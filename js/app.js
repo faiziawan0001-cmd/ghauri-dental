@@ -14,7 +14,12 @@
    =========================================================================== */
 /* Bright Smiles Dental Clinic — shared behaviour for every page.
    Paste photo URLs or data: URIs into IMG below to replace the illustrated tiles. */
-const IMG={reception:"",rooms:"",steril:"",lounge:""};
+const IMG={
+  reception:"images/clinic_interior.webp",
+  rooms:"images/new-clinic.jfif",
+  steril:"images/landing-image.webp",
+  lounge:"images/dr-umar-new.jfif"
+};
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
 const set=(s,h)=>{const e=$(s);if(e)e.innerHTML=h};
 
@@ -70,6 +75,7 @@ const openDialog=d=>{
   const form=$("#bf"),ok=$("#ok");
   if(form)form.hidden=false;
   if(ok)ok.hidden=true;
+  if(d.id==="bk"&&window.__bkReset)window.__bkReset();
   if(d.showModal)d.showModal();else d.setAttribute("open","");
   /* No scroll-lock class here on purpose: the close event is unreliable, and
      a class left behind would freeze the page for good. The
@@ -79,6 +85,7 @@ const closeDialog=d=>{if(!d||!d.open)return;if(d.close)d.close();else d.removeAt
 /* Service currently open in the #sd details modal. Carried over to the booking
    form (pre-selected dropdown) and to the WhatsApp deep link by the modal CTAs. */
 let sdSvc="";
+let bookingCtx=null;
 /* Renders (or clears) the "Your selection" summary inside the booking dialog and
    wires an optional WhatsApp deep link. Injected here so every page gets it. */
 const renderBookingSummary=(svc,ctx)=>{
@@ -88,12 +95,15 @@ const renderBookingSummary=(svc,ctx)=>{
   const units=ctx&&ctx.units>0?ctx.units:0;
   const unitTxt=units?" · "+units+" unit"+(units>1?"s":""):"";
   const est=ctx&&ctx.estimate>0?" · est. <b class=\"s-p\">PKR "+ctx.estimate.toLocaleString()+"</b>":"";
+  const mo=ctx&&ctx.months?(ctx.monthly>0?ctx.monthly:Math.round((ctx.estimate||0)/ctx.months)):0;
+  const plan=ctx&&ctx.months?" (PKR "+mo.toLocaleString()+"/mo over "+ctx.months+" months)":"";
   const el=document.createElement("div");
   el.className="bk-summary";
-  el.innerHTML="<i class=\"fa-solid fa-circle-check\" aria-hidden=\"true\"></i><div><div class=\"s-t\">Your selection</div><div class=\"s-m\">"+svc+unitTxt+est+" — final price confirmed after consultation</div></div>";
+  el.innerHTML="<i class=\"fa-solid fa-circle-check\" aria-hidden=\"true\"></i><div><div class=\"s-t\">Your selection</div><div class=\"s-m\">"+svc+unitTxt+est+plan+" — final price confirmed after consultation</div></div>";
   bf.prepend(el);
 };
 window.openBooking=(svc,ctx)=>{
+  bookingCtx={svc:svc||"",ctx:ctx||null};
   const sel=$("#s");
   if(sel&&svc&&[...sel.options].some(o=>o.value===svc))sel.value=svc;
   renderBookingSummary(svc,ctx);
@@ -127,20 +137,44 @@ if(svcSel)svcSel.innerHTML=S.map(x=>`<option>${x[0]}</option>`).join("");
 /* Homepage pre-footer CTA form also carries the same service list. */
 const ctaSel=$("#ctaService");
 if(ctaSel)ctaSel.innerHTML='<option value="">Select Service</option>'+S.map(x=>`<option>${x[0]}</option>`).join("");
+/* Estimator: treatments priced per unit vs a single fixed price. Add or remove a
+   treatment here — the value is the word used for one unit (Teeth or Implants).
+   Anything not listed is a one-off fixed price and hides the quantity slider. */
+const PER_UNIT={"Fillings":"Teeth","Root canal":"Teeth","Veneers":"Teeth","Implants":"Implants"};
+/* Set ZERO_INTEREST to false if the clinic does not offer interest-free instalments. */
+const ZERO_INTEREST=false;
 const esSel=$("#es"),eq=$("#eq"),ev=$("#ev"),eo=$("#eo"),eemi=$("#eemi"),elab=$("#elab"),ewa=$("#ewa");
 if(esSel&&eq&&ev&&eo){
   esSel.innerHTML=S.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join("");
+  const eqField=eq.closest(".field");
+  const monthsWrap=$("#emo"),monthsBtns=monthsWrap?[].slice.call(monthsWrap.querySelectorAll(".mo-btn")):[];
+  let months=6;
   const fill=()=>{const p=(eq.value-eq.min)/(eq.max-eq.min)*100;eq.style.setProperty("--fill",p+"%")};
-  const est=()=>{const a=S[esSel.value];if(!a)return;const q=+eq.value||1;const total=a[4]*q*100;
+  const est=()=>{const a=S[esSel.value];if(!a)return;
+    const per=PER_UNIT[a[0]];/* undefined = fixed price */
+    if(eqField)eqField.hidden=!per;
+    const q=per?+eq.value||1:1;
+    const total=a[4]*q*100,monthly=Math.round(total/months);
     ev.textContent=q;eo.textContent=total.toLocaleString();
-    if(eemi)eemi.textContent="PKR "+Math.round(total/6).toLocaleString()+"/mo";
-    if(elab)elab.textContent=/Implants/.test(a[0])?"Implants":/Braces/.test(a[0])?"Units":"Teeth";
-    if(ewa)ewa.href="https://wa.me/923211048740?text="+encodeURIComponent("Hi! I would like to book "+a[0]+" ("+q+" unit"+(q>1?"s":"")+"), estimated PKR "+total.toLocaleString()+".");
+    if(elab)elab.textContent=per||"";
+    if(eemi)eemi.textContent="PKR "+monthly.toLocaleString()+"/mo over "+months+" months"+(ZERO_INTEREST?" (0% available)":"");
+    if(ewa){
+      let m="Hi! I would like to book "+a[0];
+      if(per)m+=" ("+q+" "+per.toLowerCase()+")";
+      m+=", estimated PKR "+total.toLocaleString()+" over "+months+" months.";
+      ewa.href="https://wa.me/923211048740?text="+encodeURIComponent(m);
+    }
     eo.classList.remove("pulse");void eo.offsetWidth;eo.classList.add("pulse");
     fill()};
+  const setMonths=m=>{months=m;monthsBtns.forEach(b=>b.setAttribute("aria-pressed",+b.dataset.m===m?"true":"false"));est()};
+  monthsBtns.forEach(b=>b.addEventListener("click",()=>setMonths(+b.dataset.m)));
   esSel.onchange=eq.oninput=est;est();
-  /* Contextual handoff: pass the currently selected treatment + units + estimate. */
-  window.bookEstimate=()=>{const a=S[esSel.value];if(!a){openBooking();return}const q=+eq.value||1;openBooking(a[0],{units:q,estimate:a[4]*q*100})};
+  /* Contextual handoff: pass the selected treatment, units (per-unit only), estimate and plan. */
+  window.bookEstimate=()=>{const a=S[esSel.value];if(!a){openBooking();return}
+    const per=PER_UNIT[a[0]],q=per?+eq.value||1:1,total=a[4]*q*100;
+    const ctx={estimate:total,months:months,monthly:Math.round(total/months)};
+    if(per)ctx.units=q;
+    openBooking(a[0],ctx)};
 }
 
 /* --- before/after sliders (home + work) --- */
@@ -407,6 +441,7 @@ if(mn&&nav&&hdr){
     hdr.classList.toggle("mo",o);
     mn.setAttribute("aria-expanded",o?"true":"false");
     mn.setAttribute("aria-label",o?"Close menu":"Open menu");
+    mn.innerHTML = o ? "&#10005;" : "&#9776;";
     /* Stop the page scrolling behind the open menu. */
     document.documentElement.classList.toggle("lock",o);
   };
@@ -417,9 +452,9 @@ if(mn&&nav&&hdr){
   document.addEventListener("keydown",e=>{
     if(e.key==="Escape"&&nav.classList.contains("open")){setMenu(false);mn.focus()}
   });
-  /* Close on outside tap and when the layout goes back to desktop. */
+  /* Close on backdrop tap outside nav/mn and when the layout goes back to desktop. */
   document.addEventListener("click",e=>{
-    if(nav.classList.contains("open")&&!hdr.contains(e.target))setMenu(false);
+    if(nav.classList.contains("open")&&!nav.contains(e.target)&&!mn.contains(e.target))setMenu(false);
   });
   NAV_MQ.addEventListener&&NAV_MQ.addEventListener("change",e=>{if(!e.matches)setMenu(false)});
   addEventListener("resize",()=>{if(!NAV_MQ.matches)setMenu(false)},{passive:true});
@@ -444,22 +479,127 @@ if(th){
   th.onclick=()=>{const r=document.documentElement,next=isDark()?"light":"dark";r.dataset.theme=next;th.setAttribute("aria-pressed",next==="dark"?"true":"false");paint();spin();try{localStorage.setItem("theme",next)}catch(e){}};
 }
 
-/* --- booking form --- */
-const bkDlg=$("#bk"),bf=$("#bf"),sent=$("#ok"),goBtn=$("#go");
-if(goBtn){
-  const nIn=$("#n"),pIn=$("#p"),dIn=$("#d"),e1=$("#e1"),e2=$("#e2"),e3=$("#e3");
-  const validPhone=v=>/^[+\d\s-]{7,}$/.test(v);
+/* --- booking form: time slots, validation, success screen, WhatsApp confirm ---
+   Works with the existing dialog markup (#bk, #bf, #go, #n, #p, #s, #d, #e1-#e3, #ok)
+   on every page, so no HTML changes are needed. The new time-slot picker and the
+   success screen are built here, and their styles are injected from this file. */
+const CLINIC_WA="923211048740",CLINIC_NAME="Bright Smiles";
+const bkDlg=$("#bk"),bf=$("#bf"),goBtn=$("#go");
+const bkOldOk=$("#ok");
+if(goBtn&&bf&&bkOldOk){
+  const nIn=$("#n"),pIn=$("#p"),dIn=$("#d"),sSel=$("#s"),e1=$("#e1"),e2=$("#e2"),e3=$("#e3");
+  let slot="";
+
+  const st=document.createElement("style");
+  st.textContent=
+"#bk{width:min(560px,calc(100vw - 24px))}"+
+"#bk h2{font-size:clamp(24px,5vw,32px);line-height:1.1}"+
+"#bk .btn.alt{border:1px solid rgba(100,130,170,.45)}"+
+".bk-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}"+
+".bk-slot{padding:11px 6px;border:1px solid rgba(100,130,170,.45);border-radius:14px;background:transparent;color:inherit;font:inherit;font-weight:600;font-size:14px;line-height:1.3;cursor:pointer;text-align:center}"+
+".bk-slot small{display:block;font-weight:500;font-size:12px;opacity:.7}"+
+".bk-slot[aria-pressed=true]{background:#2b6fb0;border-color:#2b6fb0;color:#fff}"+
+".bk-slot[aria-pressed=true] small{opacity:.9}"+
+".bk-slot:focus-visible{outline:2px solid #3b8fd4;outline-offset:2px}"+
+"#ok[hidden]{display:none}"+
+"#ok{text-align:center}"+
+".bk-check{width:68px;height:68px;display:block;margin:6px auto 12px}"+
+".bk-check circle{fill:none;stroke:#1aa760;stroke-width:3;stroke-dasharray:166;stroke-dashoffset:166;animation:bkdraw .6s .1s forwards}"+
+".bk-check path{fill:none;stroke:#1aa760;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:48;stroke-dashoffset:48;animation:bkdraw .4s .6s forwards}"+
+"@keyframes bkdraw{to{stroke-dashoffset:0}}"+
+"#ok h3{margin:0 0 6px;font-size:24px}"+
+".bk-sub{margin:0 0 16px;opacity:.8}"+
+".bk-sum{text-align:left;background:rgba(59,143,212,.1);border-radius:16px;padding:4px 18px;margin-bottom:18px}"+
+".bk-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid rgba(100,130,170,.25);font-size:15px}"+
+".bk-row:last-child{border:0}"+
+".bk-row span{opacity:.75}.bk-row b{text-align:right}"+
+".bk-act{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}"+
+".bk-wa{background:#25d366;color:#fff;border:0;text-decoration:none;flex:1 1 220px;text-align:center}"+
+"@media(prefers-reduced-motion:reduce){.bk-check circle,.bk-check path{animation:none;stroke-dashoffset:0}}";
+  document.head.appendChild(st);
+
+  /* Time-slot picker, inserted after the date field. */
+  const sp=document.createElement("div");
+  sp.innerHTML='<label id="bk-tl">Preferred time</label><div class="bk-slots" role="group" aria-labelledby="bk-tl">'+
+    [["Morning","9am – 12pm"],["Afternoon","12pm – 4pm"],["Evening","4pm – 8pm"]]
+      .map(a=>'<button type="button" class="bk-slot" aria-pressed="false" data-val="'+a[0]+' ('+a[1]+')">'+a[0]+'<small>'+a[1]+'</small></button>').join("")+
+    '</div><div class="err" id="e4"></div>';
+  e3.after(sp);
+  const e4=$("#e4");
+  sp.addEventListener("click",e=>{
+    const b=e.target.closest(".bk-slot");if(!b)return;
+    sp.querySelectorAll(".bk-slot").forEach(x=>x.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");slot=b.dataset.val;e4.textContent="";
+  });
+
+  /* Success screen replaces the old one-line message. */
+  const done=document.createElement("div");
+  done.id="ok";done.hidden=true;done.setAttribute("aria-live","polite");
+  done.innerHTML='<svg class="bk-check" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="25"/><path d="M14 27l8 8 16-17"/></svg>'+
+    '<h3 id="ok-t">Request received</h3>'+
+    '<p class="bk-sub">One last step: confirm on WhatsApp so the clinic can lock in your slot.</p>'+
+    '<div class="bk-sum" id="ok-sum"></div>'+
+    '<div class="bk-act"><a class="btn bk-wa" id="ok-wa" target="_blank" rel="noopener noreferrer">Confirm on WhatsApp</a>'+
+    '<button type="button" class="btn alt" onclick="closeDialog(document.getElementById(\'bk\'))">Close</button></div>';
+  bkOldOk.replaceWith(done);
+
+  const pad=n=>String(n).padStart(2,"0");
+  const todayStr=()=>{const t=new Date();return t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate())};
+  /* Accepts 0300-1234567, 03001234567, +92 300 1234567, 923001234567. */
+  const cleanPhone=v=>{
+    let d=v.replace(/[\s\-()]/g,"");
+    if(d.indexOf("+92")===0)d="0"+d.slice(3);
+    else if(d.indexOf("92")===0&&d.length===12)d="0"+d.slice(2);
+    return /^03\d{9}$/.test(d)?d:null;
+  };
+  const prettyPhone=p=>p.slice(0,4)+"-"+p.slice(4);
+
+  /* Called every time the dialog opens (see openDialog): start from a clean form. */
+  window.__bkReset=()=>{
+    nIn.value="";pIn.value="";dIn.value="";dIn.min=todayStr();
+    e1.textContent="";e2.textContent="";e3.textContent="";e4.textContent="";
+    slot="";sp.querySelectorAll(".bk-slot").forEach(x=>x.setAttribute("aria-pressed","false"));
+  };
+
   const submit=()=>{
-    if(!nIn||!pIn||!dIn)return;
-    const n=nIn.value.trim(),p=pIn.value.trim(),d=dIn.value;
-    if(e1)e1.textContent=n?"":"Enter your name.";
-    if(e2)e2.textContent=validPhone(p)?"":"Enter a valid phone number.";
-    if(e3)e3.textContent=d?"":"Choose a date.";
-    if(n&&validPhone(p)&&d){if(bf)bf.hidden=true;if(sent)sent.hidden=false;}
+    const n=nIn.value.trim(),p=cleanPhone(pIn.value.trim()),d=dIn.value;
+    const okName=n.length>=2,okDate=!!d&&d>=todayStr();
+    e1.textContent=okName?"":"Enter your name.";
+    e2.textContent=p?"":"Enter a valid mobile number like 0300-1234567.";
+    e3.textContent=okDate?"":(d?"Choose today or a later date.":"Choose a date.");
+    e4.textContent=slot?"":"Pick a time of day.";
+    if(!(okName&&p&&okDate&&slot)){
+      const first=!okName?nIn:!p?pIn:!okDate?dIn:null;
+      if(first)first.focus();else sp.scrollIntoView({block:"center"});
+      return;
+    }
+    const service=sSel?sSel.value:"";
+    const ref="BS-"+Math.floor(1000+Math.random()*9000);
+    const niceDate=new Date(d+"T00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
+    const ctx=bookingCtx&&bookingCtx.svc===service?bookingCtx.ctx:null;
+
+    /* Hook for a backend: listen for this event (or add a fetch here) to save the booking. */
+    const booking={ref:ref,name:n,phone:p,service:service,date:d,slot:slot};
+    document.dispatchEvent(new CustomEvent("booking:submit",{detail:booking}));
+
+    $("#ok-t").textContent="Request received, "+n.split(/\s+/)[0]+"!";
+    const rows=[["Treatment",service],["Date",niceDate],["Time",slot],["Phone",prettyPhone(p)],["Reference","#"+ref]];
+    const sum=$("#ok-sum");sum.textContent="";
+    rows.forEach(r=>{const row=document.createElement("div"),k=document.createElement("span"),v=document.createElement("b");
+      row.className="bk-row";k.textContent=r[0];v.textContent=r[1];row.append(k,v);sum.appendChild(row)});
+
+    let msg="Hello "+CLINIC_NAME+", I just requested an appointment.\n\nName: "+n+"\nPhone: "+prettyPhone(p)+"\nService: "+service;
+    if(ctx&&ctx.units>0)msg+=" ("+ctx.units+" unit"+(ctx.units>1?"s":"")+")";
+    if(ctx&&ctx.estimate>0)msg+="\nEstimate: PKR "+ctx.estimate.toLocaleString();
+    if(ctx&&ctx.months)msg+="\nPlan: PKR "+(ctx.monthly>0?ctx.monthly:Math.round((ctx.estimate||0)/ctx.months)).toLocaleString()+"/mo over "+ctx.months+" months";
+    msg+="\nDate: "+niceDate+"\nTime: "+slot+"\nRef: #"+ref;
+    $("#ok-wa").href="https://wa.me/"+CLINIC_WA+"?text="+encodeURIComponent(msg);
+
+    bf.hidden=true;done.hidden=false;
   };
   goBtn.onclick=submit;
-  /* Enter anywhere in the booking form submits it. */
-  if(bf)bf.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.tagName!=="TEXTAREA"){e.preventDefault();submit()}});
+  /* Enter in a text field submits (but not when a slot or other button has focus). */
+  bf.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.tagName!=="BUTTON"&&e.target.tagName!=="TEXTAREA"){e.preventDefault();submit()}});
 }
 
 /* --- homepage pre-footer CTA booking form --- */

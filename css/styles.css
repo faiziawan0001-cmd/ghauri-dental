@@ -1689,6 +1689,14 @@ html.js .fit-line { white-space: nowrap; }
 .budget-cta .btn { flex: 1 1 150px; text-align: center; margin: 0; }
 .budget-cta .b-wa { background: #25D366; color: #fff; box-shadow: 0 8px 20px rgba(37, 211, 102, .32); }
 .budget-cta .b-wa:hover { box-shadow: 0 12px 26px rgba(37, 211, 102, .42); }
+/* Instalment months selector — three rounded buttons, styled like the filters. */
+.months-field { margin-bottom: 16px; }
+.months { display: flex; gap: 8px; }
+.months .mo-btn { flex: 1 1 0; border: 1px solid var(--line); background: var(--card); color: var(--navy); border-radius: 12px; padding: 10px 8px; font: 600 .88rem "Plus Jakarta Sans", sans-serif; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+.months .mo-btn[aria-pressed="true"] { background: linear-gradient(135deg, #55aae6, #2c78b4); color: #fff; border-color: transparent; box-shadow: 0 8px 18px rgba(59, 143, 201, .28); }
+.months .mo-btn:not([aria-pressed="true"]):hover { background: color-mix(in srgb, var(--tint) 70%, transparent); }
+.months .mo-btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+@media (hover: none) { .months .mo-btn:not([aria-pressed="true"]):hover { background: var(--card); } }
 /* Contextual "Your selection" summary injected into the booking dialog */
 .bk-summary { display: flex; gap: 10px; align-items: flex-start; background: linear-gradient(160deg, var(--tint), var(--card)); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin: 0 0 16px; }
 .bk-summary i { color: var(--blue); margin-top: 3px; }
