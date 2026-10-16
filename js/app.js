@@ -27,6 +27,11 @@ const IMG = {
 const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
 const set = (s, h) => { const e = $(s); if (e) e.innerHTML = h };
 
+/* --- motion: shared flag -----------------------------------------------------
+   True for visitors who asked the OS for reduced motion - the scroll reveal
+   code further down stays out of the way and everything shows immediately. */
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 const P = { sparkle: "M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2", shield: "M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z M9 12l2 2 4-4", heart: "M12 21s-8-5-8-11a4.5 4.5 0 018-3 4.5 4.5 0 018 3c0 6-8 11-8 11z", clock: "M12 7v5l3 2M12 3a9 9 0 100 18 9 9 0 000-18z", tag: "M3 12V4h8l10 10-8 8zM7.5 7.5h.01", user: "M12 12a4 4 0 100-8 4 4 0 000 8zM4 21c0-4 4-6 8-6s8 2 8 6", scan: "M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M8 12h8", zap: "M13 2L4 14h7l-1 8 9-12h-7z" };
 const ic = k => `<div class="ic"><svg viewBox="0 0 24 24"><path d="${P[k]}"/></svg></div>`;
 
@@ -85,7 +90,10 @@ const openDialog = d => {
      a class left behind would freeze the page for good. The
      html:has(dialog:modal) rule in the stylesheet handles it instead. */
 };
-const closeDialog = d => { if (!d || !d.open) return; if (d.close) d.close(); else d.removeAttribute("open") };
+const closeDialog = d => {
+  if (!d || !d.open) return;
+  if (d.close) d.close(); else d.removeAttribute("open");
+};
 /* Service currently open in the #sd details modal. Carried over to the booking
    form (pre-selected dropdown) and to the WhatsApp deep link by the modal CTAs. */
 let sdSvc = "";
@@ -265,15 +273,48 @@ if (wkHome) {
     </a>`;
   }).join("");
 }
-/* Reference-style scroll reveal: sections rise into place as they enter view. */
+/* Scroll reveal: sections rise into place as they enter view - desktop only.
+   The stylesheet only hides the targets on screens wider than 820px and this
+   block matches that same breakpoint, so phone visitors get every section
+   straight away with no animation at all.
+   GSAP ScrollTrigger owns it whenever the CDN loaded - it fires a gsap.fromTo()
+   tween (the children of a .stagger one after another), and on completion the
+   element switches to the .in class so the inline styles can be cleared: from
+   then on it sits on plain CSS, which keeps card hover transforms and
+   re-injected grid items behaving exactly as they did before. The
+   IntersectionObserver below stays as the fallback for a CDN miss, and
+   reduced-motion users simply get everything shown. */
+const revealFx = !reducedMotion && matchMedia("(min-width: 821px)").matches;
 const revs = $$(".js-rev, .fade-in, .fade-in-left, .fade-in-right, .stagger");
-if (revs.length) {
-  if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const rObs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); rObs.unobserve(e.target) } }), { threshold: .15, rootMargin: "0px 0px -40px 0px" });
-    revs.forEach(el => rObs.observe(el));
-  } else {
-    revs.forEach(el => el.classList.add("in"));
-  }
+const revealed = new WeakSet();
+const revealEl = el => {
+  if (revealed.has(el)) return;
+  revealed.add(el);
+  const kids = el.classList.contains("stagger") ? [...el.children] : [];
+  const targets = kids.length ? kids : [el];
+  /* Starting pose mirrors the stylesheet keyframes: rise for .js-rev /
+     .fade-in, sideways for the directional pair. */
+  const from = el.classList.contains("fade-in-left") ? { x: -40, opacity: 0 }
+    : el.classList.contains("fade-in-right") ? { x: 40, opacity: 0 }
+      : { y: el.classList.contains("js-rev") ? 28 : 24, opacity: 0 };
+  gsap.fromTo(targets, from, {
+    opacity: 1, x: 0, y: 0, duration: .7, ease: "power2.out",
+    stagger: kids.length > 1 ? .1 : 0,
+    onComplete: () => { el.classList.add("in"); gsap.set(targets, { clearProps: "opacity,transform" }) }
+  });
+};
+if (revealFx && revs.length && window.gsap && window.ScrollTrigger) {
+  document.documentElement.classList.add("gsap-rev");
+  gsap.registerPlugin(ScrollTrigger);
+  revs.forEach(el => ScrollTrigger.create({ trigger: el, start: "top 85%", once: true, onEnter: () => revealEl(el) }));
+  /* Anything already on screen at first paint (or a page opened at #section)
+     reveals straight away instead of waiting for a scroll that may never come. */
+  revs.forEach(el => { if (el.getBoundingClientRect().top < innerHeight * .9) revealEl(el) });
+} else if (revealFx && revs.length && "IntersectionObserver" in window) {
+  const rObs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); rObs.unobserve(e.target) } }), { threshold: .15, rootMargin: "0px 0px -40px 0px" });
+  revs.forEach(el => rObs.observe(el));
+} else if (revealFx) {
+  revs.forEach(el => el.classList.add("in"));
 }
 
 /* --- one-line CTA banner headings -----------------------------------------

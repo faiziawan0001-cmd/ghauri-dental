@@ -110,6 +110,31 @@ select.status{padding:8px 10px;font-size:.82rem;border-radius:10px;min-width:132
 .loading{padding:56px 24px;text-align:center;color:var(--muted)}
 .spin{width:34px;height:34px;margin:0 auto 14px;border-radius:50%;border:3px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--blue);animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+/* view tabs */
+.tabs{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tabbtn{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 16px;border:1.5px solid color-mix(in srgb,var(--blue) 50%,transparent);background:var(--card);color:var(--txt);border-radius:13px;cursor:pointer;font:700 .9rem "Plus Jakarta Sans",sans-serif;transition:transform .2s,background .2s,color .2s,border-color .2s}
+.tabbtn:hover{transform:translateY(-1px);border-color:var(--blue);color:var(--navy)}
+.tabbtn[aria-selected="true"]{background:linear-gradient(135deg,#55aae6,#2c78b4);color:#fff;border-color:transparent;box-shadow:0 8px 20px rgba(59,143,201,.35)}
+.tabbtn .tcount{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--warn);color:#fff;font-size:.72rem;font-weight:800;line-height:1}
+.tabbtn[aria-selected="true"] .tcount{background:#fff;color:#2c78b4}
+/* reminders */
+.remcard{padding:22px 24px}
+.rem-group{margin:0 0 22px}
+.rem-group:last-child{margin-bottom:0}
+.rem-group-title{font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:9px;margin:0 0 10px}
+.rem-group-title .cnt{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 7px;border-radius:99px;background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue);font-size:.75rem;font-weight:800}
+.rem-list{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:16px;background:var(--bg);overflow:hidden}
+.rem-item{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.rem-item:last-child{border-bottom:0}
+.rem-head{display:flex;align-items:baseline;gap:10px;flex:1 1 100%;min-width:0}
+.rem-head .name{font-weight:700;color:var(--navy);overflow-wrap:anywhere}
+.rem-head .ref{font-weight:700;color:var(--blue);font-size:.82rem;white-space:nowrap}
+.rem-meta{display:flex;flex-wrap:wrap;gap:4px 12px;flex:1 1 auto;min-width:0;font-size:.85rem;color:var(--muted)}
+.rem-meta .m{overflow-wrap:anywhere}
+.rem-send{margin-left:auto}
+@media(max-width:560px){.remcard{padding:16px}.rem-send{width:100%;margin-left:0}}
+.badge.reminded{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,transparent)}
+.statcell{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
 /* notes dialog */
 dialog{border:0;border-radius:20px;padding:26px;width:min(520px,92vw);background:var(--card);color:var(--txt);max-height:88vh;overflow:auto;box-shadow:0 40px 80px rgba(8,16,30,.4)}
 dialog::backdrop{background:rgba(8,16,30,.55);backdrop-filter:blur(3px)}
@@ -155,6 +180,11 @@ dialog textarea{min-height:140px;resize:vertical}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important}
 }
 </style>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
 <body>
 <div class="top"><div class="w in">
@@ -192,7 +222,11 @@ dialog textarea{min-height:140px;resize:vertical}
   <!-- DASHBOARD -->
   <section class="w hidden" id="dashView" aria-hidden="true">
     <div class="page-head">
-      <h1>Bookings</h1>
+      <h1 id="pageTitle">Bookings</h1>
+      <div class="tabs" role="tablist" aria-label="Dashboard views">
+        <button type="button" class="tabbtn" id="tabBookings" role="tab" aria-selected="true" aria-controls="bookingsPanel">Bookings</button>
+        <button type="button" class="tabbtn" id="tabReminders" role="tab" aria-selected="false" aria-controls="remindersPanel">Reminders<span class="tcount hidden" id="remBadge" aria-hidden="true">0</span></button>
+      </div>
       <button type="button" class="btn sm" id="newBtn">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
         New booking
@@ -200,6 +234,7 @@ dialog textarea{min-height:140px;resize:vertical}
       <span class="who" id="who"></span>
     </div>
 
+    <div id="bookingsPanel" role="tabpanel" aria-labelledby="tabBookings">
     <div class="stats" id="stats">
       <div class="stat"><div class="k">Today's bookings</div><div class="v" id="statToday">—</div></div>
       <div class="stat"><div class="k">Pending</div><div class="v accent" id="statPending">—</div></div>
@@ -269,6 +304,18 @@ dialog textarea{min-height:140px;resize:vertical}
         </table>
       </div>
     </div>
+    </div><!-- /bookingsPanel -->
+
+    <div id="remindersPanel" role="tabpanel" aria-labelledby="tabReminders" class="hidden">
+      <div class="panel remcard">
+        <div class="empty hidden" id="remEmpty">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></svg>
+          <h2>No reminders due.</h2>
+          <p>You're all caught up.</p>
+        </div>
+        <div id="remGroups"></div>
+      </div>
+    </div>
   </section>
 </main>
 
@@ -333,6 +380,15 @@ dialog textarea{min-height:140px;resize:vertical}
   </form>
 </dialog>
 
+<dialog id="remDlg" aria-labelledby="remDlgTitle">
+  <h2 id="remDlgTitle">Did you send it?</h2>
+  <p class="hint" id="remDlgWho"></p>
+  <div class="dlg-actions">
+    <button type="button" class="btn alt" id="remDlgNo">No</button>
+    <button type="button" class="btn" id="remDlgYes">Yes</button>
+  </div>
+</dialog>
+
 <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
 
 <script>
@@ -358,6 +414,12 @@ dialog textarea{min-height:140px;resize:vertical}
   var BOOKING_SOURCES = [["walk_in", "Walk-in"], ["phone", "Phone call"], ["whatsapp_chat", "WhatsApp chat"], ["other", "Other"]];
   var TIME_SLOTS = ["Morning (9am – 12pm)", "Afternoon (12pm – 4pm)", "Evening (4pm – 8pm)"];
   var REFRESH_MS = 60000;
+
+  /* ---- WhatsApp reminder message: EDIT THIS LINE to change the outgoing text ----
+     Placeholders: {name} {service} {date} {slot} {ref} */
+  var REMINDER_MESSAGE = "Hello {name}, this is a reminder from Bright Smiles Dental Clinic. You have an appointment for {service} on {date} ({slot}). Ref: {ref}. Please reply here if you need to reschedule.";
+  /* Timezone used to decide "today" and "tomorrow" for reminders (not the browser's). */
+  var REMINDER_TIMEZONE = "Asia/Karachi";
 
   var client = (window.supabase && window.supabase.createClient)
     ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true } })
@@ -393,6 +455,18 @@ dialog textarea{min-height:140px;resize:vertical}
     var d = new Date(v);
     if (isNaN(d)) return String(v);
     return d.toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  }
+  /* "Today" and "tomorrow" for reminders are decided in the clinic's timezone (Asia/Karachi),
+     not by the browser's local/UTC date. */
+  function pkToday() {
+    try {
+      return new Intl.DateTimeFormat("en-CA", { timeZone: REMINDER_TIMEZONE, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    } catch (e) { return ymd(new Date()); }
+  }
+  function pkTomorrow(todayYmd) {
+    var p = String(todayYmd).split("-");
+    var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]) + 1);
+    return ymd(d);
   }
 
   /* ---------- phone helpers ---------- */
@@ -459,6 +533,7 @@ dialog textarea{min-height:140px;resize:vertical}
     logoutBtn.classList.add("hidden");
     stopAutoRefresh();
     allBookings = []; filtered = []; loadedOnce = false;
+    renderReminders();
     if (message) { loginErr.textContent = message; loginErr.classList.remove("hidden"); }
   }
 
@@ -561,6 +636,7 @@ dialog textarea{min-height:140px;resize:vertical}
       renderStats();
       renderAnalytics();
       applyFilters();
+      renderReminders();
     }).catch(function () {
       setLoading(false, isRefresh);
       showLoadError("Could not load bookings. Check your connection and try Refresh.");
@@ -729,7 +805,12 @@ dialog textarea{min-height:140px;resize:vertical}
         sel.appendChild(opt);
       });
       sel.addEventListener("change", function () { changeStatus(b, sel); });
-      statusTd.appendChild(sel);
+      var statBox = el("div", { class: "statcell" });
+      statBox.appendChild(sel);
+      if (b.reminder_sent) {
+        statBox.appendChild(el("span", { class: "badge reminded", title: "WhatsApp reminder marked as sent" }, "Reminded"));
+      }
+      statusTd.appendChild(statBox);
       tr.appendChild(statusTd);
 
       tr.appendChild(el("td", { class: "mono", dataset: { label: "Created" } }, prettyDateTime(b.created_at)));
@@ -775,6 +856,7 @@ dialog textarea{min-height:140px;resize:vertical}
       if (next === "confirmed") b.confirmed_at = patch.confirmed_at;
       toast("Saved");
       renderStats();
+      renderReminders();
     }).catch(function () {
       select.disabled = false;
       select.value = prev;
@@ -797,6 +879,155 @@ dialog textarea{min-height:140px;resize:vertical}
       msg = "Hello " + name + ", this is Bright Smiles Dental Clinic regarding your appointment for " + svc + " on " + date + (slot ? " (" + slot + ")" : "") + ". Ref: " + (b.ref || "") + ".";
     }
     return "https://wa.me/" + num + "?text=" + encodeURIComponent(msg);
+  }
+
+  /* ---------- reminders (one-tap WhatsApp) ---------- */
+  var REM_TAB = { BOOKINGS: "bookings", REMINDERS: "reminders" };
+  var tabBookings = $("tabBookings"), tabReminders = $("tabReminders");
+  var remDlg = $("remDlg"), remDlgWho = $("remDlgWho"), remDlgYes = $("remDlgYes"), remDlgNo = $("remDlgNo");
+  var pendingReminder = null; /* booking waiting for the "Did you send it?" answer */
+
+  function switchTab(which) {
+    var onReminders = which === REM_TAB.REMINDERS;
+    tabBookings.setAttribute("aria-selected", onReminders ? "false" : "true");
+    tabReminders.setAttribute("aria-selected", onReminders ? "true" : "false");
+    $("bookingsPanel").classList.toggle("hidden", onReminders);
+    $("remindersPanel").classList.toggle("hidden", !onReminders);
+    $("pageTitle").textContent = onReminders ? "Reminders" : "Bookings";
+    if (onReminders) renderReminders();
+  }
+  tabBookings.addEventListener("click", function () { switchTab(REM_TAB.BOOKINGS); });
+  tabReminders.addEventListener("click", function () { switchTab(REM_TAB.REMINDERS); });
+  [tabBookings, tabReminders].forEach(function (btn) {
+    btn.addEventListener("keydown", function (e) {
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      e.preventDefault();
+      var goReminders = btn === tabBookings;
+      switchTab(goReminders ? REM_TAB.REMINDERS : REM_TAB.BOOKINGS);
+      (goReminders ? tabReminders : tabBookings).focus();
+    });
+  });
+
+  /* Builds the reminder text from the editable REMINDER_MESSAGE constant. */
+  function reminderText(b, apptDay) {
+    return REMINDER_MESSAGE
+      .replace("{name}", b.name || "there")
+      .replace("{service}", b.service || "your appointment")
+      .replace("{date}", prettyDate(apptDay))
+      .replace("{slot}", b.time_slot || "")
+      .replace("{ref}", b.ref || "");
+  }
+
+  /* Only confirmed bookings on today/tomorrow (Asia/Karachi) that have not been reminded yet. */
+  function remindersDue() {
+    var today = pkToday(), tomorrow = pkTomorrow(today);
+    var rows = allBookings.filter(function (b) {
+      var d = b.appt_date ? String(b.appt_date).slice(0, 10) : "";
+      return (d === today || d === tomorrow) && b.status === "confirmed" && !b.reminder_sent;
+    });
+    rows.sort(function (a, b) {
+      var ia = TIME_SLOTS.indexOf(a.time_slot), ib = TIME_SLOTS.indexOf(b.time_slot);
+      if (ia !== ib) return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    });
+    return { today: today, tomorrow: tomorrow, rows: rows };
+  }
+
+  function updateRemBadge(n) {
+    var badge = $("remBadge");
+    badge.textContent = String(n);
+    badge.classList.toggle("hidden", n === 0);
+    tabReminders.setAttribute("aria-label", "Reminders, " + n + " due");
+  }
+
+  function reminderRow(b, apptDay) {
+    var name = b.name || "Patient";
+    var li = el("li", { class: "rem-item" });
+
+    var head = el("div", { class: "rem-head" });
+    head.appendChild(el("span", { class: "name" }, name));
+    if (b.ref) head.appendChild(el("span", { class: "ref" }, b.ref));
+    li.appendChild(head);
+
+    var meta = el("div", { class: "rem-meta" });
+    meta.appendChild(el("span", { class: "m" }, prettyPhone(b.phone) || "—"));
+    meta.appendChild(el("span", { class: "m" }, b.service || "—"));
+    meta.appendChild(el("span", { class: "m" }, b.time_slot || "—"));
+    li.appendChild(meta);
+
+    var btn = el("button", { type: "button", class: "btn sm rem-send", "aria-label": "Send WhatsApp reminder to " + name + " for " + prettyDate(apptDay) }, "Send reminder");
+    btn.addEventListener("click", function () { sendReminder(b, apptDay); });
+    li.appendChild(btn);
+
+    return li;
+  }
+
+  function renderReminders() {
+    var due = remindersDue();
+    var wrap = $("remGroups"), empty = $("remEmpty");
+    wrap.textContent = "";
+    updateRemBadge(due.rows.length);
+    if (!due.rows.length) { empty.classList.remove("hidden"); return; }
+    empty.classList.add("hidden");
+
+    [["Tomorrow", due.tomorrow], ["Today", due.today]].forEach(function (group) {
+      var label = group[0], day = group[1];
+      var rows = due.rows.filter(function (b) { return String(b.appt_date).slice(0, 10) === day; });
+      if (!rows.length) return;
+      var sec = el("section", { class: "rem-group" });
+      var h = el("h2", { class: "rem-group-title" });
+      h.appendChild(el("span", null, label));
+      h.appendChild(el("span", { class: "cnt" }, String(rows.length)));
+      sec.appendChild(h);
+      var ul = el("ul", { class: "rem-list" });
+      rows.forEach(function (b) { ul.appendChild(reminderRow(b, day)); });
+      sec.appendChild(ul);
+      wrap.appendChild(sec);
+    });
+  }
+
+  function sendReminder(b, apptDay) {
+    var num = waNumber(b.phone);
+    if (!num) { toast("Cannot send reminder: no valid phone number for " + (b.name || b.ref || "this booking") + ".", true); return; }
+    var url = "https://wa.me/" + num + "?text=" + encodeURIComponent(reminderText(b, apptDay));
+    var a = el("a", { href: url, target: "_blank", rel: "noopener noreferrer", "aria-hidden": "true", tabindex: "-1" });
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    pendingReminder = b;
+    remDlgWho.textContent = (b.name || "Patient") + (b.ref ? " · " + b.ref : "");
+    if (typeof remDlg.showModal === "function") remDlg.showModal(); else remDlg.setAttribute("open", "");
+    setTimeout(function () { remDlgYes.focus(); }, 30);
+  }
+
+  function closeRemDlg() {
+    if (typeof remDlg.close === "function") remDlg.close(); else remDlg.removeAttribute("open");
+    pendingReminder = null;
+  }
+  remDlgNo.addEventListener("click", function () { closeRemDlg(); });
+  remDlg.addEventListener("cancel", function () { pendingReminder = null; });
+  remDlgYes.addEventListener("click", function () {
+    var b = pendingReminder;
+    closeRemDlg();
+    if (b) markReminderSent(b);
+  });
+
+  function markReminderSent(b) {
+    if (!client) { toast("Could not save: you are not connected. Reload and try again.", true); return; }
+    var q = keyQuery(b);
+    client.from("bookings").update({ reminder_sent: true }).eq(q.col, q.val).then(function (res) {
+      if (res && res.error) {
+        toast("Could not mark the reminder as sent: " + (res.error.message || "unknown error") + ". It stays in the list.", true);
+        return;
+      }
+      b.reminder_sent = true;
+      renderReminders();
+      renderTable();
+      toast("Reminder marked as sent");
+    }).catch(function () {
+      toast("Could not mark the reminder as sent. Check your connection and try again.", true);
+    });
   }
 
   /* ---------- notes ---------- */
@@ -970,8 +1201,4 @@ dialog textarea{min-height:140px;resize:vertical}
 
   /* ---------- boot ---------- */
   initNewBookingFields();
-  initAuth();
-})();
-</script>
-</body>
-</html>
+  switchTab(REM_TAB.BOOKINGS)
