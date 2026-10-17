@@ -329,16 +329,23 @@ if (revealFx && revs.length && "IntersectionObserver" in window) {
    narrow screens. Scale it down to the banner's inner width instead — per
    page, per viewport. Re-runs when the web font lands and on resize. */
 const fitCTAHeadings = () => {
-  const fit = (h, box) => {
-    if (!box) return;
-    h.style.fontSize = "";
+  /* Collect targets, then write all resets, read all measurements and write all
+     results as three separate passes. Doing it per-element (reset -> measure ->
+     set) forces a synchronous reflow on every iteration; batching keeps it to one. */
+  const jobs = [];
+  $$(".consult-strip h2").forEach(h => jobs.push([h, h.closest(".consult-strip")]));
+  $$(".fit-line").forEach(h => jobs.push([h, h.closest(".sh-line") || h.parentElement]));
+  if (!jobs.length) return;
+  jobs.forEach(([h]) => { h.style.fontSize = ""; });
+  const plans = jobs.map(([h, box]) => {
+    if (!box) return null;
     const cs = getComputedStyle(box);
     const avail = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
     const w = h.scrollWidth;
-    if (avail > 0 && w > avail) h.style.fontSize = Math.floor(parseFloat(getComputedStyle(h).fontSize) * avail / w) + "px";
-  };
-  $$(".consult-strip h2").forEach(h => fit(h, h.closest(".consult-strip")));
-  $$(".fit-line").forEach(h => fit(h, h.closest(".sh-line") || h.parentElement));
+    if (avail > 0 && w > avail) return [h, Math.floor(parseFloat(getComputedStyle(h).fontSize) * avail / w) + "px"];
+    return null;
+  });
+  plans.forEach(p => { if (p) p[0].style.fontSize = p[1]; });
 };
 fitCTAHeadings();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitCTAHeadings);
