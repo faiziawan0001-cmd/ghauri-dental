@@ -1,0 +1,17 @@
+# Bright Smiles Dental Clinic - https://bright-dental.vercel.app
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /*-preview.html
+Disallow: /eyebrow-option-1.html
+Disallow: /eyebrow-option-2.html
+Disallow: /hero-mobile-variant.html
+
+# Let crawlers render the lazy-loaded images and scripts they need
+User-agent: Googlebot
+Allow: /css/
+Allow: /js/
+Allow: /images/
+Allow: /fonts/
+
+Sitemap: https://bright-dental.vercel.app/sitemap.xml

@@ -17,12 +17,28 @@
 /* Supabase — one config object, anon key only. The public "bookings" table grants
    INSERT only, so bookings are written here and never read back. */
 const SUPABASE = { url: "https://xbgkskfayfbrevguoowl.supabase.co", anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhiZ2tza2ZheWZicmV2Z3Vvb3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE5NjYyMDQsImV4cCI6MjEwNzU0MjIwNH0.ltKHSFv_gJc15Vq2ewr--r6tDzWq-iagAzRAKFi1J5M" };
-const supabaseClient = (typeof window !== "undefined" && window.supabase && window.supabase.createClient) ? window.supabase.createClient(SUPABASE.url, SUPABASE.anonKey) : null;
+let supabaseClient = null, supabaseLoading = null;
+/* The CDN bundle is loaded on demand (the first booking submit) so its download
+   and parse never compete with the first paint. If it fails to load, the booking
+   form falls back to the WhatsApp hand-off below. */
+const loadSupabase = () => {
+  if (supabaseClient) return Promise.resolve(supabaseClient);
+  if (supabaseLoading) return supabaseLoading;
+  supabaseLoading = new Promise(resolve => {
+    const s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4";
+    s.async = true;
+    s.onload = () => { supabaseClient = (window.supabase && window.supabase.createClient) ? window.supabase.createClient(SUPABASE.url, SUPABASE.anonKey) : null; resolve(supabaseClient) };
+    s.onerror = () => { supabaseLoading = null; resolve(null) };
+    document.head.appendChild(s);
+  });
+  return supabaseLoading;
+};
 const IMG = {
   reception: "images/clinic_interior.webp",
-  rooms: "images/new-clinic.jfif",
+  rooms: "images/new-clinic.webp",
   steril: "images/landing-image.webp",
-  lounge: "images/dr-umar-new.jfif"
+  lounge: "images/dr-umar-new.webp"
 };
 const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
 const set = (s, h) => { const e = $(s); if (e) e.innerHTML = h };
@@ -35,10 +51,27 @@ const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const P = { sparkle: "M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2", shield: "M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z M9 12l2 2 4-4", heart: "M12 21s-8-5-8-11a4.5 4.5 0 018-3 4.5 4.5 0 018 3c0 6-8 11-8 11z", clock: "M12 7v5l3 2M12 3a9 9 0 100 18 9 9 0 000-18z", tag: "M3 12V4h8l10 10-8 8zM7.5 7.5h.01", user: "M12 12a4 4 0 100-8 4 4 0 000 8zM4 21c0-4 4-6 8-6s8 2 8 6", scan: "M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M8 12h8", zap: "M13 2L4 14h7l-1 8 9-12h-7z" };
 const ic = k => `<div class="ic"><svg viewBox="0 0 24 24"><path d="${P[k]}"/></svg></div>`;
 
-/* Responsive images: the Unsplash URLs already carry a w= parameter, so one
-   source becomes several widths without adding any new asset. Declared up here
-   because the card templates below are called before the slider section runs. */
-const srcset = u => { if (!u) return ""; const p = u.replace(/([?&]w=)\d+/, "$1{W}"); return [400, 600, 900, 1200].map(w => p.replace("{W}", w) + " " + w + "w").join(", ") };
+/* Responsive images. Local gallery art is stored as <slug>-640.webp / -1280.webp
+   pairs, so one path expands to a two-width srcset without extra config. Any
+   remaining remote URL (the Unsplash URLs already carry a w= parameter) is
+   expanded the same way. */
+const srcset = u => {
+  if (!u) return "";
+  if (u.indexOf("images/gallery/") === 0) {
+    return [640, 1280].map(w => u.replace(".webp", "-" + w + ".webp") + " " + w + "w").join(", ");
+  }
+  const p = u.replace(/([?&]w=)\d+/, "$1{W}");
+  return [400, 600, 900, 1200].map(w => p.replace("{W}", w) + " " + w + "w").join(", ")
+};
+/* Same idea for the AVIF source of a <picture>: only emits a <source> when the
+   AVIF sibling exists, so a missing file never breaks the image. */
+const avifSrcset = u => {
+  if (!u || u.indexOf("images/gallery/") !== 0) return "";
+  return [640, 1280].map(w => u.replace(".webp", "-" + w + ".avif") + " " + w + "w").join(", ");
+};
+/* Local gallery art ships only as -640 / -1280 siblings, so the bare slug in a
+   src attribute would 404. This points the fallback src at the real 1280 file. */
+const baseImg = u => (u && u.indexOf("images/gallery/") === 0) ? u.replace(".webp", "-1280.webp") : u;
 const SRV_SIZES = "(max-width:560px) 90vw, (max-width:820px) 46vw, 340px";
 const WK_SIZES = "(max-width:600px) 90vw, (max-width:1024px) 46vw, 420px";
 
@@ -70,7 +103,7 @@ const card = (a, i) => {
   const slug = SERV_IMG[a[0]] || "";
   const price = (a[4] * 100).toLocaleString();
   let media = slug
-    ? '<div class="svc-media"><img src="images/services/' + slug + '-1280.webp" srcset="images/services/' + slug + '-640.webp 640w, images/services/' + slug + '-1280.webp 1280w" sizes="' + SRV_SIZES + '" alt="' + a[0] + ' treatment at Bright Smiles Dental Clinic" loading="lazy" decoding="async" width="1280" height="720"><span class="svc-tag">' + a[1] + '</span></div>'
+    ? '<div class="svc-media"><picture><source type="image/avif" srcset="images/services/' + slug + '-640.avif 640w, images/services/' + slug + '-1280.avif 1280w" sizes="' + SRV_SIZES + '"><img src="images/services/' + slug + '-1280.webp" srcset="images/services/' + slug + '-640.webp 640w, images/services/' + slug + '-1280.webp 1280w" sizes="' + SRV_SIZES + '" alt="' + a[0] + ' treatment at Bright Smiles Dental Clinic" loading="lazy" decoding="async" width="1280" height="720"></picture><span class="svc-tag">' + a[1] + '</span></div>'
     : '<div class="svc-media"><div class="svc-fallback">' + ic(a[5]) + '</div><span class="svc-tag">' + a[1] + '</span></div>';
   return '<div class="card svc h" style="cursor:pointer" tabindex="0" role="button" aria-haspopup="dialog" data-i="' + i + '">' + media + '<div class="svc-body"><h3>' + a[0] + '</h3><p>' + a[2] + '</p><div class="svc-meta"><span class="svc-price">From Rs ' + price + '</span><span class="svc-link">View details <i class="fa-solid fa-arrow-right"></i></span></div></div></div>';
 };
@@ -211,19 +244,19 @@ const ba = t => `<div class="card"><div class="ba"><div class="b">${teeth(5)}<em
 const wk0 = $("#wk0"); if (wk0) wk0.innerHTML = ba("Teeth whitening");
 
 const WORK_DATA = [
-  { name: "Sarah's Wedding Smile", cat: "Veneers", desc: "Sarah wanted a brighter, more symmetrical smile for her wedding. Using 8 custom porcelain veneers, we achieved a natural, radiant look.", img: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=800&auto=format&fit=crop" },
-  { name: "Ahmed's Transformation", cat: "Aligners", desc: "Ahmed corrected severe crowding over 14 months with clear aligners, entirely discreetly without metal braces.", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" },
-  { name: "Fatima's Restoration", cat: "Implants", desc: "A seamless replacement of a missing front tooth using a titanium implant and custom hand-layered ceramic crown.", img: "https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=800&auto=format&fit=crop" },
-  { name: "Omar's Refresh", cat: "Whitening", desc: "A dramatic 6-shade improvement in just one in-clinic session, completely rejuvenating his overall appearance.", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop" },
-  { name: "Aisha's Makeover", cat: "Makeover", desc: "A combination of gum contouring and cosmetic bonding to fix uneven edges and correct a gummy smile.", img: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?q=80&w=800&auto=format&fit=crop" },
-  { name: "Hassan's Repair", cat: "Veneers", desc: "Quick and minimally invasive repair of chipped front teeth using high-end, color-matched composite bonding.", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop" }
+  { name: "Sarah's Wedding Smile", cat: "Veneers", desc: "Sarah wanted a brighter, more symmetrical smile for her wedding. Using 8 custom porcelain veneers, we achieved a natural, radiant look.", img: "images/gallery/smile-wedding.webp" },
+  { name: "Ahmed's Transformation", cat: "Aligners", desc: "Ahmed corrected severe crowding over 14 months with clear aligners, entirely discreetly without metal braces.", img: "images/gallery/smile-aligners.webp" },
+  { name: "Fatima's Restoration", cat: "Implants", desc: "A seamless replacement of a missing front tooth using a titanium implant and custom hand-layered ceramic crown.", img: "images/gallery/smile-implant.webp" },
+  { name: "Omar's Refresh", cat: "Whitening", desc: "A dramatic 6-shade improvement in just one in-clinic session, completely rejuvenating his overall appearance.", img: "images/gallery/smile-whitening.webp" },
+  { name: "Aisha's Makeover", cat: "Makeover", desc: "A combination of gum contouring and cosmetic bonding to fix uneven edges and correct a gummy smile.", img: "images/gallery/smile-makeover.webp" },
+  { name: "Hassan's Repair", cat: "Veneers", desc: "Quick and minimally invasive repair of chipped front teeth using high-end, color-matched composite bonding.", img: "images/gallery/smile-bonding.webp" }
 ];
 
 const storyCard = (s) => `
 <div class="story-card" data-cat="${s.cat}">
   <div class="story-ba">
-    <img src="${s.img}" srcset="${srcset(s.img)}" sizes="${WK_SIZES}" class="b-img" alt="Before" loading="lazy" decoding="async" width="1200" height="900">
-    <img src="${s.img}" srcset="${srcset(s.img)}" sizes="${WK_SIZES}" class="a-img" alt="After" loading="lazy" decoding="async" width="1200" height="900">
+    <picture>${avifSrcset(s.img) ? `<source type="image/avif" srcset="${avifSrcset(s.img)}" sizes="${WK_SIZES}">` : ""}<img src="${baseImg(s.img)}" srcset="${srcset(s.img)}" sizes="${WK_SIZES}" class="b-img" alt="Before - ${s.name} at Bright Smiles Dental Clinic" loading="lazy" decoding="async" width="1280" height="960"></picture>
+    <picture>${avifSrcset(s.img) ? `<source type="image/avif" srcset="${avifSrcset(s.img)}" sizes="${WK_SIZES}">` : ""}<img src="${baseImg(s.img)}" srcset="${srcset(s.img)}" sizes="${WK_SIZES}" class="a-img" alt="After - ${s.name} at Bright Smiles Dental Clinic" loading="lazy" decoding="async" width="1280" height="960"></picture>
     <em style="left:16px">Before</em>
     <em style="right:16px">After</em>
     <i></i>
@@ -265,7 +298,7 @@ if (wkHome) {
   wkHome.innerHTML = teaser.map(s => {
     const line = (s.desc.split(".")[0] || s.desc).trim() + ".";
     return `<a href="work.html" class="smile-card js-rev">
-      <img src="${s.img}" srcset="${srcset(s.img)}" sizes="${WK_SIZES}" alt="${s.name} — ${s.cat} result at Bright Smiles Dental Clinic" loading="lazy" decoding="async" width="1200" height="900">
+      <img src="${baseImg(s.img)}" srcset="${srcset(s.img)}" sizes="${WK_SIZES}" alt="${s.name} — ${s.cat} result at Bright Smiles Dental Clinic" loading="lazy" decoding="async" width="1200" height="900">
       <div class="smile-ov">
         <h3>${s.name}</h3>
         <p>${line}</p>
@@ -276,43 +309,17 @@ if (wkHome) {
 /* Scroll reveal: sections rise into place as they enter view - desktop only.
    The stylesheet only hides the targets on screens wider than 820px and this
    block matches that same breakpoint, so phone visitors get every section
-   straight away with no animation at all.
-   GSAP ScrollTrigger owns it whenever the CDN loaded - it fires a gsap.fromTo()
-   tween (the children of a .stagger one after another), and on completion the
-   element switches to the .in class so the inline styles can be cleared: from
-   then on it sits on plain CSS, which keeps card hover transforms and
-   re-injected grid items behaving exactly as they did before. The
-   IntersectionObserver below stays as the fallback for a CDN miss, and
-   reduced-motion users simply get everything shown. */
+   straight away with no animation at all. The reveal itself is pure CSS (the
+   .in class starts the transition/keyframes); an IntersectionObserver only
+   decides *when* to add it, so no animation library is downloaded or run. */
 const revealFx = !reducedMotion && matchMedia("(min-width: 821px)").matches;
 const revs = $$(".js-rev, .fade-in, .fade-in-left, .fade-in-right, .stagger");
-const revealed = new WeakSet();
-const revealEl = el => {
-  if (revealed.has(el)) return;
-  revealed.add(el);
-  const kids = el.classList.contains("stagger") ? [...el.children] : [];
-  const targets = kids.length ? kids : [el];
-  /* Starting pose mirrors the stylesheet keyframes: rise for .js-rev /
-     .fade-in, sideways for the directional pair. */
-  const from = el.classList.contains("fade-in-left") ? { x: -40, opacity: 0 }
-    : el.classList.contains("fade-in-right") ? { x: 40, opacity: 0 }
-      : { y: el.classList.contains("js-rev") ? 28 : 24, opacity: 0 };
-  gsap.fromTo(targets, from, {
-    opacity: 1, x: 0, y: 0, duration: .7, ease: "power2.out",
-    stagger: kids.length > 1 ? .1 : 0,
-    onComplete: () => { el.classList.add("in"); gsap.set(targets, { clearProps: "opacity,transform" }) }
-  });
-};
-if (revealFx && revs.length && window.gsap && window.ScrollTrigger) {
-  document.documentElement.classList.add("gsap-rev");
-  gsap.registerPlugin(ScrollTrigger);
-  revs.forEach(el => ScrollTrigger.create({ trigger: el, start: "top 85%", once: true, onEnter: () => revealEl(el) }));
-  /* Anything already on screen at first paint (or a page opened at #section)
-     reveals straight away instead of waiting for a scroll that may never come. */
-  revs.forEach(el => { if (el.getBoundingClientRect().top < innerHeight * .9) revealEl(el) });
-} else if (revealFx && revs.length && "IntersectionObserver" in window) {
+if (revealFx && revs.length && "IntersectionObserver" in window) {
   const rObs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); rObs.unobserve(e.target) } }), { threshold: .15, rootMargin: "0px 0px -40px 0px" });
   revs.forEach(el => rObs.observe(el));
+  /* Anything already on screen at first paint (or a page opened at #section)
+     reveals straight away instead of waiting for a scroll that may never come. */
+  revs.forEach(el => { if (el.getBoundingClientRect().top < innerHeight * .9) el.classList.add("in") });
 } else if (revealFx) {
   revs.forEach(el => el.classList.add("in"));
 }
@@ -368,10 +375,14 @@ document.addEventListener("pointerdown", e => {
 }, { passive: true });
 
 /* --- about: team --- */
-set("#tm", [["Dr. Umar Liaqat", "Lead Dentist &amp; Founder", "BDS, MSc · Implants · RCT · Smile restoration", "fa-user-doctor", "images/dr-umar-new.jfif"], ["Dr. Omar Siddiqui", "Orthodontist", "Aligners, braces &amp; bite correction · MOrth", "fa-tooth"], ["Dr. Sara Malik", "Paediatric Dentist", "Child dentistry &amp; prevention · BDS, MDS", "fa-child"], ["Sana Yousaf", "Dental Hygienist", "Scaling, whitening &amp; gum care", "fa-spa"]].map(a => `<div class="tmc"><div class="tmi">${a[4] ? `<img src="${a[4]}" alt="${a[0]}" loading="lazy">` : `<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#t"/></svg>`}</div><div class="tmb"><h3>${a[0]}</h3><div class="rl"><i class="fa-solid ${a[3]}"></i> ${a[1]}</div><p>${a[2]}</p></div></div>`).join(""));
+set("#tm", [["Dr. Umar Liaqat", "Lead Dentist &amp; Founder", "BDS, MSc · Implants · RCT · Smile restoration", "fa-user-doctor", "images/dr-umar-new.webp"], ["Dr. Omar Siddiqui", "Orthodontist", "Aligners, braces &amp; bite correction · MOrth", "fa-tooth"], ["Dr. Sara Malik", "Paediatric Dentist", "Child dentistry &amp; prevention · BDS, MDS", "fa-child"], ["Sana Yousaf", "Dental Hygienist", "Scaling, whitening &amp; gum care", "fa-spa"]].map(a => `<div class="tmc"><div class="tmi">${a[4] ? `<picture><source type="image/avif" srcset="images/dr-umar-new.avif"><img src="${a[4]}" alt="${a[0]}" width="1000" height="1000" loading="lazy" decoding="async"></picture>` : `<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#t"/></svg>`}</div><div class="tmb"><h3>${a[0]}</h3><div class="rl"><i class="fa-solid ${a[3]}"></i> ${a[1]}</div><p>${a[2]}</p></div></div>`).join(""));
 
 /* --- clinic: gallery, technology --- */
-const pic = (k, t, g) => `<div class="pic" style="--g:${IMG[k] ? `url(${IMG[k]})` : g}"><svg viewBox="0 0 24 24"><use href="#t"/></svg><span>${t}</span></div>`;
+/* The image URL is applied inline (document-relative) rather than through a
+   --g custom property: url() inside a custom property is resolved against the
+   stylesheet that consumes it (css/styles.css), which would wrongly look in
+   css/images/. Inline background-image resolves against the page instead. */
+const pic = (k, t, g) => `<div class="pic" style="background-image:${IMG[k] ? `url(${IMG[k]})` : g}"><svg viewBox="0 0 24 24"><use href="#t"/></svg><span>${t}</span></div>`;
 set("#gal", [pic("reception", "Reception and lounge", "linear-gradient(135deg,#a8d5f2,#3B8FC9)"), pic("rooms", "Treatment rooms", "linear-gradient(135deg,#7fb6e0,#1E3A6E)"), pic("steril", "Sterilisation suite", "linear-gradient(135deg,#cfe9fb,#5aa5d8)"), pic("lounge", "Kids' corner", "linear-gradient(135deg,#9ad0f0,#2c78b4)")].join(""));
 set("#tech", [["scan", "Digital X-ray", "Low radiation, instant results."], ["tag", "3D intraoral scanner", "No messy impressions."], ["zap", "Laser dentistry", "Gentler gum care, faster healing."]].map(a => `<div class="card">${ic(a[0])}<h3>${a[1]}</h3><p>${a[2]}</p></div>`).join(""));
 
@@ -709,14 +720,15 @@ if (goBtn && bf && bkOldOk) {
     /* date -> appt_date, slot -> time_slot. The row is never read back (INSERT only). */
     const row = { ref: "", name: n, phone: p, email: em || null, service: service, units: ctx && ctx.units ? ctx.units : null, estimate: ctx && ctx.estimate ? ctx.estimate : null, months: ctx && ctx.months ? ctx.months : null, appt_date: d, time_slot: slot, source: source, notes: null };
     let saved = false, lastError = null;
-    if (!supabaseClient) {
+    const client = supabaseClient || await loadSupabase();
+    if (!client) {
       showSaveError(n, p, service, ctx, niceDate, slot);
     } else {
       /* Retry only on a duplicate-ref collision (Postgres 23505). Any other error is fatal. */
       for (let attempt = 0; attempt < 4 && !saved; attempt++) {
         row.ref = makeRef();
         try {
-          const res = await supabaseClient.from("bookings").insert(row);
+          const res = await client.from("bookings").insert(row);
           if (!res.error) { saved = true; break }
           lastError = res.error;
           if ((res.error.code || "") === "23505") continue;
