@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logo size — compare 36 / 34 / 32 px</title>
+<link rel="stylesheet" href="css/fontawesome.css">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  /* ---- page chrome only; everything below uses the REAL site stylesheet ---- */
+  .wrap{max-width:1180px;margin:0 auto;padding:26px clamp(16px,4vw,28px) 70px}
+  .lead{font-size:.88rem;color:#5B6B7F;line-height:1.6;margin:6px 0 28px}
+  .lead b{color:#1E3A6E}
+  .demo{margin-bottom:26px}
+  .demo-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+  .tag{font-weight:800;font-size:.86rem;color:#1E3A6E;letter-spacing:-.01em}
+  .pick{font-size:.7rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#fff;
+    background:#3B8FC9;border-radius:999px;padding:3px 10px}
+  .badge{margin-left:auto;font:600 .72rem ui-monospace,Consolas,monospace;color:#334a68;
+    background:#EAF3FA;border:1px solid #c4d8e9;border-radius:999px;padding:4px 10px;white-space:nowrap}
+  .stage{position:relative;overflow:hidden;border:1px solid #c4d8e9;border-radius:16px;
+    background:linear-gradient(180deg,#f8faff,#eef5fb);padding:78px 18px 96px}
+  .stage-note{margin:14px 2px 0;font-size:.76rem;color:#5B6B7F;line-height:1.55}
+  .stage header{position:absolute;top:0;left:0;right:0;z-index:5;padding:0 max(20px,calc((100% - 1230px)/2))}
+  .stage hr{border:0;border-top:1px dashed #c4d8e9;margin:34px 0}
+  /* the three header-logo variants */
+  .demo[data-variant="l36"] header .logo svg{width:36px;height:36px}
+  .demo[data-variant="l34"] header .logo svg{width:34px;height:34px}
+  .demo[data-variant="l32"] header .logo svg{width:32px;height:32px}
+  /* footer-brand proof strip (real footer classes, dark chamber) */
+  .footstage{margin-top:8px;border:1px solid #c4d8e9;border-radius:16px;overflow:hidden;
+    background:#0b1c33;padding:26px clamp(16px,4vw,28px)}
+  .footstage .demo-hd .tag{color:#dcebfa}
+  .footstage .demo-hd .badge{background:rgba(143,205,245,.12);border-color:#22314e;color:#bcd4ee}
+  .foot-row{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+  .foot-row p{color:#8ba1c2;font-size:.78rem;line-height:1.55;margin:10px 0 0;max-width:520px}
+  .choice{margin-top:10px}
+  .choice a{display:inline-block;margin-right:10px;background:none;border:1.5px solid #3B8FC9;color:#1d6494;
+    font-weight:700;font-size:.78rem;border-radius:999px;padding:7px 14px;text-decoration:none}
+  .foot{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,28px) 90px;font-size:.84rem;color:#5B6B7F}
+  .foot b{color:#1E3A6E}
+</style>
+</head>
+<body>
+
+<svg style="display:none"><symbol id="t" viewBox="0 0 24 24"><path d="M12 3c-2 0-3 1-5 1S3 5 3 9c0 3 1 5 2 8 .5 2 1 4 2.5 4 1.7 0 1.5-4 4.5-4s2.8 4 4.5 4c1.5 0 2-2 2.5-4 1-3 2-5 2-8 0-4-2-5-4-5s-3-1-5-1z"/></symbol></svg>
+
+<div class="wrap">
+  <h1 style="color:#1E3A6E;font-size:1.35rem;margin:2px 0 2px">Navbar logo — 36 / 34 / 32 px comparison</h1>
+  <p class="lead">
+    Rendered with your site's <b>real styles.css</b> — same header as production (toggle at 39px per Option B,
+    CTA untouched). The badges are <b>measured live from the DOM</b>. Only the <b>header</b> logo changes in these
+    variants — scroll to the bottom to confirm the footer brand keeps its 36px icon in all cases.
+  </p>
+
+  <!-- ============ 1 · CURRENT 36 ============ -->
+  <section class="demo" data-variant="l36">
+    <div class="demo-hd"><span class="tag">1 · Today (icon 36px)</span><span class="badge" id="b1">measuring…</span></div>
+    <div class="stage">
+      <header class="sc">
+        <a class="logo" href="#"><svg><use href="#t"/></svg><span>Bright Smiles<br><small>Dental Clinic</small></span></a>
+        <nav id="nav"><a href="#" class="on">Home</a><a href="#">About</a><a href="#">Services</a></nav>
+        <div class="ha">
+          <button type="button" class="btn hb"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Book appointment</button>
+          <button type="button" id="th" aria-label="Toggle dark mode"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+          <button type="button" id="mn" class="mn" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+        </div>
+      </header>
+      <p class="stage-note">The filled 36px tooth + the two-line brand text form the heaviest block in the bar — noticeably denser once the controls around it dropped to 39px (Option B).</p>
+      <hr>
+    </div>
+  </section>
+
+  <!-- ============ 2 · VARIANT 34 ============ -->
+  <section class="demo" data-variant="l34">
+    <div class="demo-hd"><span class="pick">B</span><span class="tag">Variant · icon 34px (mild step down)</span><span class="badge" id="b2">measuring…</span></div>
+    <div class="stage">
+      <header class="sc">
+        <a class="logo" href="#"><svg><use href="#t"/></svg><span>Bright Smiles<br><small>Dental Clinic</small></span></a>
+        <nav id="nav2"><a href="#" class="on">Home</a><a href="#">About</a><a href="#">Services</a></nav>
+        <div class="ha">
+          <button type="button" class="btn hb"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Book appointment</button>
+          <button type="button" id="th2" aria-label="Toggle dark mode"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+          <button type="button" id="mn2" class="mn" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+        </div>
+      </header>
+      <p class="stage-note">A 2px whisper of a change — mainly softens the icon's optical weight in the left edge zone.</p>
+      <hr>
+    </div>
+  </section>
+
+  <!-- ============ 3 · VARIANT 32 ============ -->
+  <section class="demo" data-variant="l32">
+    <div class="demo-hd"><span class="pick">A</span><span class="tag">Variant · icon 32px (classic premium ratio)</span><span class="badge" id="b3">measuring…</span></div>
+    <div class="stage">
+      <header class="sc">
+        <a class="logo" href="#"><svg><use href="#t"/></svg><span>Bright Smiles<br><small>Dental Clinic</small></span></a>
+        <nav id="nav3"><a href="#" class="on">Home</a><a href="#">About</a><a href="#">Services</a></nav>
+        <div class="ha">
+          <button type="button" class="btn hb"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Book appointment</button>
+          <button type="button" id="th3" aria-label="Toggle dark mode"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+          <button type="button" id="mn3" class="mn" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+        </div>
+      </header>
+      <p class="stage-note">Icon smaller than the control row — the standard premium-navbar ratio. Brand reads anchored without dominating. If applied for real, the ≤360px phones rule (28px) gets a one-line companion edit so the ladder stays intact.</p>
+      <hr>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER PROOF ============ -->
+  <section class="footstage">
+    <div class="demo-hd"><span class="tag">Footer brand — untouched by any variant (stays 36px)</span><span class="badge" id="b4">measuring…</span></div>
+    <div class="foot-row">
+      <a class="logo" href="#"><svg><use href="#t"/></svg><span>Bright Smiles<br><small>Dental Clinic</small></span></a>
+      <p>All three header rules are scoped to <b>header .logo svg</b> only — sharing the class with the footer is why the un-scoped version of this fix would have shrunk the footer logo by accident.</p>
+    </div>
+  </section>
+</div>
+
+<p class="foot"><b>Next step:</b> reply with your pick — “32”, “34”, or “keep 36” — and I'll apply that header-only rule (plus the tiny-screens companion line if needed), verified by git diff.</p>
+
+<script src="js/app.js" defer></script>
+<script defer>
+  addEventListener('load', function(){
+    var b = {l36:'b1', l34:'b2', l32:'b3'};
+    document.querySelectorAll('.demo').forEach(function(d){
+      var svg = d.querySelector('header .logo svg');
+      var cta = d.querySelector('.hb'), th = d.querySelector('[id^="th"]');
+      if(!svg || !cta || !th) return;
+      var s = Math.round(svg.getBoundingClientRect().width);
+      var h = function(el){ return Math.round(el.getBoundingClientRect().height * 10) / 10; };
+      document.getElementById(b[d.dataset.variant]).textContent =
+        'measured live →  icon: ' + s + 'px  ·  CTA: ' + h(cta) + 'px  ·  toggle: ' + h(th) + 'px';
+    });
+    var fs = document.querySelector('.footstage .foot-row .logo svg');
+    if(fs){
+      document.getElementById('b4').textContent = 'measured live →  footer icon: '
+        + Math.round(fs.getBoundingClientRect().width) + 'px (fixed)';
+    }
+  });
+</script>
+</body>
+</html>

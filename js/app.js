@@ -550,7 +550,15 @@ document.addEventListener("keydown", e => {
 if (hdr) addEventListener("scroll", () => hdr.classList.toggle("sc", scrollY > 24), { passive: true });
 const th = $("#th");
 if (th) {
-  const isDark = () => getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() === "#0b1526";
+  /* Determine dark from the explicit theme, not from a hard-coded token
+     colour (a colour swap must never break the toggle again). If no theme
+     has been picked, follow the OS preference. */
+  const isDark = () => {
+    const t = document.documentElement.dataset.theme;
+    if (t === "dark") return true;
+    if (t === "light") return false;
+    return !!(window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+  };
   const paint = () => { th.innerHTML = isDark() ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>' : '<i class="fa-solid fa-moon" aria-hidden="true"></i>'; };
   const spin = () => { th.classList.remove("spin"); void th.offsetWidth; th.classList.add("spin"); };
   paint();

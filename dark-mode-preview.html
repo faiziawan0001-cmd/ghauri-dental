@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dark mode review — Bright Smiles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- The REAL site stylesheet. Every panel below only swaps the dark tokens,
+     so what you see here is exactly what ships. -->
+<link rel="stylesheet" href="css/styles.css">
+<meta name="robots" content="noindex, nofollow">
+<style>
+/* ============================================================
+   Review harness only. Nothing here touches the live site.
+   ============================================================ */
+body{background:#eef2f7;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+
+.dp-wrap{max-width:1500px;margin:0 auto;padding:0 20px 80px}
+
+/* ---- sticky topbar ---- */
+.dp-bar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:14px 20px;margin:0 -20px 28px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);
+  border-bottom:1px solid #dbe3ee}
+.dp-bar h1{margin:0;font-size:1.05rem;color:#1E3A6E;font-weight:800}
+.dp-bar p{margin:0;font-size:.82rem;color:#5c6d82}
+.dp-jump{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.dp-jump a{font:600 .78rem 'Plus Jakarta Sans',sans-serif;text-decoration:none;color:#1E3A6E;
+  border:1px solid #dbe3ee;border-radius:99px;padding:7px 14px;background:#fff}
+.dp-jump a:hover{border-color:#3B8FC9;color:#1d6494}
+
+/* ---- intro ---- */
+.dp-intro{background:#fff;border:1px solid #e2e9f2;border-radius:18px;padding:22px 26px;margin:0 0 26px;
+  box-shadow:0 8px 24px rgba(30,58,110,.06)}
+.dp-intro h2{margin:0 0 10px;font-size:1.25rem;color:#1E3A6E}
+.dp-intro p{margin:0 0 10px;font-size:.92rem;color:#44566c;line-height:1.65}
+.dp-intro p:last-child{margin-bottom:0}
+.dp-intro code{background:#eef3fa;border-radius:6px;padding:1px 6px;font-size:.85em;color:#1d6494}
+
+/* ---- contrast table ---- */
+.dp-table{margin:0 0 30px;border:1px solid #e2e9f2;border-radius:18px;overflow:hidden;background:#fff;
+  box-shadow:0 8px 24px rgba(30,58,110,.06)}
+.dp-table table{width:100%;border-collapse:collapse;font-size:.86rem}
+.dp-table th,.dp-table td{padding:11px 14px;text-align:left;border-bottom:1px solid #eef2f7}
+.dp-table thead th{background:#f6f9fc;color:#1E3A6E;font-size:.76rem;letter-spacing:.06em;text-transform:uppercase}
+.dp-table tbody tr:last-child td{border-bottom:0}
+.dp-table td:first-child{font-weight:600;color:#1E3A6E}
+.dp-chip{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.dp-dot{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,.15);flex:none}
+.dp-pass{color:#1f8a4c;font-weight:700}
+.dp-fail{color:#c0392b;font-weight:700}
+.dp-warn{color:#a97b12;font-weight:700}
+.dp-ratio{font-variant-numeric:tabular-nums;font-weight:700;color:#33475f}
+.dp-tag2{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:99px;background:#eef2f7;color:#5c6d82}
+
+/* ---- the three columns ---- */
+.dp-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:start}
+@media(max-width:1400px){.dp-cols{grid-template-columns:1fr}}
+
+.dp-col{border:1px solid #dbe3ee;border-radius:20px;overflow:hidden;background:#fff;
+  box-shadow:0 14px 34px rgba(30,58,110,.10)}
+.dp-colhead{padding:14px 18px;border-bottom:1px solid #dbe3ee;background:#f8fafc}
+.dp-colhead b{display:block;font-size:.98rem;color:#1E3A6E}
+.dp-colhead span{font-size:.79rem;color:#5c6d82}
+.dp-colhead .dp-verdict{margin-top:6px;display:inline-block;font-size:.72rem;font-weight:700;
+  padding:3px 10px;border-radius:99px}
+.dp-colhead .v-bad{background:#fdeceb;color:#b23b2e}
+.dp-colhead .v-ok{background:#e8f6ee;color:#1f8a4c}
+.dp-colhead .v-gold{background:#faf3e2;color:#8a6d1f}
+
+/* ---- stage: real site markup, scaled to fit a review column ---- */
+.dp-stage{background:var(--bg);color:var(--txt);max-height:760px;overflow:auto}
+.dp-stage{background:var(--bg);color:var(--txt);max-height:980px;overflow:auto;overflow-x:hidden}
+.dp-stage .sec{padding:38px 0}
+.dp-stage .sec.hs{height:auto;min-height:360px;padding:76px 0 24px}
+.dp-stage .w{padding:0 18px}
+.dp-stage h2{font-size:1.5rem}
+.dp-stage .card{padding:22px}
+.dp-stage .grid{gap:16px}
+.dp-stage footer{padding:26px 0}
+.dp-stage .strip{border-top:1px solid var(--strip-top);border-bottom:1px solid var(--strip-line)}
+.dp-stage .strip .swin{overflow-x:auto}
+.dp-stage .strip .si{width:200px;padding:16px 0;font-size:.78rem}
+.dp-stage .strip .stab{width:40px}
+.dp-stage .consult-strip{padding:38px 22px;border-radius:0}
+.dp-stage .consult-strip h2{font-size:1.32rem;white-space:normal}
+.dp-stage .consult-strip p{font-size:.92rem}
+.dp-stage .consult-actions .btn{padding:13px 22px;font-size:.88rem}
+.dp-stage .two{grid-template-columns:1fr!important;gap:22px!important}
+.dp-stage .hero h1{font-size:clamp(2rem,5vw,2.8rem)}
+.dp-stage .hero p{font-size:1rem}
+.dp-label{font:700 .68rem 'Plus Jakarta Sans',sans-serif;letter-spacing:.14em;text-transform:uppercase;
+  color:#8b98a8;padding:14px 18px 0}
+.dp-lead{font-size:.98rem;line-height:1.65;margin:0 0 10px}
+.dp-meta{font-size:.84rem;color:var(--subtle);margin:0 0 16px}
+.dp-btns{display:flex;gap:10px;flex-wrap:wrap}
+.dp-nav{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--line);
+  background:var(--card)}
+.dp-swatchrow{display:flex;gap:10px;flex-wrap:wrap;padding:14px 18px;border-top:1px solid var(--line);background:var(--card)}
+.dp-sw{display:flex;align-items:center;gap:7px;font-size:.72rem;color:var(--subtle)}
+.dp-sw i{width:20px;height:20px;border-radius:6px;display:block;border:1px solid rgba(255,255,255,.18)}
+.dp-form{padding:0 18px}
+.dp-form label{color:var(--navy)}
+.dp-form input,.dp-form select{background:var(--bg)}
+
+/* ============================================================
+   THE THREE DARK TOKEN SETS (only variables change)
+   ============================================================ */
+/* 1 · BEFORE — the original dark tokens */
+.v-old{
+  --navy:#d6e4ff;--blue-ink:#8fcdf5;--tint:#12223b;--bg:#0b1526;--card:#15243b;
+  --txt:#a3b4ca;--subtle:#9fb0c6;--line:#27385a;--page:#070f1c;
+  --strip-bg:linear-gradient(180deg,#0d1a2f,#0a1526);--strip-line:rgba(255,255,255,.08);
+  --strip-top:rgba(143,205,245,.25);--strip-ic:#8fcdf5;
+}
+/* 2 · AFTER · B — neutral text + calmer surfaces (applied now) */
+.v-b{
+  --navy:#f5f7fa;--blue-ink:#9fd3ff;--tint:#0f182b;--bg:#0a101f;--card:#141f33;
+  --txt:#cdd7e1;--subtle:#9fb2c9;--line:rgba(255,255,255,.09);--page:#070d19;
+  --strip-bg:linear-gradient(180deg,#111d2f,#0a101f);--strip-line:rgba(255,255,255,.08);
+  --strip-top:rgba(159,211,255,.20);--strip-ic:#9fd3ff;
+}
+/* 3 · AFTER · C — B plus a restrained gold primary CTA */
+.v-c{
+  --navy:#f5f7fa;--blue-ink:#9fd3ff;--tint:#0f182b;--bg:#0a101f;--card:#141f33;
+  --txt:#cdd7e1;--subtle:#9fb2c9;--line:rgba(255,255,255,.09);--page:#070d19;
+  --strip-bg:linear-gradient(180deg,#111d2f,#0a101f);--strip-line:rgba(255,255,255,.08);
+  --strip-top:rgba(185,160,108,.20);--strip-ic:#9fd3ff;
+}
+.v-c .btn{
+  background:linear-gradient(135deg,#e2c47c,#b9933f);color:#221a08;
+  box-shadow:0 8px 20px rgba(185,160,108,.34);
+}
+.v-c .btn:hover{box-shadow:0 12px 26px rgba(185,160,108,.46)}
+.v-c .btn.alt{background:var(--card);color:var(--navy);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.v-c .dp-nav .btn{box-shadow:0 4px 14px rgba(185,160,108,.3)}
+
+/* ============================================================
+   DARK POLISH — mirrors the production rules now in
+   css/styles.css (scoped here to .v-b / .v-c instead of
+   :root[data-theme="dark"], so the preview matches the site).
+   ============================================================ */
+.v-b, .v-c{--sh-card:0 10px 30px rgba(0,0,0,.45);--sh-card-hover:0 20px 46px rgba(0,0,0,.55)}
+.v-b .card, .v-c .card,
+.v-b .stats div, .v-c .stats div{
+  box-shadow:var(--sh-card), inset 0 1px 0 rgba(255,255,255,.05);
+  background-image:linear-gradient(180deg,rgba(255,255,255,.018),transparent 34%);
+}
+.v-b .card.h:hover, .v-c .card.h:hover{box-shadow:var(--sh-card-hover), inset 0 1px 0 rgba(255,255,255,.07)}
+.v-b h1, .v-c h1, .v-b h2, .v-c h2{color:#fff}
+.v-b h3, .v-c h3, .v-b h4, .v-c h4{color:#e8edf5;letter-spacing:-.01em}
+.v-b .card h3, .v-c .card h3{color:#eef2f8}
+.v-b .sh p, .v-c .sh p,
+.v-b .two > div > p, .v-c .two > div > p{color:#b7c3d2}
+.v-b .eb, .v-c .eb{color:#9fd3ff}
+.v-b input, .v-b select, .v-c input, .v-c select{
+  background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.12);color:#f2f5fa}
+.v-b input::placeholder, .v-c input::placeholder{color:#8296ad}
+.v-b input:focus, .v-b select:focus, .v-c input:focus, .v-c select:focus{
+  border-color:#5aa9ea;box-shadow:0 0 0 4px rgba(90,169,234,.18)}
+.v-b .btn, .v-c .btn{background:linear-gradient(135deg,#67b6ee,#2f85c6);box-shadow:0 10px 26px rgba(59,143,201,.45)}
+.v-b .btn:hover, .v-c .btn:hover{box-shadow:0 14px 34px rgba(59,143,201,.6)}
+.v-b .btn.alt, .v-c .btn.alt{background:rgba(255,255,255,.07);color:#eef2f8;border:1px solid rgba(255,255,255,.16);box-shadow:none}
+.v-b .svc-media, .v-c .svc-media{background:linear-gradient(135deg,#0f182b,#16283f)}
+.v-b footer, .v-c footer{background:linear-gradient(180deg,#0d1626,#090f1c);border-top:1px solid rgba(255,255,255,.06)}
+.v-b header, .v-c header{position:relative;background:rgba(10,16,31,.6);border-bottom:1px solid rgba(255,255,255,.06);padding:12px 18px}
+/* The "before" column keeps the old flat look on purpose */
+.v-old header{position:relative;background:#0f2548;padding:12px 18px}
+.v-old h3, .v-old .card h3{color:var(--navy)}
+</style>
+</head>
+<body>
+<div class="dp-wrap">
+
+  <div class="dp-bar">
+    <h1>Dark mode review</h1>
+    <p>Same components, three dark token sets — rendered with the live <b>css/styles.css</b>.</p>
+    <div class="dp-jump">
+      <a href="#before">Before</a>
+      <a href="#b">B · applied</a>
+      <a href="#c">C · +gold</a>
+      <a href="#contrast">Contrast table</a>
+    </div>
+  </div>
+
+  <div class="dp-intro">
+    <h2>Why the old dark mode felt "off"</h2>
+    <p><b>1 · The text was blue, not white.</b> Headings used <code>--navy:#d6e4ff</code> and body used
+    <code>--txt:#a3b4ca</code> — both tinted blue. On a navy page that reads icy and washed out instead of crisp.</p>
+    <p><b>2 · Surfaces were too close together.</b> <code>--bg:#0b1526</code> and <code>--card:#15243b</code> are
+    nearly the same tone, so cards didn't separate from the page and everything looked flat.</p>
+    <p><b>3 · Borders were blue-grey and heavy.</b> <code>--line:#27385a</code> drew visible blue outlines around
+    every card instead of a soft hairline.</p>
+    <p>The fix: keep blue for <b>links, icons and interactive bits only</b>, make the text neutral, and give the
+    surfaces a little more separation with softer borders.</p>
+    <p style="margin-top:12px"><b>Note:</b> the hero and the "Ready for a healthier smile?" banner are
+    intentionally dark in both themes — they're supposed to look the same in every panel.</p>
+  </div>
+
+  <!-- ================= CONTRAST TABLE ================= -->
+  <div class="dp-table" id="contrast">
+    <table>
+      <thead>
+        <tr>
+          <th>Text role</th>
+          <th>Before (old)</th>
+          <th>B · applied</th>
+          <th>On</th>
+          <th>Verdict</th>
+        </tr>
+      </thead>
+      <tbody id="contrastBody"></tbody>
+    </table>
+  </div>
+
+  <!-- ================= THREE COLUMNS ================= -->
+  <div class="dp-cols">
+
+    <div class="dp-col v-old" id="before">
+      <div class="dp-colhead">
+        <b>Before — original dark</b>
+        <span>icy blue text, flat surfaces</span>
+        <em class="dp-verdict v-bad">washed out</em>
+      </div>
+      <div class="dp-stage" data-stage></div>
+    </div>
+
+    <div class="dp-col v-b" id="b">
+      <div class="dp-colhead">
+        <b>After · B — neutral text</b>
+        <span>now live in css/styles.css</span>
+        <em class="dp-verdict v-ok">recommended</em>
+      </div>
+      <div class="dp-stage" data-stage></div>
+    </div>
+
+    <div class="dp-col v-c" id="c">
+      <div class="dp-colhead">
+        <b>After · C — neutral + gold CTA</b>
+        <span>B, with the primary button in gold</span>
+        <em class="dp-verdict v-gold">optional flavour</em>
+      </div>
+      <div class="dp-stage" data-stage></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= the shared stage markup (real site classes) ================= -->
+<template id="stageTpl">
+  <header>
+    <a class="logo" href="#" aria-label="Bright Smiles">
+      <svg width="32" height="32" viewBox="0 0 200 200" role="img"><g stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="100" r="76" stroke-width="8"/><path d="M60 78a6 6 0 0 1 10.4-4.8L78 80.4 69.6 90a6 6 0 0 1-10.4-4.8V78zm80 0a6 6 0 0 1 10.4-4.8L158 80.4 149.6 90a6 6 0 0 1-10.4-4.8V78zM52 112c12 16 32 28 48 28s36-12 48-28" stroke-width="8"/></g></svg>
+      <div><div>Bright Smiles</div><small>DENTAL CARE</small></div>
+    </a>
+    <nav><a href="#">Home</a><a href="#">Services</a><a href="#">About</a><a href="#">Reviews</a><a href="#">Contact</a></nav>
+    <div class="ha"><button type="button" class="btn hb">Book appointment</button></div>
+  </header>
+
+  <div class="sec hs">
+    <div class="w">
+      <div class="hero">
+        <div>
+          <div class="eb"><i class="fa-solid fa-star"></i> Gentle &amp; painless dentistry</div>
+          <h1>
+            <span class="hl"><span>Healthy smiles,</span></span>
+            <span class="hl"><span>created by experts</span></span>
+          </h1>
+          <p class="in">Bright Smiles Dental Clinic — modern, trusted care in DHA Phase 6, Lahore. Book online or chat on WhatsApp in seconds.</p>
+          <div class="hero-btns in">
+            <button class="btn">Book appointment</button>
+            <button class="btn alt">See our services</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="strip">
+    <div class="swin"><div class="strack">
+      <span class="si"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Digital X-ray &amp; scanning</span>
+      <span class="si"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Gentle, pain-free care</span>
+      <span class="si"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Braces &amp; aligners</span>
+      <span class="si"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Dental implants</span>
+      <span class="si"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Teeth whitening</span>
+      <span class="si"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>Root canals &amp; fillings</span>
+    </div></div>
+    <button class="stab" type="button" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+  </div>
+
+  <section class="sec">
+    <div class="w">
+      <div class="sh">
+        <div class="eb">WHAT WE OFFER</div>
+        <h2>Comprehensive Dental Services</h2>
+        <p>A full range of modern dental treatments designed for your comfort. Tap any service below to learn how it works and book in seconds.</p>
+      </div>
+      <div class="grid">
+        <div class="card svc h">
+          <div class="svc-media">
+            <div class="svc-fallback">
+              <svg viewBox="0 0 24 24" width="54" height="54" fill="none" stroke="var(--blue)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-2 0-3 1-5 1S3 5 3 9c0 3 1 5 2 8 .5 2 1 4 2.5 4 1.7 0 1.5-4 4.5-4s2.8 4 4.5 4c1.5 0 2-2 2.5-4 1-3 2-5 2-8 0-4-2-5-4-5s-3-1-5-1z"/></svg>
+            </div>
+            <span class="svc-tag">Popular</span>
+          </div>
+          <div class="svc-body">
+            <h3>Teeth Whitening</h3>
+            <p>Brighten your smile in a single visit with safe, enamel-friendly whitening.</p>
+            <div class="svc-meta">
+              <span class="svc-price">from PKR 18,000</span>
+              <span class="svc-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card svc h">
+          <div class="svc-media">
+            <div class="svc-fallback">
+              <svg viewBox="0 0 24 24" width="54" height="54" fill="none" stroke="var(--blue)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/></svg>
+            </div>
+            <span class="svc-tag">Recommended</span>
+          </div>
+          <div class="svc-body">
+            <h3>Dental Implants</h3>
+            <p>A permanent, natural-looking replacement for missing teeth.</p>
+            <div class="svc-meta">
+              <span class="svc-price">from PKR 55,000</span>
+              <span class="svc-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card svc h">
+          <div class="svc-media">
+            <div class="svc-fallback">
+              <svg viewBox="0 0 24 24" width="54" height="54" fill="none" stroke="var(--blue)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v7M5.5 16.5a7 7 0 1 0 13 0"/></svg>
+            </div>
+          </div>
+          <div class="svc-body">
+            <h3>Braces &amp; Aligners</h3>
+            <p>Straighten your teeth comfortably with modern clear aligners.</p>
+            <div class="svc-meta">
+              <span class="svc-price">from PKR 39,000</span>
+              <span class="svc-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sec tint">
+    <div class="w">
+      <div class="two" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center">
+        <div>
+          <div class="eb">WHY CHOOSE US</div>
+          <h2>Comfort-first dentistry you can trust</h2>
+          <p>From the first hello to your final follow-up, we focus on gentle care, honest advice and results that last.</p>
+          <div class="feats">
+            <div class="feat"><div class="ic"><i class="fa-solid fa-heart-pulse"></i></div><div><h3>Gentle &amp; pain-free</h3><p>Modern anaesthesia and a calm approach for every patient.</p></div></div>
+            <div class="feat"><div class="ic"><i class="fa-solid fa-microscope"></i></div><div><h3>Latest technology</h3><p>Digital scans and low-radiation X-rays for precise care.</p></div></div>
+            <div class="feat"><div class="ic"><i class="fa-solid fa-certificate"></i></div><div><h3>Experienced team</h3><p>Qualified dentists focused on long-term oral health.</p></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <h3>Book your consultation</h3>
+            <label>Full name</label><input type="text" placeholder="Ayesha Khan">
+            <label>Phone number</label><input type="tel" placeholder="03xx xxxxxxx">
+            <label>Preferred service</label>
+            <select><option>General check-up &amp; cleaning</option><option>Teeth whitening</option><option>Dental implants</option><option>Braces &amp; aligners</option></select>
+            <button class="btn" style="margin-top:16px;width:100%">Request appointment</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" style="padding:0">
+    <div class="w consult-strip" style="max-width:none">
+      <div class="consult-copy">
+        <span class="cs-eyebrow">Get in touch</span>
+        <h2>Ready for a healthier smile?</h2>
+        <p>Book online in 60 seconds or text us via WhatsApp.</p>
+      </div>
+      <div class="consult-actions">
+        <button class="btn cs-book" type="button">Book appointment</button>
+        <button class="btn cs-wa" type="button"><i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="w">
+      <div class="grid">
+        <div><h3>Bright Smiles</h3><p>Gentle, modern dentistry in DHA Phase 6, Lahore.</p></div>
+        <div><h3>Services</h3><p>Whitening · Implants · Braces</p></div>
+        <div><h3>Hours</h3><p>Mon–Sat · 9:00 AM – 8:00 PM</p></div>
+      </div>
+    </div>
+  </footer>
+
+
+</template>
+
+<script>
+/* ---- 1. paint the shared stage into each column ---- */
+const tpl = document.getElementById('stageTpl').content;
+document.querySelectorAll('[data-stage]').forEach((host, i) => {
+  const node = tpl.cloneNode(true);
+  // de-duplicate the field ids so labels stay wired per column
+  node.querySelectorAll('[id]').forEach(el => el.id = el.id + '-' + i);
+  host.appendChild(node);
+});
+
+/* ---- 2. build the contrast table from the real token values ---- */
+function contrast(a, b) {
+  const lum = hex => {
+    const c = hex.replace('#', '');
+    const rgb = [0, 2, 4].map(i => parseInt(c.substr(i, 2), 16) / 255)
+      .map(v => v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4));
+    return .2126 * rgb[0] + .7152 * rgb[1] + .0722 * rgb[2];
+  };
+  const l1 = lum(a), l2 = lum(b);
+  const hi = Math.max(l1, l2), lo = Math.min(l1, l2);
+  return (hi + .05) / (lo + .05);
+}
+function rate(r) { return r >= 4.5 ? ['pass', 'AA ✓'] : r >= 3 ? ['warn', 'AA large'] : ['fail', 'too low']; }
+function deltaHtml(before, after) {
+  const diff = after - before;
+  if (Math.abs(diff) < 0.05) return '<span class="dp-tag2">no change</span>';
+  const up = diff > 0;
+  return `<span class="dp-${up ? 'pass' : 'fail'}">${up ? '▲' : '▼'} ${Math.abs(diff).toFixed(2)}</span>`;
+}
+
+const SETS = {
+  old: { label:'Before', navy:'#d6e4ff', txt:'#a3b4ca', subtle:'#9fb0c6', accent:'#8fcdf5',
+         bg:'#0b1526', card:'#15243b', tint:'#12223b' },
+  b:   { label:'B · applied', navy:'#f5f7fa', txt:'#cdd7e1', subtle:'#9fb2c9', accent:'#9fd3ff',
+         bg:'#0a101f', card:'#141f33', tint:'#0f182b' }
+};
+
+const hex2rgb = h => {
+  h = h.replace('#','');
+  if (h.length === 3) h = h.split('').map(c => c + c).join('');
+  return [0,2,4].map(i => parseInt(h.slice(i, i+2), 16));
+};
+const lum = hex => {
+  const [r,g,bl] = hex.match(/[0-9a-f]{2}/gi).map(h => parseInt(h,16)/255)
+    .map(c => c <= 0.03928 ? c/12.92 : Math.pow((c + 0.055)/1.055, 2.4));
+  return 0.2126*r + 0.7152*g + 0.0722*b;
+};
+const ratio = (a, b) => {
+  const l1 = lum(a), l2 = lum(b);
+  return ((Math.max(l1,l2) + 0.05) / (Math.min(l1, l2) + 0.05));
+};
+const rate = r => r >= 4.5 ? ['pass','AA ✓'] : r >= 3 ? ['warn','AA large'] : ['fail','too low'];
+
+const ROWS = [
+  ['Headings / links', 'navy'],
+  ['Body copy',        'txt'],
+  ['Meta & labels',    'subtle'],
+  ['Accents (icons)',  'accent'],
+];
+
+const body = document.getElementById('contrastBody');
+ROWS.forEach(([role, key]) => {
+  ['bg','card'].forEach(surface => {
+    const tr = document.createElement('tr');
+    const ro = SETS.old, rn = SETS.b;
+    const co = contrast(ro[key], ro[surface]);
+    const cn = contrast(rn[key], rn[surface]);
+    const [clsO, txtO] = rate(co);
+    const [clsN, txtN] = rate(cn);
+    tr.innerHTML =
+      `<td>${role}<div class="dp-tag2" style="margin-top:4px">on ${surface === 'bg' ? 'page' : 'card'}</div></td>` +
+      `<td><span class="dp-chip"><i class="dp-dot" style="background:${ro[key]}"></i>${ro[key]}</span>` +
+        `<div class="dp-ratio" style="margin-top:4px">${co.toFixed(2)}:1 <span class="dp-${clsO}">${txtO}</span></div></td>` +
+      `<td><span class="dp-chip"><i class="dp-dot" style="background:${rn[key]}"></i>${rn[key]}</span>` +
+        `<div class="dp-ratio" style="margin-top:4px">${cn.toFixed(2)}:1 <span class="dp-${clsN}">${txtN}</span></div></td>` +
+      `<td><span class="dp-chip"><i class="dp-dot" style="background:${surface === 'bg' ? ro.bg : ro.card}"></i>` +
+        `${surface === 'bg' ? 'page bg' : 'card'}</span>` +
+        `<div class="dp-tag2" style="margin-top:4px">${surface === 'bg' ? ro.bg : ro.card}</div></td>` +
+      `<td>${deltaHtml(co, cn)}</td>`;
+    body.appendChild(tr);
+  });
+});
+</script>
+</body>
+</html>

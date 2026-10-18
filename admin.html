@@ -529,7 +529,7 @@ dialog textarea{min-height:140px;resize:vertical}
       </div>
       <div class="actions">
         <button type="button" class="btn alt sm" id="clearFilters">Clear</button>
-        <button type="button" class="btn alt sm" id="exportCsv">Export CSV</button>
+        <button type="button" class="btn sm" id="exportCsv">Export CSV</button>
       </div>
     </div>
 
@@ -726,6 +726,10 @@ dialog textarea{min-height:140px;resize:vertical}
   var loadingNow = false;
   var refreshTimer = null;
   var currentUserEmail = "";
+  var currentUserName = "";
+  /* Display name only — used for the greeting. Never used for auth or storage. */
+  var CLINICIAN_NAME = "Dr. Umar";
+  var lastTodayCount = null;
 
   /* ---------- dates ---------- */
   function pad(n) { return String(n).padStart(2, "0"); }
@@ -904,10 +908,14 @@ dialog textarea{min-height:140px;resize:vertical}
   function applySession(session) {
     if (session && session.user) {
       currentUserEmail = session.user.email || "";
+      var md = session.user.user_metadata || {};
+      currentUserName = md.full_name || md.name || md.display_name || "";
       if (dashView.classList.contains("hidden")) showDash();
       else $("who").textContent = currentUserEmail;
+      paintHeader(lastTodayCount);
     } else {
       currentUserEmail = "";
+      currentUserName = "";
       showLogin("");
     }
   }
@@ -998,14 +1006,29 @@ dialog textarea{min-height:140px;resize:vertical}
     if (diff < 0) return diff + " vs " + label;
     return "Same as " + label;
   }
-  function updateSubhead(todayCount) {
-    var sh = $("subhead");
-    if (!sh) return;
+  function displayNameOf() {
+    var raw = (currentUserName || "").trim();
+    if (!raw) return CLINICIAN_NAME;
+    /* Preserve an existing capitalisation pattern (e.g. "Dr. Umar"); only fix
+       fully-lowercase names, which is how staff are usually typed into Supabase. */
+    var words = raw.split(/\s+/);
+    var alreadyCapitalised = words.some(function (w) { return /[A-Z]/.test(w); });
+    if (alreadyCapitalised) return raw;
+    return words.map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(" ");
+  }
+  /* Greeting heading + date/count subhead. Time-aware, so it stays truthful if
+     the tab is left open across a work day. */
+  function paintHeader(todayCount) {
+    if (typeof todayCount === "number") lastTodayCount = todayCount;
     var h = new Date().getHours();
     var word = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+    var title = $("pageTitle"), sh = $("subhead");
+    if (title) title.textContent = word + ", " + displayNameOf() + ".";
+    if (!sh) return;
     var dstr = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+    if (lastTodayCount === null) { sh.hidden = true; return; }
     sh.hidden = false;
-    sh.textContent = word + " · " + dstr + " · " + todayCount + " booking" + (todayCount === 1 ? "" : "s") + " today";
+    sh.textContent = dstr + " · " + lastTodayCount + " booking" + (lastTodayCount === 1 ? "" : "s") + " today";
   }
   function renderStats() {
     var today = ymd(new Date());
@@ -1045,7 +1068,7 @@ dialog textarea{min-height:140px;resize:vertical}
     countUp($("statPending"), pending);
     countUp($("statWeek"), weekCount);
     countUp($("statTotal"), total);
-    updateSubhead(todayCount);
+    paintHeader(todayCount);
   }
 
   /* ---------- analytics ---------- */
@@ -1338,7 +1361,7 @@ dialog textarea{min-height:140px;resize:vertical}
     tabReminders.setAttribute("aria-selected", onReminders ? "true" : "false");
     $("bookingsPanel").classList.toggle("hidden", onReminders);
     $("remindersPanel").classList.toggle("hidden", !onReminders);
-    $("pageTitle").textContent = onReminders ? "Reminders" : "Bookings";
+    /* The heading stays the greeting; the active tab already shows which view is on. */
     if (onReminders) renderReminders();
   }
   tabBookings.addEventListener("click", function () { switchTab(REM_TAB.BOOKINGS); });
