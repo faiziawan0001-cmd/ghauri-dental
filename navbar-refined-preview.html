@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navbar refined (glass) — R1 / R2</title>
+<link rel="stylesheet" href="css/fontawesome.css">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  /* ---- page chrome + refined-island overrides --------------------------
+     Real site header markup + real styles.css on the real hero. The two
+     refinements differ only in how the ACTIVE link is treated. */
+  body{margin:0;background:#eef3f9}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px clamp(16px,4vw,28px) 90px}
+  h1{font-size:1.3rem;color:#1E3A6E;margin:2px 0 6px}
+  .lead{font-size:.86rem;color:#5B6B7F;line-height:1.6;margin:0 0 26px;max-width:880px}
+  .lead b{color:#1E3A6E}
+  .design{margin:0 0 30px}
+  .dhd{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;flex-wrap:wrap}
+  .pill{font-size:.66rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#fff;
+    background:#1E3A6E;border-radius:999px;padding:3px 10px}
+  .dname{font-weight:800;color:#1E3A6E;font-size:.95rem}
+  .ddesc{font-size:.8rem;color:#5B6B7F}
+  .cell{border:1px solid #c4d8e9;border-radius:14px;overflow:hidden;background:#fff}
+  .st{font-size:.66rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#5B6B7F;
+    padding:7px 13px;background:#f6fafd;border-bottom:1px solid #e3edf6;display:flex;
+    justify-content:space-between;align-items:center}
+  .st code{font-weight:600;text-transform:none;letter-spacing:0;color:#8aa0b8}
+  .stage{position:relative;overflow:hidden;min-height:170px;
+    background:
+      linear-gradient(rgba(7,20,40,.32),rgba(7,20,40,.32)),
+      linear-gradient(90deg,rgba(7,20,40,.60) 0%,rgba(7,20,40,.25) 45%,rgba(7,20,40,0) 72%),
+      url('images/landing-image.webp') center/cover no-repeat}
+  .stage header{position:absolute;top:0;left:0;right:0;z-index:5}
+
+  /* ---- shared: both refinements are floating-glass islands ---- */
+  .stage header{top:10px;left:0;right:0;width:min(1120px,calc(100% - 24px));margin-inline:auto;
+    border-radius:20px;padding:9px clamp(14px,3vw,20px);background:transparent;
+    border:1px solid rgba(255,255,255,.2);box-shadow:0 2px 14px rgba(7,20,40,.10);
+    transition:background .35s,box-shadow .35s,border-color .35s}
+  .stage header.sc{
+    background:color-mix(in srgb,var(--card) 88%,transparent);
+    -webkit-backdrop-filter:blur(16px) saturate(180%);backdrop-filter:blur(16px) saturate(180%);
+    border-color:var(--line);box-shadow:0 12px 34px rgba(30,58,110,.16),inset 0 1px 0 rgba(255,255,255,.6)}
+
+  /* ---- R1: soft pill on the active link ---- */
+  .stage[data-r="1"] header nav a{border-bottom:0;border-radius:9px;padding:7px 12px;
+    transition:background .25s,color .25s}
+  .stage[data-r="1"] header nav a.on{background:rgba(255,255,255,.18);color:#fff}
+  .stage[data-r="1"][data-s="scrolled"] header nav a.on,
+  .stage[data-r="1"][data-s="scrolled"] header nav a:hover{background:var(--tint)}
+  .stage[data-r="1"][data-s="scrolled"] header nav a.on{color:var(--blue-ink)}
+  .stage[data-r="1"][data-s="scrolled"] header nav a:hover{color:var(--navy)}
+
+  /* ---- R2: gradient underline under the active link ---- */
+  .stage[data-r="2"] header nav a{border-bottom:2px solid transparent}
+  .stage[data-r="2"] header nav a.on{border-bottom-color:transparent;color:#fff;
+    background:linear-gradient(90deg,#8fd0ff,#2c78b4) left bottom/100% 2px no-repeat}
+  .stage[data-r="2"][data-s="scrolled"] header nav a.on{color:var(--blue-ink);
+    background:linear-gradient(90deg,#55aae6,#2c78b4) left bottom/100% 2px no-repeat}
+</style>
+</head>
+<body>
+
+<svg style="display:none"><symbol id="t" viewBox="0 0 24 24"><path d="M12 3c-2 0-3 1-5 1S3 5 3 9c0 3 1 5 2 8 .5 2 1 4 2.5 4 1.7 0 1.5-4 4.5-4s2.8 4 4.5 4c1.5 0 2-2 2.5-4 1-3 2-5 2-8 0-4-2-5-4-5s-3-1-5-1z"/></symbol></svg>
+
+<div class="wrap">
+  <h1>Navbar — refined glass (R1 / R2)</h1>
+  <p class="lead">
+    Both refinements are the same <b>floating-glass island</b>; they only differ in how the
+    <b>active link</b> is treated. Real header markup, real <b>styles.css</b>, real hero — nothing here
+    changes the live site.
+  </p>
+
+  <section class="design">
+    <div class="dhd"><span class="pill">R1</span><span class="dname">Glass island + soft active pill</span>
+      <span class="ddesc">active link sits in a translucent pill</span></div>
+    <div class="cell">
+      <div class="st"><span>At top of page</span><code>header</code></div>
+      <div class="stage" data-r="1" data-s="top"></div>
+      <div class="st"><span>Scrolled</span><code>header.sc · pill → tint</code></div>
+      <div class="stage" data-r="1" data-s="scrolled"></div>
+    </div>
+  </section>
+
+  <section class="design">
+    <div class="dhd"><span class="pill">R2</span><span class="dname">Glass island + gradient underline</span>
+      <span class="ddesc">active link gets a gradient underline</span></div>
+    <div class="cell">
+      <div class="st"><span>At top of page</span><code>header</code></div>
+      <div class="stage" data-r="2" data-s="top"></div>
+      <div class="st"><span>Scrolled</span><code>header.sc · gradient underline</code></div>
+      <div class="stage" data-r="2" data-s="scrolled"></div>
+    </div>
+  </section>
+
+  <p class="lead" style="margin:0"><b>Pick one</b> and I'll apply exactly that treatment to the live header, verified by git diff.</p>
+</div>
+
+<script>
+  var HDR = '<header><a class="logo" href="#"><svg><use href="#t"/></svg><span>Bright Smiles<br><small>Dental Clinic</small></span></a><nav><a href="#" class="on">Home</a><a href="#">About Us</a><a href="#">Services</a><a href="#">Clinic</a><a href="#">Smile Gallery</a><a href="#">Testimonials</a></nav><div class="ha"><button type="button" class="btn hb"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Book appointment</button><button type="button" id="th" aria-label="Toggle dark mode"><i class="fa-solid fa-moon" aria-hidden="true"></i></button><button type="button" class="mn" aria-label="Open menu"><span></span><span></span><span></span></button></div></header>';
+  document.querySelectorAll('.stage').forEach(function (s) {
+    s.insertAdjacentHTML('afterbegin', HDR);
+    if (s.dataset.s === 'scrolled') s.querySelector('header').classList.add('sc');
+  });
+</script>
+</body>
+</html>

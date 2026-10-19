@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nav centring — 1 / 2 / 3</title>
+<link rel="stylesheet" href="css/fontawesome.css">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  /* ---- page chrome + the three centring methods ------------------------
+     Real site header markup + real styles.css on the real hero. The only
+     difference between the rows is how the <nav> is positioned. */
+  body{margin:0;background:#eef3f9}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px clamp(16px,4vw,28px) 90px}
+  h1{font-size:1.3rem;color:#1E3A6E;margin:2px 0 6px}
+  .lead{font-size:.86rem;color:#5B6B7F;line-height:1.6;margin:0 0 26px;max-width:880px}
+  .lead b{color:#1E3A6E}
+  .design{margin:0 0 30px}
+  .dhd{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;flex-wrap:wrap}
+  .pill{font-size:.66rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#fff;
+    background:#3B8FC9;border-radius:999px;padding:3px 10px}
+  .dname{font-weight:800;color:#1E3A6E;font-size:.95rem}
+  .ddesc{font-size:.8rem;color:#5B6B7F}
+  .badge{margin-left:auto;font:600 .72rem ui-monospace,Consolas,monospace;color:#334a68;
+    background:#EAF3FA;border:1px solid #c4d8e9;border-radius:999px;padding:4px 10px;white-space:nowrap}
+  .cell{border:1px solid #c4d8e9;border-radius:14px;overflow:hidden;background:#fff}
+  .stage{position:relative;overflow:hidden;min-height:160px;
+    background:
+      linear-gradient(rgba(7,20,40,.32),rgba(7,20,40,.32)),
+      linear-gradient(90deg,rgba(7,20,40,.60) 0%,rgba(7,20,40,.25) 45%,rgba(7,20,40,0) 72%),
+      url('images/landing-image.webp') center/cover no-repeat}
+  .stage header{position:absolute;top:0;left:0;right:0;z-index:5}
+  /* centre guide */
+  .stage::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;
+    background:repeating-linear-gradient(180deg,rgba(255,255,255,.55) 0 6px,transparent 6px 12px);
+    transform:translateX(-.5px);z-index:1;pointer-events:none}
+
+  /* 1 — site default: grid 1fr auto 1fr (nav centred between equal side columns) */
+  /* (no override needed) */
+
+  /* 2 — flex, nav centred in the leftover space */
+  .stage[data-c="2"] header{display:flex;align-items:center;gap:18px}
+  .stage[data-c="2"] header nav{margin-inline:auto}
+
+  /* 3 — absolutely centred in the bar, no matter how wide the sides are */
+  .stage[data-c="3"] header{display:flex;align-items:center;justify-content:space-between;position:absolute}
+  .stage[data-c="3"] header nav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+
+  .foot{font-size:.82rem;color:#5B6B7F;line-height:1.6}
+  .foot b{color:#1E3A6E}
+</style>
+</head>
+<body>
+
+<svg style="display:none"><symbol id="t" viewBox="0 0 24 24"><path d="M12 3c-2 0-3 1-5 1S3 5 3 9c0 3 1 5 2 8 .5 2 1 4 2.5 4 1.7 0 1.5-4 4.5-4s2.8 4 4.5 4c1.5 0 2-2 2.5-4 1-3 2-5 2-8 0-4-2-5-4-5s-3-1-5-1z"/></symbol></svg>
+
+<div class="wrap">
+  <h1>Nav centring — 1 / 2 / 3</h1>
+  <p class="lead">
+    Same real header, three ways to centre the <b>nav</b>. The dashed line is the bar's true centre;
+    the badge measures how far the nav's centre sits from it (read live from the DOM).
+    Nothing here changes the live site.
+  </p>
+
+  <section class="design">
+    <div class="dhd"><span class="pill">1</span><span class="dname">Grid — current</span>
+      <span class="ddesc">grid-template-columns:1fr auto 1fr · nav in the middle auto column</span>
+      <span class="badge" data-badge="1">measuring…</span></div>
+    <div class="cell"><div class="stage" data-c="1"></div></div>
+  </section>
+
+  <section class="design">
+    <div class="dhd"><span class="pill">2</span><span class="dname">Flex + auto margins</span>
+      <span class="ddesc">display:flex · nav{margin-inline:auto} centres it in the leftover space</span>
+      <span class="badge" data-badge="2">measuring…</span></div>
+    <div class="cell"><div class="stage" data-c="2"></div></div>
+  </section>
+
+  <section class="design">
+    <div class="dhd"><span class="pill">3</span><span class="dname">Absolutely centred</span>
+      <span class="ddesc">nav{position:absolute;left:50%;transform:translateX(-50%)} — always bar-centred</span>
+      <span class="badge" data-badge="3">measuring…</span></div>
+    <div class="cell"><div class="stage" data-c="3"></div></div>
+  </section>
+
+  <p class="foot">
+    <b>1</b> and <b>3</b> keep the nav dead-centre. <b>2</b> drifts left/right whenever the logo and the
+    action cluster aren't equal widths. Pick one and I'll apply it to the live header, verified by git diff.
+  </p>
+</div>
+
+<script>
+  var HDR = '<header><a class="logo" href="#"><svg><use href="#t"/></svg><span>Bright Smiles<br><small>Dental Clinic</small></span></a><nav><a href="#" class="on">Home</a><a href="#">About Us</a><a href="#">Services</a><a href="#">Clinic</a><a href="#">Smile Gallery</a><a href="#">Testimonials</a></nav><div class="ha"><button type="button" class="btn hb"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Book appointment</button><button type="button" id="th" aria-label="Toggle dark mode"><i class="fa-solid fa-moon" aria-hidden="true"></i></button><button type="button" class="mn" aria-label="Open menu"><span></span><span></span><span></span></button></div></header>';
+  document.querySelectorAll('.stage').forEach(function (s) {
+    s.insertAdjacentHTML('afterbegin', HDR);
+  });
+  addEventListener('load', function () {
+    document.querySelectorAll('.stage').forEach(function (s) {
+      var nav = s.querySelector('nav'), bar = s.querySelector('header');
+      if (!nav || !bar) return;
+      var n = nav.getBoundingClientRect(), b = bar.getBoundingClientRect();
+      var off = Math.round(((n.left + n.width / 2) - (b.left + b.width / 2)) * 10) / 10;
+      var badge = document.querySelector('.badge[data-badge="' + s.dataset.c + '"]');
+      if (badge) badge.textContent = 'nav centre offset → ' + (off > 0 ? '+' + off : off) + 'px';
+    });
+  });
+</script>
+</body>
+</html>

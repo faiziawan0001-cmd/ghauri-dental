@@ -604,7 +604,7 @@ if (goBtn && bf && bkOldOk) {
     ".bk-row:last-child{border:0}" +
     ".bk-row span{opacity:.75}.bk-row b{text-align:right}" +
     ".bk-act{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}" +
-    ".bk-wa{background:#25d366;color:#fff;border:0;text-decoration:none;flex:1 1 220px;text-align:center}" +
+    ".bk-wa{border:0;text-decoration:none;flex:1 1 220px;text-align:center}" +
     ".bk-change{display:inline-block;margin:-6px 0 12px;padding:2px 0;background:none;border:0;color:#3b8fd4;font:inherit;font-size:13px;font-weight:600;cursor:pointer;text-decoration:underline}" +
     ".bk-hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden}" +
     ".bk-send-err{margin:12px 0 4px;padding:12px 14px;border-radius:14px;background:rgba(220,60,60,.1);border:1px solid rgba(220,60,60,.35);font-size:14px}" +
