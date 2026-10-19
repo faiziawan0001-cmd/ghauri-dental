@@ -83,26 +83,39 @@
 
   /* ---- widget logic ----------------------------------------------------- */
   const $ = s => document.querySelector(s), msgs = $("#msgs"), lx = $("#lx");
-  let booking = null, greeted = false, voiceOn = false;
+  let booking = null, greeted = false, voiceOn = false, micOn = false;
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  // iOS Safari only allows the first spoken utterance to happen inside a user gesture.
+  // Speaking a silent one on the first tap "unlocks" speech for the rest of the session,
+  // so the real replies (which arrive after a short typing delay) are allowed to play.
+  let speechReady = false;
+  function unlockSpeech() {
+    if (speechReady || !window.speechSynthesis) return;
+    speechReady = true;
+    try { speechSynthesis.speak(new SpeechSynthesisUtterance(" ")); } catch (e) {}
+  }
 
   function say(h) {
     if (!voiceOn || !window.speechSynthesis) return;
     const t = h.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(t);
-    u.lang = "en-GB";
-    speechSynthesis.speak(u);
+    if (!t) return;
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(t);
+      u.lang = "en-GB";
+      speechSynthesis.speak(u);
+    } catch (e) { /* speech blocked or unsupported - chat still works */ }
   }
 
   const openPanel = v => { lx.classList.toggle("open", v); if (v && !greeted) { greeted = true; start(); } };
   $("#lx-fab").onclick = () => {
-    const o = !lx.classList.contains("open"), first = !greeted;
-    if (o && SR) voiceOn = true;
+    const o = !lx.classList.contains("open");
+    if (o) { unlockSpeech(); voiceOn = true; }  // unlock iOS speech + read replies aloud
     openPanel(o);
-    if (o && !first && voiceOn) listen();
+    if (o && micOn) listen();                   // resume the mic only if the user already tapped it
   };
-  $("#lx-close").onclick = () => { openPanel(false); voiceOn = false; window.speechSynthesis && speechSynthesis.cancel(); };
+  $("#lx-close").onclick = () => { openPanel(false); voiceOn = false; micOn = false; window.speechSynthesis && speechSynthesis.cancel(); };
 
   const scroll = () => setTimeout(() => msgs.scrollTop = msgs.scrollHeight, 30);
   const el = (h, c) => { const d = document.createElement("div"); d.className = c; d.innerHTML = h; msgs.appendChild(d); scroll(); return d; };
@@ -135,7 +148,6 @@
   async function start() {
     await bot("Welcome to " + CLINIC.name + ". I\u2019m Sarah, the virtual assistant here. I can book your visit, share treatment prices or connect you with our team. Just say what you need, or tap an option.");
     menu();
-    if (voiceOn) listen();
   }
 
   async function book1() {
@@ -219,10 +231,10 @@
     if (!SR) return;
     if (window.speechSynthesis && speechSynthesis.speaking) { setTimeout(listen, 400); return; }
     const r = new SR();
-    r.lang = "en-GB"; voiceOn = true; mic.classList.add("rec");
+    r.lang = "en-GB"; voiceOn = true; micOn = true; mic.classList.add("rec");
     r.onresult = e => { const v = e.results[0][0].transcript; user(v); booking && booking.ask ? confirm(v) : route(v); };
     r.onend = r.onerror = () => mic.classList.remove("rec");
     try { r.start(); } catch (e) { mic.classList.remove("rec"); }
   }
-  if (!SR) mic.hidden = true; else mic.onclick = listen;
+  if (!SR) mic.hidden = true; else mic.onclick = () => { unlockSpeech(); listen(); };
 })();
