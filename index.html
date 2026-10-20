@@ -139,23 +139,23 @@
     <div class="explore-grid explore-grid--bento stagger">
 
       <!-- Card 1: Tall left — Before/After Slider -->
-      <a href="work.html" class="explore-card explore-card--slider explore-card--tall" id="elink-work" draggable="false">
+      <div class="explore-card explore-card--slider explore-card--tall" id="elink-work" draggable="false" tabindex="0" role="link" aria-label="Smile Gallery">
         <div class="explore-card-ba">
           <picture><source type="image/avif" srcset="images/before2.avif"><img src="images/before2.webp" class="ec-b" alt="Before — dental smile makeover" width="928" height="1152" loading="lazy" decoding="async" draggable="false"></picture>
           <picture><source type="image/avif" srcset="images/after2.avif"><img src="images/after2.webp" class="ec-a" alt="After — radiant white smile" width="928" height="1152" loading="lazy" decoding="async" draggable="false"></picture>
           <em class="ec-lbl ec-lbl--before">Before</em>
           <em class="ec-lbl ec-lbl--after">After</em>
           <i class="ec-handle"></i>
-          <input type="range" min="0" max="100" value="50" class="ec-range" aria-label="Compare smile before and after treatment" onclick="event.preventDefault(); event.stopPropagation();" onmousedown="event.stopPropagation();">
+          <input type="range" min="0" max="100" value="50" class="ec-range" aria-label="Compare smile before and after treatment" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();" ontouchstart="event.stopPropagation();">
         </div>
         <div class="explore-card-overlay">
           <div class="ec-head">
             <h3>Smile Gallery</h3>
-            <span class="ec-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+            <a href="work.html" class="ec-arrow" aria-label="View Smile Gallery"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a>
           </div>
           <p style="margin-bottom: 0;">Browse veneers, aligners, whitening &amp; more</p>
         </div>
-      </a>
+      </div>
 
       <!-- Card 2: Top right — Clinic -->
       <a href="about.html" class="explore-card" id="elink-clinic">

@@ -324,6 +324,22 @@ if (revealFx && revs.length && "IntersectionObserver" in window) {
   revs.forEach(el => el.classList.add("in"));
 }
 
+/* --- home: smile gallery card click handling for non-anchor variant --- */
+const elinkWork = document.getElementById('elink-work');
+if (elinkWork && !elinkWork.tagName || elinkWork.tagName === 'DIV') {
+  elinkWork.style.cursor = 'pointer';
+  elinkWork.addEventListener('click', (e) => {
+    if (e.target.closest('.ec-range') || e.target.closest('.ec-lbl') || e.target.closest('a') || e.target.closest('button')) return;
+    window.location.href = 'work.html';
+  });
+  elinkWork.addEventListener('keydown', (e) => {
+    if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('a')) {
+      e.preventDefault();
+      window.location.href = 'work.html';
+    }
+  });
+}
+
 /* --- one-line CTA banner headings -----------------------------------------
    The banner h2 is nowrap (see styles.css), so a long heading would clip on
    narrow screens. Scale it down to the banner's inner width instead — per
