@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sarah assistant — colour &amp; design options</title>
+<link rel="stylesheet" href="css/fonts.css">
+<!-- the CURRENT widget's Google fonts — only used by the "Current" mock, so you can
+     see the serif-vs-sans mismatch for real (options A–D use the site font only) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===========================================================================
+   PREVIEW CHROME — uses the live site's own tokens (css/styles.css)
+   =========================================================================== */
+*{box-sizing:border-box}
+:root{
+  --navy:#1E3A6E;--blue:#3B8FC9;--blueD:#2C78B4;--blueL:#55AAE6;
+  --gold:#b9a06c;--goldL:#D9BD7E;--tint:#EAF3FA;--page:#e6f0f8;
+  --line:#c4d8e9;--txt:#5B6B7F;--card:#fff;--fh:'Plus Jakarta Sans',system-ui,sans-serif;--ink:#1E3A6E;
+}
+:root[data-theme="dark"]{
+  --navy:#EAF3FA;--blue:#9FD3FF;--blueD:#2F85C6;--blueL:#67B6EE;
+  --gold:#D9BD7E;--goldL:#E4CB93;--tint:#111D2F;--page:#0A101F;
+  --line:rgba(255,255,255,.14);--txt:#C3CFDE;--card:#141F33;--ink:#EAF3FA;
+}
+body{margin:0;background:var(--page);color:var(--txt);font:16px/1.65 var(--fh)}
+h1,h2,h3,h4{color:var(--ink);margin:0 0 .4em;line-height:1.15}
+.wrap{max-width:1230px;margin:0 auto;padding:0 20px 90px}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--card) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar h1{font-size:1.08rem;margin:0;font-weight:800}
+.topbar p{margin:0;font-size:.8rem;opacity:.85}
+.jump{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.jump a{font:600 .78rem var(--fh);text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:6px 13px;background:var(--card)}
+.jump a:hover{border-color:var(--blue);color:var(--blueD)}
+.tgl{font:700 .78rem var(--fh);cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:7px 14px;display:inline-flex;align-items:center;gap:7px}
+.tgl:hover{border-color:var(--blue)}
+
+/* intro */
+.hero{padding:44px 0 8px}
+.hero .kicker{font:700 .7rem var(--fh);letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.hero h2{font-size:clamp(1.7rem,3.6vw,2.5rem);font-weight:800;max-width:22ch}
+.hero p{max-width:70ch;font-size:1rem;margin:0 0 8px}
+.hero p b{color:var(--ink)}
+
+/* comparison table */
+.tbl{width:100%;border-collapse:collapse;margin:18px 0 6px;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;font-size:.88rem}
+.tbl th,.tbl td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl th{font:700 .72rem var(--fh);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);background:var(--tint)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td.sw{white-space:nowrap}
+.chip-c{display:inline-flex;align-items:center;gap:8px}
+.chip-c i{width:16px;height:16px;border-radius:5px;display:inline-block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.ok{color:#1c8f57;font-weight:700}
+.no{color:#b4544a;font-weight:700}
+:root[data-theme="dark"] .ok{color:#5ee59a}
+:root[data-theme="dark"] .no{color:#ff9a8f}
+
+/* option sections */
+.opt{margin:0 0 64px;scroll-margin-top:80px}
+.opt-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 8px}
+.tag{font:700 .7rem var(--fh);letter-spacing:.12em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#1E3A6E,#16305A);border-radius:99px;padding:5px 12px}
+.opt-head h3{font-size:1.45rem;font-weight:800;margin:0}
+.rec{font:700 .7rem var(--fh);letter-spacing:.06em;text-transform:uppercase;color:#7a6a37;background:linear-gradient(135deg,#f3e9cf,#e6d3a0);border-radius:99px;padding:5px 12px}
+.opt>p{max-width:78ch;font-size:.94rem;margin:0 0 16px}
+.opt>p b{color:var(--ink)}
+
+/* demo grid: big stage + closed-state mini */
+.demo{display:grid;grid-template-columns:1fr 330px;gap:18px;align-items:start}
+@media(max-width:980px){.demo{grid-template-columns:1fr}}
+.frame{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 18px 44px rgba(30,58,110,.10)}
+:root[data-theme="dark"] .frame{box-shadow:0 18px 44px rgba(0,0,0,.45)}
+.frame-label{font:600 .74rem var(--fh);color:var(--txt);padding:9px 16px;border-bottom:1px solid var(--line);background:var(--tint);letter-spacing:.03em}
+
+/* fake site behind the widget */
+.stage{position:relative;overflow:hidden;height:640px;background:linear-gradient(180deg,var(--card) 0%,var(--tint) 100%)}
+.mini{position:relative;overflow:hidden;height:240px;background:linear-gradient(180deg,var(--card) 0%,var(--tint) 100%)}
+.site{padding:34px 32px}
+.site-eb{display:inline-block;font:700 .66rem var(--fh);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.site-h{font-size:clamp(1.3rem,2.4vw,1.85rem);font-weight:800;max-width:15ch;margin:0 0 8px}
+.site-p{max-width:30ch;font-size:.9rem;margin:0 0 18px;opacity:.95}
+.site-btns{display:flex;gap:10px;flex-wrap:wrap}
+.site-btn{font:700 .85rem var(--fh);color:#fff;background:linear-gradient(135deg,var(--blueL),var(--blueD));padding:12px 20px;border-radius:13px;box-shadow:0 8px 20px rgba(59,143,201,.32)}
+.site-btn.alt{background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.site-card{position:absolute;left:32px;bottom:34px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:11px 16px;font-size:.78rem;box-shadow:0 12px 30px rgba(30,58,110,.14)}
+.site-card b{display:block;color:var(--ink);font-size:1.05rem;font-weight:800}
+:root[data-theme="dark"] .site-card{box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.mini .site{padding:20px 22px}
+.mini .site-h{font-size:1.05rem;max-width:22ch}
+.mini .site-p{display:none}
+/* ===========================================================================
+   WIDGET MOCK — structure + sizes copied from css/dental-assistant.css.
+   Every colour comes from the --* variables set per option below, so the
+   options differ ONLY by palette. Nothing here is site CSS.
+   =========================================================================== */
+.mock{position:absolute;right:16px;bottom:10px;width:390px;display:flex;flex-direction:column;align-items:flex-end;gap:14px;transform:scale(.78);transform-origin:bottom right;pointer-events:none}
+.mock .panel{width:390px;height:600px;display:flex;flex-direction:column;overflow:hidden;border-radius:26px;box-shadow:var(--shadow);border:1px solid transparent;background:linear-gradient(var(--surface),var(--surface)) padding-box,linear-gradient(160deg,var(--gold),transparent 38%,transparent 62%,var(--gold)) border-box}
+
+/* header bar */
+.mock .hd{padding:19px 18px 17px;display:flex;gap:13px;align-items:center;background:var(--hdr-bg);color:var(--hdr-ink)}
+.mock .hd b{font-size:1.18rem;font-weight:800;display:block;line-height:1.1}
+.mock .hd small{font-size:11.5px;opacity:.84;display:flex;align-items:center;gap:6px;margin-top:3px}
+.mock .dot{width:7px;height:7px;border-radius:50%;background:var(--dot);flex:none}
+.mock .av{width:44px;height:44px;border-radius:50%;border:1px solid var(--av-ring);background:rgba(255,255,255,.08);overflow:hidden;flex:none;display:grid;place-items:center}
+.mock .av svg{width:100%;height:100%;display:block}
+.mock .x{margin-left:auto;background:transparent;border:0;color:inherit;opacity:.8;font-size:20px;line-height:1;cursor:pointer;padding:2px 7px;border-radius:8px}
+
+/* messages */
+.mock .msgs{flex:1;overflow:hidden;padding:18px 16px;display:flex;flex-direction:column;gap:11px}
+.mock .m{max-width:84%;padding:11px 14px;border-radius:18px;font-size:13.5px;line-height:1.5}
+.mock .m.b{background:var(--bubble-bot);color:var(--ink);border-bottom-left-radius:6px;align-self:flex-start}
+.mock .m.u{background:var(--bubble-user);color:var(--bubble-user-ink);border-bottom-right-radius:6px;align-self:flex-end}
+.mock .chips{display:flex;flex-wrap:wrap;gap:7px;align-self:flex-start}
+.mock .chip{border:1px solid var(--chip-line);background:var(--chip-bg);color:var(--chip-ink);padding:8px 13px;border-radius:99px;font:600 12.5px var(--fh)}
+.mock .card{border:1px solid var(--card-line);background:var(--card-bg);color:var(--card-ink);border-radius:16px;padding:14px;font-size:13.5px;align-self:stretch}
+.mock .card h4{font-size:1.05rem;font-weight:800;margin:0 0 4px;color:inherit}
+.mock .row{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px solid var(--line)}
+.mock .row:last-child{border:0}
+.mock .cta{display:inline-block;margin-top:10px;background:var(--btn-bg);color:var(--btn-ink);padding:10px 15px;border-radius:12px;font-weight:700;font-size:12.5px;box-shadow:var(--btn-shadow)}
+.mock .typing{padding:12px 15px}
+.mock .typing i{width:6px;height:6px;border-radius:50%;background:var(--muted);display:inline-block;margin-right:4px;animation:bl 1.1s infinite}
+.mock .typing i:nth-child(2){animation-delay:.15s}
+.mock .typing i:nth-child(3){animation-delay:.3s}
+@keyframes bl{0%,60%,100%{opacity:.3}30%{opacity:1}}
+
+/* footer / composer */
+.mock .ft{padding:12px 14px 13px;border-top:1px solid var(--line)}
+.mock .ft form{display:flex;gap:8px}
+.mock .ft input{flex:1;min-width:0;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:11px 13px;font:13.5px var(--fh);outline:0}
+.mock .mic{width:42px;border:1px solid var(--mic-line);background:transparent;color:var(--mic-ink);border-radius:14px;display:grid;place-items:center;cursor:pointer}
+.mock .mic svg{width:17px;height:17px}
+.mock .send{width:42px;border:0;border-radius:14px;background:var(--btn-bg);color:var(--btn-ink);font:700 15px var(--fh);cursor:pointer}
+.mock .mic,.mock .x{font-family:var(--fh)}
+.mock .note{font-size:10.5px;color:var(--muted);text-align:center;margin-top:8px}
+
+/* launcher (character + pill) */
+.mock .launcher{display:flex;flex-direction:row-reverse;align-items:flex-end;gap:4px}
+.mock .pill{display:flex;align-items:center;gap:8px;margin-bottom:42px;padding:11px 15px;border-radius:15px;background:var(--pill-bg);border:1px solid var(--pill-line);color:var(--pill-ink);font:700 13px var(--fh);white-space:nowrap;box-shadow:0 12px 30px -8px rgba(0,0,0,.45)}
+.mock .pill b{background:var(--badge-bg);color:var(--badge-ink);font-size:10.5px;padding:3px 7px;border-radius:99px}
+.mock .pi{width:15px;height:15px}
+.mock .ch{width:86px;height:138px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.25));animation:bob 4s ease-in-out infinite}
+.mini .mock{right:12px;bottom:8px;transform:scale(.62);gap:0}
+.mini .mock .pill{margin-bottom:30px}
+@keyframes bob{50%{transform:translateY(-3px)}}
+.mock .wv{transform-origin:67px 66px;animation:wave 2.4s ease-in-out infinite}
+.mock .sp{animation:tw 2.6s ease-in-out infinite}
+.mock .sp.s2{animation-delay:1.2s}
+@keyframes wave{25%,75%{transform:rotate(-14deg)}50%{transform:rotate(6deg)}}
+@keyframes tw{50%{opacity:.2}}
+@media(max-width:1260px){.mock{transform:scale(.66)}}
+@media(max-width:700px){.tbl{display:block;overflow-x:auto}.hero h2{font-size:1.5rem}}
+@media(max-width:520px){.stage{height:520px}}
+
+/* ===========================================================================
+   PALETTE PER OPTION — change a hex here and the whole mock follows.
+   =========================================================================== */
+
+/* ---- BEFORE: the current assistant (teal + antique gold) ---------------- */
+.mock[data-v="before"]{--surface:#fff;--ink:#14302F;--muted:#5E7270;--line:#DCE4E2;--bg:#F3F5F4;--hdr-bg:#14302F;--hdr-ink:#F3F5F4;--bubble-bot:#EAF0EE;--bubble-user:#14302F;--bubble-user-ink:#F3F5F4;--card-bg:#F1E8D6;--card-line:#B08D4F;--card-ink:#14302F;--btn-bg:#14302F;--btn-ink:#F3F5F4;--btn-shadow:none;--chip-bg:transparent;--chip-line:#B08D4F;--chip-ink:#14302F;--gold:#B08D4F;--gold-b:#D2B27A;--av-ring:#B08D4F;--mic-line:#B08D4F;--mic-ink:#B08D4F;--dot:#5FD08F;--pill-bg:#10292A;--pill-line:#B08D4F;--pill-ink:#F3F5F4;--badge-bg:#D2B27A;--badge-ink:#10292A;--shadow:0 30px 80px -20px rgba(20,48,47,.35);--scrub:#1E4B49;--uniform:#14302F;--coat:#F8F6F0;--hair:#2A1A15;--skin:#F1C6A4;--paper:#fff;--av1:#1E4B49;--av2:#0F2625}
+
+/* the live widget's typography, for the "Current" mock only (Cormorant serif + Manrope) */
+.mock[data-v="before"]{font-family:Manrope,system-ui,sans-serif}
+.mock[data-v="before"] .hd b,.mock[data-v="before"] .card h4{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:1.3rem}
+.mock[data-v="before"] :is(.chip,.pill,.ft input,.send,.mic,.x,.cta){font-family:Manrope,system-ui,sans-serif}
+.mock[data-v="before"] .chip{font-weight:500}
+
+/* ---- OPTION A: Brand Blue (gold kept as a small accent) ----------------- */
+.mock[data-v="a"]{--surface:#fff;--ink:#1E3A6E;--muted:#5B6B7F;--line:#C4D8E9;--bg:#F2F8FD;--hdr-bg:linear-gradient(135deg,#1E3A6E,#16305A);--hdr-ink:#fff;--bubble-bot:#EAF3FA;--bubble-user:linear-gradient(135deg,#2C78B4,#1E3A6E);--bubble-user-ink:#fff;--card-bg:#EAF3FA;--card-line:#C4D8E9;--card-ink:#1E3A6E;--btn-bg:linear-gradient(135deg,#55AAE6,#2C78B4);--btn-ink:#fff;--btn-shadow:0 8px 20px rgba(59,143,201,.32);--chip-bg:#fff;--chip-line:#C4D8E9;--chip-ink:#1E3A6E;--gold:#B9A06C;--gold-b:#D9BD7E;--av-ring:#B9A06C;--mic-line:#B9A06C;--mic-ink:#B9A06C;--dot:#2FBF71;--pill-bg:#1E3A6E;--pill-line:rgba(185,160,108,.55);--pill-ink:#fff;--badge-bg:#B9A06C;--badge-ink:#1E3A6E;--shadow:0 30px 80px -20px rgba(30,58,110,.30);--scrub:#1E3A6E;--uniform:#16305A;--coat:#F8F6F1;--hair:#2A1A15;--skin:#F1C6A4;--paper:#fff;--av1:#1E3A6E;--av2:#0F2548}
+
+/* ---- OPTION B: Blue + Gold Signature ----------------------------------- */
+.mock[data-v="b"]{--surface:#fff;--ink:#1E3A6E;--muted:#5B6B7F;--line:#C4D8E9;--bg:#F2F8FD;--hdr-bg:linear-gradient(135deg,#1E3A6E,#16305A);--hdr-ink:#fff;--bubble-bot:#EAF3FA;--bubble-user:#1E3A6E;--bubble-user-ink:#fff;--card-bg:#FBF7EE;--card-line:#E2D3AC;--card-ink:#1E3A6E;--btn-bg:linear-gradient(135deg,#C9B076,#A98F52);--btn-ink:#1E3A6E;--btn-shadow:0 8px 20px rgba(169,143,82,.35);--chip-bg:transparent;--chip-line:#B9A06C;--chip-ink:#1E3A6E;--gold:#B9A06C;--gold-b:#D9BD7E;--av-ring:#D9BD7E;--mic-line:#B9A06C;--mic-ink:#B9A06C;--dot:#2FBF71;--pill-bg:#16305A;--pill-line:rgba(185,160,108,.7);--pill-ink:#F8F6F1;--badge-bg:linear-gradient(135deg,#D9BD7E,#B9975A);--badge-ink:#16305A;--shadow:0 30px 80px -20px rgba(30,58,110,.30);--scrub:#1E3A6E;--uniform:#16305A;--coat:#F8F6F1;--hair:#2A1A15;--skin:#F1C6A4;--paper:#fff;--av1:#1E3A6E;--av2:#0F2548}
+.mock[data-v="b"] .hd{box-shadow:inset 0 -2px 0 var(--gold)}
+
+/* ---- OPTION C: Midnight Concierge (dark panel, always) ------------------ */
+.mock[data-v="c"]{--surface:#0F182B;--ink:#EAF3FA;--muted:#9FB2C9;--line:rgba(255,255,255,.12);--bg:rgba(255,255,255,.05);--hdr-bg:linear-gradient(135deg,#0F2548,#1E3A6E);--hdr-ink:#fff;--bubble-bot:rgba(255,255,255,.07);--bubble-user:linear-gradient(135deg,#2C78B4,#1E3A6E);--bubble-user-ink:#fff;--card-bg:rgba(185,160,108,.10);--card-line:rgba(185,160,108,.45);--card-ink:#F3E9CF;--btn-bg:linear-gradient(135deg,#C9B076,#A98F52);--btn-ink:#0F2548;--btn-shadow:0 8px 20px rgba(0,0,0,.35);--chip-bg:rgba(255,255,255,.05);--chip-line:rgba(185,160,108,.45);--chip-ink:#EAF3FA;--gold:#E4CB93;--gold-b:#E4CB93;--av-ring:#E4CB93;--mic-line:rgba(228,203,147,.55);--mic-ink:#E4CB93;--dot:#5EE59A;--pill-bg:#0F2548;--pill-line:rgba(228,203,147,.6);--pill-ink:#EAF3FA;--badge-bg:#E4CB93;--badge-ink:#0F2548;--shadow:0 30px 80px -20px rgba(0,0,0,.6);--scrub:#2C78B4;--uniform:#0F2548;--coat:#F8F6F1;--hair:#2A1A15;--skin:#F1C6A4;--paper:#fff;--av1:#1E3A6E;--av2:#0F2548}
+
+/* ---- OPTION D: Clean Clinical (no gold at all) -------------------------- */
+.mock[data-v="d"]{--surface:#fff;--ink:#1E3A6E;--muted:#5B6B7F;--line:#C4D8E9;--bg:#F5FAFE;--hdr-bg:#1E3A6E;--hdr-ink:#fff;--bubble-bot:#EAF3FA;--bubble-user:linear-gradient(135deg,#2C78B4,#1E3A6E);--bubble-user-ink:#fff;--card-bg:#F5FAFE;--card-line:#C4D8E9;--card-ink:#1E3A6E;--btn-bg:linear-gradient(135deg,#55AAE6,#2C78B4);--btn-ink:#fff;--btn-shadow:0 8px 20px rgba(59,143,201,.32);--chip-bg:#fff;--chip-line:#C4D8E9;--chip-ink:#1E3A6E;--gold:#3B8FC9;--gold-b:#8FCDF5;--av-ring:#3B8FC9;--mic-line:#C4D8E9;--mic-ink:#2C78B4;--dot:#2FBF71;--pill-bg:#1E3A6E;--pill-line:rgba(255,255,255,.2);--pill-ink:#fff;--badge-bg:linear-gradient(135deg,#8FCDF5,#3B8FC9);--badge-ink:#0F2548;--shadow:0 30px 80px -20px rgba(30,58,110,.30);--scrub:#1E3A6E;--uniform:#16305A;--coat:#F8F6F1;--hair:#2A1A15;--skin:#F1C6A4;--paper:#fff;--av1:#1E3A6E;--av2:#0F2548}
+
+/* ---- dark-mode palettes (site dark tokens) ------------------------------ */
+:root[data-theme="dark"] .mock[data-v="before"]{--surface:#142423;--ink:#EDF2F0;--muted:#8FA6A3;--line:#233836;--bg:#0C1716;--hdr-bg:#142423;--hdr-ink:#EDF2F0;--bubble-bot:#1B302E;--bubble-user:#D2B27A;--bubble-user-ink:#14302F;--card-bg:#2A2A22;--card-line:#D2B27A;--card-ink:#EDF2F0;--btn-bg:#D2B27A;--btn-ink:#14302F;--chip-bg:transparent;--chip-line:#D2B27A;--chip-ink:#EDF2F0;--gold:#D2B27A;--pill-bg:#0C1716;--pill-line:#D2B27A;--pill-ink:#EDF2F0;--badge-bg:#D2B27A;--badge-ink:#0C1716;--shadow:0 30px 80px -20px rgba(0,0,0,.7);--scrub:#1D3A5C;--uniform:#0C1716;--coat:#EAF3FA;--av1:#1D3A5C;--av2:#0F2548}
+:root[data-theme="dark"] .mock[data-v="a"],:root[data-theme="dark"] .mock[data-v="d"]{--surface:#141F33;--ink:#E8EDF5;--muted:#9FB2C9;--line:rgba(255,255,255,.14);--bg:#0F182B;--hdr-bg:linear-gradient(135deg,#16283F,#1D3A5C);--hdr-ink:#EAF3FA;--bubble-bot:#16283F;--bubble-user:linear-gradient(135deg,#67B6EE,#2F85C6);--card-bg:#111D2F;--card-line:rgba(159,211,255,.22);--card-ink:#E8EDF5;--btn-bg:linear-gradient(135deg,#67B6EE,#2F85C6);--btn-ink:#fff;--btn-shadow:0 8px 20px rgba(59,143,201,.35);--chip-bg:transparent;--chip-line:rgba(255,255,255,.18);--chip-ink:#EAF3FA;--gold:#D9BD7E;--gold-b:#D9BD7E;--av-ring:#9FD3FF;--mic-line:rgba(159,211,255,.45);--mic-ink:#9FD3FF;--dot:#5EE59A;--pill-bg:#14233C;--pill-line:rgba(159,211,255,.4);--pill-ink:#EAF3FA;--badge-bg:linear-gradient(135deg,#9FD3FF,#3B8FC9);--badge-ink:#0A101F;--shadow:0 30px 80px -20px rgba(0,0,0,.7);--scrub:#1D3A5C;--uniform:#16283F;--coat:#EAF3FA;--av1:#1D3A5C;--av2:#0F2548}
+:root[data-theme="dark"] .mock[data-v="b"]{--surface:#141F33;--ink:#E8EDF5;--muted:#9FB2C9;--line:rgba(255,255,255,.14);--bg:#0F182B;--hdr-bg:linear-gradient(135deg,#16283F,#1D3A5C);--hdr-ink:#EAF3FA;--bubble-bot:#16283F;--bubble-user:#1D3A5C;--card-bg:rgba(217,189,126,.10);--card-line:rgba(217,189,126,.35);--card-ink:#F3E9CF;--btn-bg:linear-gradient(135deg,#E4CB93,#B9975A);--btn-ink:#0F182B;--btn-shadow:0 8px 20px rgba(0,0,0,.35);--chip-bg:transparent;--chip-line:rgba(217,189,126,.5);--chip-ink:#F3E9CF;--gold:#D9BD7E;--gold-b:#E4CB93;--av-ring:#D9BD7E;--mic-line:rgba(217,189,126,.5);--mic-ink:#D9BD7E;--dot:#5EE59A;--pill-bg:#16283F;--pill-line:rgba(217,189,126,.6);--pill-ink:#F8F6F1;--badge-bg:linear-gradient(135deg,#E4CB93,#B9975A);--badge-ink:#0F182B;--shadow:0 30px 80px -20px rgba(0,0,0,.7);--scrub:#1D3A5C;--uniform:#16283F;--coat:#EAF3FA;--av1:#1D3A5C;--av2:#0F2548}
+:root[data-theme="dark"] .mock[data-v="c"]{--shadow:0 30px 80px -20px rgba(0,0,0,.75)}
+
+/* character + avatar recolouring (SVG fills read these vars) */
+.mock .svg-hair{fill:var(--hair)}
+.mock .svg-skin{fill:var(--skin)}
+.mock .svg-coat{fill:var(--coat)}
+.mock .svg-scrub{fill:var(--scrub)}
+.mock .svg-uniform{fill:var(--uniform)}
+.mock .svg-uniform-s{stroke:var(--uniform);fill:none}
+.mock .svg-coat-s{stroke:var(--coat);fill:none}
+.mock .svg-gold{fill:var(--gold)}
+.mock .svg-goldb{fill:var(--gold-b)}
+.mock .svg-gold-s{stroke:var(--gold);fill:none}
+.mock .svg-glow{fill:var(--gold-b);opacity:.16}
+.mock .svg-shadow{fill:#000;opacity:.28}
+.mock .svg-blush{fill:#E89A8A;opacity:.35}
+.mock .svg-paper{fill:var(--paper)}
+.mock .svg-hair-s{stroke:var(--hair);fill:none}
+.mock .svg-smile{fill:#fff;stroke:#B5524B}
+@media(prefers-reduced-motion:reduce){.mock *,.mock{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <h1>Sarah assistant — colour &amp; design options</h1>
+    <p>Reviewed against the live site tokens in <b>css/styles.css</b> · light + dark</p>
+  </div>
+  <nav class="jump">
+    <a href="#before">Current</a>
+    <a href="#opt-a">A · Brand Blue</a>
+    <a href="#opt-b">B · Gold Signature</a>
+    <a href="#opt-c">C · Midnight</a>
+    <a href="#opt-d">D · Clean Clinical</a>
+    <button class="tgl" id="tgl" type="button">🌙 Dark mode</button>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <div class="kicker">Design review</div>
+    <h2>Why the assistant feels “bolted on” — and 4 fixes</h2>
+    <p>The widget ships its own luxury palette (teal / forest green + antique gold) with serif headings, while the clinic site is <b>navy + sky-blue with soft gold as a small accent</b>. Two different hue families, two different golds, two different type systems — that is what the eye reads as “not matching”.</p>
+    <p>Every option below is a <b>pure palette swap</b>: same layout, same SVG character, same behaviour — only the colours (and, in A–D, the typeface) change. Open in full screen, and toggle dark mode top-right.</p>
+
+    <table class="tbl">
+      <thead><tr><th>Element</th><th>Current assistant</th><th>Proposed (Option A)</th></tr></thead>
+      <tbody>
+        <tr><td>Brand / header bar</td><td class="sw"><span class="chip-c"><i style="background:#14302F"></i>#14302F teal</span></td><td class="sw"><span class="chip-c"><i style="background:#1E3A6E"></i>#1E3A6E site navy</span></td></tr>
+        <tr><td>Buttons &amp; user bubble</td><td class="sw">flat teal #14302F</td><td class="sw">gradient <span class="chip-c"><i style="background:#55AAE6"></i><i style="background:#2C78B4"></i></span> same as site <b>.btn</b></td></tr>
+        <tr><td>Bot bubble</td><td class="sw"><span class="chip-c"><i style="background:#EAF0EE"></i>#EAF0EE (greenish)</span></td><td class="sw"><span class="chip-c"><i style="background:#EAF3FA"></i>#EAF3FA site tint</span></td></tr>
+        <tr><td>Info card</td><td class="sw"><span class="chip-c"><i style="background:#F1E8D6"></i>#F1E8D6 beige</span></td><td class="sw"><span class="chip-c"><i style="background:#EAF3FA"></i>#EAF3FA + <i style="background:#C4D8E9"></i>blue line</span></td></tr>
+        <tr><td>Gold accent</td><td class="sw"><span class="chip-c"><i style="background:#B08D4F"></i>#B08D4F antique</span></td><td class="sw"><span class="chip-c"><i style="background:#B9A06C"></i>#B9A06C site gold</span></td></tr>
+        <tr><td>Typeface</td><td class="sw no">Cormorant Garamond + Manrope (Google)</td><td class="sw ok">Plus Jakarta Sans (self-hosted)</td></tr>
+        <tr><td>Dark mode base</td><td class="sw"><span class="chip-c"><i style="background:#0C1716"></i>#0C1716 teal-black</span></td><td class="sw"><span class="chip-c"><i style="background:#0A101F"></i>#0A101F site navy-black</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="opt" id="before">
+    <div class="opt-head"><span class="tag">Current</span><h3>What is live today</h3></div>
+    <p>Teal header, greenish-grey bubbles, beige info card, serif headings. On a blue page it reads as a different product — and in dark mode it turns teal-black while the site turns navy-black. <b>“Current”</b> is shown without its animation so it can be compared fairly.</p>
+    <div class="demo">
+      <div class="frame">
+        <div class="frame-label">Open panel on the site (current palette)</div>
+        <div class="stage" data-v="before"></div>
+      </div>
+      <div>
+        <div class="frame">
+          <div class="frame-label">Closed launcher</div>
+          <div class="mini" data-v="before" data-closed="1"></div>
+        </div>
+        <div class="pal" data-sw="before"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="opt" id="opt-a">
+    <div class="opt-head"><span class="tag">Option A</span><h3>Brand Blue</h3><span class="rec">Recommended</span></div>
+    <p>Blue does the heavy lifting — navy header, blue-gradient buttons and user bubble exactly like the site’s <b>.btn</b>, pale-blue bot bubble and card from the site’s <b>--tint</b>. Gold shrinks to a refined accent (avatar ring, AI badge, mic) which is exactly how the site uses gold. Plus Jakarta Sans everywhere.</p>
+    <div class="demo">
+      <div class="frame">
+        <div class="frame-label">Open panel on the site</div>
+        <div class="stage" data-v="a"></div>
+      </div>
+      <div>
+        <div class="frame">
+          <div class="frame-label">Closed launcher</div>
+          <div class="mini" data-v="a" data-closed="1"></div>
+        </div>
+        <div class="pal" data-sw="a"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="opt" id="opt-b">
+    <div class="opt-head"><span class="tag">Option B</span><h3>Gold Signature</h3></div>
+    <p>Same blue skeleton, but gold is promoted to the signature: gold call-to-action buttons, gold-hairline under the navy header, gold-outlined chips and a warm cream card (the same treatment as the site’s “Most popular” tier). Navy stays the base so it still reads as one brand.</p>
+    <div class="demo">
+      <div class="frame">
+        <div class="frame-label">Open panel on the site</div>
+        <div class="stage" data-v="b"></div>
+      </div>
+      <div>
+        <div class="frame">
+          <div class="frame-label">Closed launcher</div>
+          <div class="mini" data-v="b" data-closed="1"></div>
+        </div>
+        <div class="pal" data-sw="b"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="opt" id="opt-c">
+    <div class="opt-head"><span class="tag">Option C</span><h3>Midnight Concierge</h3><span class="rec">Bold</span></div>
+    <p>A deliberately premium departure: the panel stays dark navy even on the light site (like a concierge desk), with gold CTAs and a navy-blue gradient for the user. It is the most “luxury” of the four, but it no longer matches the light site surfaces — pick this only if the client wants the chat to feel like a separate VIP service.</p>
+    <div class="demo">
+      <div class="frame">
+        <div class="frame-label">Open panel on the site</div>
+        <div class="stage" data-v="c"></div>
+      </div>
+      <div>
+        <div class="frame">
+          <div class="frame-label">Closed launcher</div>
+          <div class="mini" data-v="c" data-closed="1"></div>
+        </div>
+        <div class="pal" data-sw="c"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="opt" id="opt-d">
+    <div class="opt-head"><span class="tag">Option D</span><h3>Clean Clinical</h3></div>
+    <p>Gold removed entirely — blue and sky-blue only. The calmest, most medical option: pale-blue accents, blue avatar ring, white chips. Safest for a clinic that wants zero decorative colour, though you lose the warm gold that makes the site feel premium.</p>
+    <div class="demo">
+      <div class="frame">
+        <div class="frame-label">Open panel on the site</div>
+        <div class="stage" data-v="d"></div>
+      </div>
+      <div>
+        <div class="frame">
+          <div class="frame-label">Closed launcher</div>
+          <div class="mini" data-v="d" data-closed="1"></div>
+        </div>
+        <div class="pal" data-sw="d"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="opt">
+    <div class="opt-head"><span class="tag">Notes</span><h3>What stays the same in every option</h3></div>
+    <p>Layout, sizes, spacing, the SVG character, the mic / voice logic and all behaviour are untouched — this is a <b>palette + typeface change only</b>, so nothing breaks and there is no re-testing of flows. The character illustration is recoloured the same way in each option (scrubs become navy, accessories use the site gold) and lists are rendered with the same code path.</p>
+    <p>Accessibility: bot text is <b>#5B6B7F on #FFF (5.2:1)</b>, user bubble white on the blue gradient stays <b>≥ 4.8:1</b>, and the focus ring becomes the site’s 3px blue outline. Option A also lets us <b>delete the Google Fonts import</b> (Cormorant + Manrope) since Plus Jakarta Sans is already self-hosted.</p>
+  </section>
+
+</main>
+<style>
+html{scroll-behavior:smooth}
+.pal{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.pal .ph{grid-column:1/-1;font:700 .7rem var(--fh);letter-spacing:.14em;text-transform:uppercase;color:var(--txt);opacity:.8;margin-top:6px}
+.pal .k{display:flex;align-items:center;gap:9px;font-size:.78rem;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 11px}
+.pal .k i{width:22px;height:22px;border-radius:7px;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
+.pal .k b{display:block;font-size:.82rem;color:var(--ink);font-weight:800;line-height:1.25}
+.pal .k span{opacity:.75;font-size:.7rem}
+</style>
+<script>
+(function(){
+  "use strict";
+
+  /* mic icon (used in the composer) */
+  var MIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>';
+
+  /* Sarah avatar (head + shoulders) — every fill is a class so one palette drives it */
+  function avatar(gid){
+    return '<svg viewBox="0 0 100 100" aria-hidden="true">'
+      + '<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="1" y2="1">'
+      + '<stop offset="0" style="stop-color:var(--av1)"/><stop offset="1" style="stop-color:var(--av2)"/>'
+      + '</linearGradient></defs>'
+      + '<rect width="100" height="100" fill="url(#'+gid+')"/>'
+      + '<circle cx="50" cy="44" r="34" class="svg-glow"/>'
+      + '<path d="M29 48C24 72 28 84 38 88L62 88C72 84 76 72 71 48Z" class="svg-hair"/>'
+      + '<path d="M10 100C12 80 30 73 50 73C70 73 88 80 90 100Z" class="svg-coat"/>'
+      + '<path d="M37 75L50 92L63 75C58 72 42 72 37 75Z" class="svg-gold"/>'
+      + '<path d="M44 60H56V76C53 79 47 79 44 76Z" class="svg-skin"/>'
+      + '<ellipse cx="50" cy="46" rx="16" ry="19" class="svg-skin"/>'
+      + '<path d="M32 48C28 26 42 19 54 21C69 23 71 38 68 48C66 38 58 31 46 33C38 35 34 40 32 48Z" class="svg-hair"/>'
+      + '<ellipse cx="43" cy="48" rx="1.8" ry="2.2" class="svg-hair"/><ellipse cx="57" cy="48" rx="1.8" ry="2.2" class="svg-hair"/>'
+      + '<path d="M39 43Q43 41 47 43M53 43Q57 41 61 43" class="svg-hair-s" stroke-width="1.3" stroke-linecap="round"/>'
+      + '<circle cx="39" cy="54" r="3" class="svg-blush"/><circle cx="61" cy="54" r="3" class="svg-blush"/>'
+      + '<path d="M44 56Q50 62 56 56Q50 59 44 56Z" class="svg-smile" stroke-width="1.2" stroke-linejoin="round"/>'
+      + '<circle cx="34" cy="54" r="1.8" class="svg-goldb"/><circle cx="66" cy="54" r="1.8" class="svg-goldb"/>'
+      + '</svg>';
+  }
+
+  /* full standing character (launcher) — same paths as js/dental-assistant.js, classed */
+  var CHAR = '<ellipse cx="50" cy="154" rx="24" ry="4" class="svg-shadow"/>'
+    + '<path d="M30 40C26 64 30 74 38 76L62 76C70 74 74 64 70 40Z" class="svg-hair"/>'
+    + '<path d="M36 98L35 148H47L50 112L53 148H65L64 98Z" class="svg-scrub"/>'
+    + '<ellipse cx="41" cy="150" rx="8" ry="3.5" class="svg-goldb"/><ellipse cx="59" cy="150" rx="8" ry="3.5" class="svg-goldb"/>'
+    + '<rect x="45" y="52" width="10" height="12" rx="4" class="svg-skin"/>'
+    + '<path d="M31 72C31 62 40 58 50 58S69 62 69 72L68 102H32Z" class="svg-coat"/>'
+    + '<path d="M43 59L50 80L57 59Z" class="svg-uniform"/><path d="M50 80V102" class="svg-gold-s" stroke-width="1"/>'
+    + '<circle cx="50" cy="90" r="1.3" class="svg-gold"/><circle cx="50" cy="97" r="1.3" class="svg-gold"/><rect x="55" y="76" width="7" height="3.5" rx="1" class="svg-goldb"/>'
+    + '<path d="M33 68C25 74 24 88 32 96" class="svg-coat-s" stroke-width="8" stroke-linecap="round"/>'
+    + '<rect x="20" y="90" width="15" height="20" rx="2" class="svg-gold"/><rect x="22" y="93" width="11" height="15" rx="1" class="svg-paper"/>'
+    + '<path d="M24 97H31M24 100H31M24 103H29" class="svg-gold-s" stroke-width=".8"/><circle cx="32" cy="98" r="4" class="svg-skin"/>'
+    + '<g class="wv"><path d="M67 68C77 68 82 58 81 46" class="svg-coat-s" stroke-width="8" stroke-linecap="round"/><circle cx="81" cy="41" r="5" class="svg-skin"/></g>'
+    + '<ellipse cx="50" cy="38" rx="17" ry="19" class="svg-skin"/>'
+    + '<path d="M32 40C28 16 44 9 55 11C71 13 72 30 68 40C66 29 58 23 46 25C38 27 34 33 32 40Z" class="svg-hair"/>'
+    + '<ellipse cx="43" cy="41" rx="1.9" ry="2.4" class="svg-hair"/><ellipse cx="57" cy="41" rx="1.9" ry="2.4" class="svg-hair"/>'
+    + '<path d="M38 35Q43 33 47 35M53 35Q57 33 62 35" class="svg-hair-s" stroke-width="1.3" stroke-linecap="round"/>'
+    + '<circle cx="39" cy="47" r="3" class="svg-blush"/><circle cx="61" cy="47" r="3" class="svg-blush"/>'
+    + '<path d="M44 49Q50 55 56 49Q50 52 44 49Z" class="svg-smile" stroke-width="1.2" stroke-linejoin="round"/>'
+    + '<path d="M33 38C32 10 68 10 67 38" class="svg-uniform-s" stroke-width="2.6"/>'
+    + '<rect x="29.5" y="35" width="5" height="9" rx="2.5" class="svg-uniform"/><rect x="65.5" y="35" width="5" height="9" rx="2.5" class="svg-uniform"/>'
+    + '<path d="M32 44C32 56 38 58 44 56" class="svg-uniform-s" stroke-width="1.6"/><circle cx="45" cy="56" r="2.3" class="svg-goldb"/>'
+    + '<circle cx="34" cy="48" r="1.6" class="svg-gold"/><circle cx="66" cy="48" r="1.6" class="svg-gold"/>'
+    + '<path class="sp svg-goldb" transform="translate(12 28)" d="M0-5Q0 0 5 0Q0 0 0 5Q0 0-5 0Q0 0 0-5Z"/>'
+    + '<path class="sp s2 svg-goldb" transform="translate(90 12)" d="M0-5Q0 0 5 0Q0 0 0 5Q0 0-5 0Q0 0 0-5Z"/>'
+    + '<path class="sp svg-goldb" transform="translate(88 100) scale(.7)" d="M0-5Q0 0 5 0Q0 0 0 5Q0 0-5 0Q0 0 0-5Z"/>';
+
+  function panel(gid){
+    return '<div class="panel">'
+      + '<div class="hd"><div class="av">'+avatar(gid)+'</div>'
+      +   '<div><b>Sarah</b><small><span class="dot"></span>Virtual assistant · replies instantly</small></div>'
+      +   '<button class="x" aria-label="Close chat">×</button></div>'
+      + '<div class="msgs">'
+      +   '<div class="m b">Hi! I’m Sarah 👋 How can I help?</div>'
+      +   '<div class="m u">How much is teeth whitening?</div>'
+      +   '<div class="m b">From Rs 6,000. Takes about an hour.</div>'
+      +   '<div class="chips"><button class="chip">Book appointment</button><button class="chip">Prices</button><button class="chip">Opening hours</button></div>'
+      +   '<div class="card"><h4>Cleaning &amp; check-up</h4><div class="row"><span>Price</span><b>From Rs 1,500</b></div><span class="cta">Book this treatment</span></div>'
+      + '</div>'
+      + '<div class="ft"><form onsubmit="return false"><input placeholder="Type, or tap the mic to talk" aria-label="Message">'
+      +   '<button type="button" class="mic" aria-label="Speak to Sarah">'+MIC+'</button><button class="send" aria-label="Send">➤</button></form>'
+      +   '<div class="note">Sarah shares clinic information only and can’t give medical advice.</div></div>'
+      + '</div>';
+  }
+
+  var launcher = '<div class="launcher">'
+    + '<span class="pill"><svg class="pi" style="color:var(--gold-b)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Talk to Sarah<b>AI</b></span>'
+    + '<svg class="ch" viewBox="0 0 100 160" aria-hidden="true">'+CHAR+'</svg></div>';
+
+  var site = function(withCard){
+    return '<div class="site"><span class="site-eb">Dental clinic · Lahore</span>'
+      + '<div class="site-h">A smile you’ll love to show off</div>'
+      + '<p class="site-p">Gentle, modern dentistry with transparent pricing and same-day appointments.</p>'
+      + '<div class="site-btns"><span class="site-btn">Book appointment</span><span class="site-btn alt">Our services</span></div>'
+      + (withCard ? '<div class="site-card"><b>4.9 ★</b><span>1,200+ happy patients</span></div>' : '')
+      + '</div>';
+  };
+
+  /* ---- mount every stage/mini ---- */
+  var uid = 0;
+  document.querySelectorAll('.stage,.mini').forEach(function(el){
+    var closed = el.getAttribute('data-closed') === '1';
+    var gid = 'avg' + (++uid);
+    el.innerHTML = site(!closed)
+      + '<div class="mock" data-v="' + el.getAttribute('data-v') + '">'
+      + (closed ? '' : panel(gid))
+      + launcher + '</div>';
+  });
+
+  /* ---- palette swatches ---- */
+  var SW = {
+    before: [["Header bar","#14302F"],["Bot bubble","#EAF0EE"],["Info card","#F1E8D6"],["Gold","#B08D4F"],["Panel bg","#F3F5F4"],["Dark base","#0C1716"]],
+    a: [["Header (navy)","#1E3A6E"],["User bubble","#2C78B4|#1E3A6E"],["Buttons","linear-gradient(135deg,#55AAE6,#2C78B4)"],["Bot bubble","#EAF3FA"],["Line","#C4D8E9"],["Gold accent","#B9A06C"]],
+    b: [["CTA gold","linear-gradient(135deg,#C9B076,#A98F52)"],["Navy base","#1E3A6E"],["Card cream","#FBF7EE"],["Gold line","#B9A06C"],["Bot bubble","#EAF3FA"],["Online","#2FBF71"]],
+    c: [["Panel","linear-gradient(135deg,#0F2548,#1E3A6E)"],["CTA gold","linear-gradient(135deg,#C9B076,#A98F52)"],["Bot bubble","#20273A"],["Gold","#E4CB93"],["User bubble","#2C78B4|#1E3A6E"],["Online","#5EE59A"]],
+    d: [["Header","#1E3A6E"],["Buttons","linear-gradient(135deg,#55AAE6,#2C78B4)"],["Accent blue","#3B8FC9"],["Tint","#EAF3FA"],["Line","#C4D8E9"],["Online","#2FBF71"]]
+  };
+  document.querySelectorAll('[data-sw]').forEach(function(el){
+    var list = SW[el.getAttribute('data-sw')] || [];
+    var html = '<div class="ph">Palette at a glance</div>';
+    list.forEach(function(p){
+      var c = p[1];
+      var style = c.indexOf('|') > -1
+        ? 'linear-gradient(135deg,' + c.split('|').join(',') + ')'
+        : c;
+      html += '<div class="k"><i style="background:' + style + '"></i><div><b>' + p[0] + '</b><span>'
+           + (c.indexOf('linear-gradient') > -1 || c.indexOf('|') > -1 ? c.replace(/\|/g,' → ').replace(/linear-gradient\([^)]+\)/g,'blue gradient') : c)
+           + '</span></div></div>';
+    });
+    el.innerHTML = html;
+  });
+
+  /* ---- light / dark toggle ---- */
+  var tgl = document.getElementById('tgl');
+  tgl.addEventListener('click', function(){
+    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (dark) document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme','dark');
+    tgl.textContent = dark ? '🌙 Dark mode' : '☀️ Light mode';
+  });
+})();
+</script>
+</body>
+</html>

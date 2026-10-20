@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Navbar toggle — shape options (preview)</title>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/fontawesome.css">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  /* ---- page chrome only; each header below uses the REAL site stylesheet ----
+     NOTE: the dark-mode buttons reuse id="th" in every row on purpose, so each
+     one renders through the exact same #th rules the live site uses. It is a
+     throwaway preview, not the live page, so the repeated id never ships. */
+  .wrap{max-width:1360px;margin:0 auto;padding:30px clamp(16px,4vw,28px) 40px}
+  h1.pt{font-size:1.4rem;color:var(--navy);letter-spacing:-.02em;margin:4px 0 8px}
+  .lead{font-size:.9rem;color:var(--txt);line-height:1.65;margin:0 0 30px;max-width:74ch}
+  .lead b{color:var(--navy)}
+  .demo{margin-bottom:30px}
+  .demo-hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .pick{font-size:.7rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#fff;
+    background:var(--blue);border-radius:999px;padding:3px 10px}
+  .tag{font-weight:800;font-size:.9rem;color:var(--navy);letter-spacing:-.01em}
+  .badge{margin-left:auto;font:600 .72rem ui-monospace,Consolas,monospace;color:var(--blue-ink);
+    background:var(--tint);border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap}
+  .stage{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:18px;
+    padding:78px 0 46px;background:linear-gradient(180deg,color-mix(in srgb,var(--tint) 75%,var(--bg)),var(--bg))}
+  /* faux content band so the floating control can be judged over a real page */
+  .stage::before{content:"";position:absolute;left:0;right:0;top:0;height:180px;
+    background:linear-gradient(135deg,#a9cbe6,#6f9cc4)}
+  .stage .faux{position:relative;margin:38px auto 0;width:min(760px,calc(100% - 120px));display:grid;gap:12px}
+  .stage .faux i{display:block;height:14px;border-radius:7px;background:color-mix(in srgb,var(--line) 75%,transparent)}
+  .stage .faux i:nth-child(2){width:82%}
+  .stage .faux i:nth-child(3){width:60%}
+  /* Render the fixed site header in normal flow inside the stage, centred with
+     clear room at both edges so the separated toggle always has space. */
+  .stage header{position:relative;top:0;width:min(1040px,max(340px,calc(100% - 300px)));margin:0 auto;
+    box-shadow:0 12px 34px rgba(30,58,110,.20)}
+  /* Force the separated layout at every window size (the live site only does it
+     at >=1300px) so the two shapes can be compared side by side. */
+  .stage header #th{position:absolute;right:auto;left:100%;margin-left:16px;top:calc(50% - 22px);
+    width:44px;height:44px;border-radius:14px;
+    background:color-mix(in srgb,var(--card) 88%,transparent);
+    -webkit-backdrop-filter:blur(16px) saturate(180%);backdrop-filter:blur(16px) saturate(180%);
+    border:1px solid var(--line);
+    box-shadow:0 12px 34px rgba(30,58,110,.16),inset 0 1px 0 rgba(255,255,255,.6)}
+  .stage header #th:hover{border-color:var(--blue);
+    box-shadow:0 16px 38px rgba(30,58,110,.22),inset 0 1px 0 rgba(255,255,255,.7)}
+  /* OPTION 2 — softer 20px corners, echoing the header capsule's own radius */
+  .demo[data-v="r20"] .stage header #th{border-radius:20px}
+  /* OPTION 3 — capsule pill with icon + label */
+  .demo[data-v="pill"] .stage header #th{width:auto;padding:0 18px 0 16px;gap:9px;border-radius:999px;font-weight:700}
+  .demo[data-v="pill"] .stage header #th .lbl{font-size:.87rem;letter-spacing:.01em}
+  .note{margin:12px 2px 0;font-size:.8rem;color:var(--txt);line-height:1.65}
+  .note b{color:var(--navy)}
+  .foot{max-width:1360px;margin:0 auto;padding:22px clamp(16px,4vw,28px) 96px;font-size:.86rem;color:var(--txt);line-height:1.75}
+  .foot b{color:var(--navy)}
+  /* Small screens: this is a desktop comparison, so stack the pieces plainly. */
+  @media (max-width:900px){
+    .stage header{width:100%}
+    .stage header #th{position:static;margin:10px 0 0}
+  }
+</style>
+</head>
+<body>
+
+<svg style="display:none"><symbol id="t" viewBox="0 0 24 24"><path d="M12 3c-2 0-3 1-5 1S3 5 3 9c0 3 1 5 2 8 .5 2 1 4 2.5 4 1.7 0 1.5-4 4.5-4s2.8 4 4.5 4c1.5 0 2-2 2.5-4 1-3 2-5 2-8 0-4-2-5-4-5s-3-1-5-1z"/></symbol></svg>
+
+<div class="wrap">
+  <h1 class="pt">Navbar dark-mode toggle — separated shape options</h1>
+  <p class="lead">
+    All three rows use your site's real <b>styles.css</b> — same capsule, logo, links and Book appointment CTA, nothing mocked.
+    Each toggle is shown <b>separated to the right of the capsule</b> in its scrolled (frosted) state, sitting over a faux content band
+    so you can judge how it reads on the page. <b>Click any toggle to flip dark mode</b> and see both themes.
+  </p>
+
+  <!-- ============ 1 · LIVE (reference) ============ -->
+  <section class="demo" data-v="live">
+    <div class="demo-hd"><span class="pick">Live</span><span class="tag">1 · Rounded square, 14px — what is shipped today</span><span class="badge">measuring…</span></div>
+    <div class="stage">
+      <header class="sc">
+        <a class="logo" href="#"><svg><use href="#t"/></svg><span>Bright Smiles<br><small>Dental Clinic</small></span></a>
+        <nav><a href="#" class="on" aria-current="page">Home</a><a href="#">About Us</a><a href="#">Services</a><a href="#">Clinic</a><a href="#">Smile Gallery</a><a href="#">Testimonials</a></nav>
+        <div class="ha">
+          <button type="button" class="btn hb"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Book appointment</button>
+          <button type="button" id="th" aria-label="Toggle dark mode" aria-pressed="false"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+          <button type="button" class="mn" aria-label="Open menu"><span></span><span></span><span></span></button>
+        </div>
+      </header>
+      <div class="faux" aria-hidden="true"><i></i><i></i><i></i></div>
+    </div>
+    <p class="note">Reference row — the 14px corners match the Book CTA exactly. <b>Not button-like</b> but perfectly consistent with the buttons and icon tiles.</p>
+  </section>
+
+  <!-- ============ 2 · OPTION: 20px radius ============ -->
+  <section class="demo" data-v="r20">
+    <div class="demo-hd"><span class="pick">Option 2</span><span class="tag">Rounded square, 20px radius</span><span class="badge">measuring…</span></div>
+    <div class="stage">
+      <header class="sc">
+        <a class="logo" href="#"><svg><use href="#t"/></svg><span>Bright Smiles<br><small>Dental Clinic</small></span></a>
+        <nav><a href="#" class="on" aria-current="page">Home</a><a href="#">About Us</a><a href="#">Services</a><a href="#">Clinic</a><a href="#">Smile Gallery</a><a href="#">Testimonials</a></nav>
+        <div class="ha">
+          <button type="button" class="btn hb"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Book appointment</button>
+          <button type="button" id="th" aria-label="Toggle dark mode" aria-pressed="false"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+          <button type="button" class="mn" aria-label="Open menu"><span></span><span></span><span></span></button>
+        </div>
+      </header>
+      <div class="faux" aria-hidden="true"><i></i><i></i><i></i></div>
+    </div>
+    <p class="note">Softer corners that echo the <b>header capsule's own 20px radius</b>. Slightly friendlier and a touch less "button-like" than the 14px version, while still feeling part of the same family.</p>
+  </section>
+
+  <!-- ============ 3 · OPTION: capsule pill ============ -->
+  <section class="demo" data-v="pill">
+    <div class="demo-hd"><span class="pick">Option 3</span><span class="tag">Capsule pill with icon + label (🌙 Dark / ☀️ Light)</span><span class="badge">measuring…</span></div>
+    <div class="stage">
+      <header class="sc">
+        <a class="logo" href="#"><svg><use href="#t"/></svg><span>Bright Smiles<br><small>Dental Clinic</small></span></a>
+        <nav><a href="#" class="on" aria-current="page">Home</a><a href="#">About Us</a><a href="#">Services</a><a href="#">Clinic</a><a href="#">Smile Gallery</a><a href="#">Testimonials</a></nav>
+        <div class="ha">
+          <button type="button" class="btn hb"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Book appointment</button>
+          <button type="button" id="th" aria-label="Toggle dark mode" aria-pressed="false"><i class="fa-solid fa-moon" aria-hidden="true"></i><span class="lbl">Dark</span></button>
+          <button type="button" class="mn" aria-label="Open menu"><span></span><span></span><span></span></button>
+        </div>
+      </header>
+      <div class="faux" aria-hidden="true"><i></i><i></i><i></i></div>
+    </div>
+    <p class="note">The clearest, self-explanatory take and it echoes the <b>navbar-capsule motif</b>. Trade-off: it is roughly twice as wide, so it needs more room before it can sit outside the bar — the float breakpoint would rise from 1300px to about 1360px, and below that it stays inside the capsule on the live site.</p>
+  </section>
+</div>
+
+<p class="foot"><b>How to read it:</b> all rows are identical except the toggle's corner radius / label, so the only variable is the shape. The frosted glass, the light-blue over-hero ring, the hover lift and the icon spin are the same in every row. Tell me your pick — <b>1</b>, <b>2</b> or <b>3</b> — and I'll apply exactly that to the real header.</p>
+
+<script defer>
+  addEventListener('load', function () {
+    /* Live size badges, measured from the DOM (not estimated). */
+    document.querySelectorAll('.demo').forEach(function (d) {
+      var th = d.querySelector('#th'), badge = d.querySelector('.badge');
+      if (!th || !badge) return;
+      var r = th.getBoundingClientRect();
+      badge.textContent = 'toggle ' + Math.round(r.width) + '×' + Math.round(r.height) + 'px';
+    });
+
+    /* One working theme switch for the whole page (all previews flip together). */
+    function apply(dark) {
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      document.querySelectorAll('#th').forEach(function (t) {
+        t.classList.remove('spin'); void t.offsetWidth; t.classList.add('spin');
+        t.setAttribute('aria-pressed', dark ? 'true' : 'false');
+        t.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+        var i = t.querySelector('i');
+        if (i) i.className = dark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        var lbl = t.querySelector('.lbl');
+        if (lbl) lbl.textContent = dark ? 'Light' : 'Dark';
+      });
+    }
+    document.querySelectorAll('#th').forEach(function (t) {
+      t.addEventListener('click', function () {
+        apply(document.documentElement.dataset.theme !== 'dark');
+      });
+    });
+  });
+</script>
+</body>
+</html>

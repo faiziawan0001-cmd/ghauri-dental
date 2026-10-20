@@ -39,11 +39,10 @@
 
   /* ---- markup (launcher + panel) ---------------------------------------- */
   const MARKUP = `
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="sbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1E4B49"/><stop offset="1" stop-color="#0F2625"/></linearGradient></defs><symbol id="sarah" viewBox="0 0 100 100"><rect width="100" height="100" fill="url(#sbg)"/><circle cx="50" cy="44" r="34" fill="#B08D4F" opacity=".16"/><path d="M29 48C24 72 28 84 38 88L62 88C72 84 76 72 71 48Z" fill="#2A1A15"/><path d="M10 100C12 80 30 73 50 73C70 73 88 80 90 100Z" fill="#F8F8F5"/><path d="M37 75L50 92L63 75C58 72 42 72 37 75Z" fill="#B08D4F"/><path d="M44 60H56V76C53 79 47 79 44 76Z" fill="#E7B58F"/><ellipse cx="50" cy="46" rx="16" ry="19" fill="#F1C6A4"/><path d="M32 48C28 26 42 19 54 21C69 23 71 38 68 48C66 38 58 31 46 33C38 35 34 40 32 48Z" fill="#2A1A15"/><ellipse cx="43" cy="48" rx="1.8" ry="2.2" fill="#2A1A15"/><ellipse cx="57" cy="48" rx="1.8" ry="2.2" fill="#2A1A15"/><path d="M39 43Q43 41 47 43M53 43Q57 41 61 43" stroke="#2A1A15" stroke-width="1.3" fill="none" stroke-linecap="round"/><circle cx="39" cy="54" r="3" fill="#E89A8A" opacity=".35"/><circle cx="61" cy="54" r="3" fill="#E89A8A" opacity=".35"/><path d="M44 56Q50 62 56 56Q50 59 44 56Z" fill="#fff" stroke="#B5524B" stroke-width="1.2" stroke-linejoin="round"/><circle cx="34" cy="54" r="1.8" fill="#D2B27A"/><circle cx="66" cy="54" r="1.8" fill="#D2B27A"/></symbol></svg>
 <div id="lx">
   <section id="lx-panel" role="dialog" aria-label="Clinic assistant">
     <div class="hd">
-      <div class="av"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#sarah"/></svg></div>
+      <div class="av"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="lx-sbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="g1"/><stop offset="1" class="g2"/></linearGradient></defs><rect width="100" height="100" fill="url(#lx-sbg)"/><circle cx="50" cy="44" r="34" class="svg-glow"/><path d="M29 48C24 72 28 84 38 88L62 88C72 84 76 72 71 48Z" class="svg-hair"/><path d="M10 100C12 80 30 73 50 73C70 73 88 80 90 100Z" class="svg-coat"/><path d="M37 75L50 92L63 75C58 72 42 72 37 75Z" class="svg-gold"/><path d="M44 60H56V76C53 79 47 79 44 76Z" class="svg-skin"/><ellipse cx="50" cy="46" rx="16" ry="19" class="svg-skin"/><path d="M32 48C28 26 42 19 54 21C69 23 71 38 68 48C66 38 58 31 46 33C38 35 34 40 32 48Z" class="svg-hair"/><ellipse cx="43" cy="48" rx="1.8" ry="2.2" class="svg-hair"/><ellipse cx="57" cy="48" rx="1.8" ry="2.2" class="svg-hair"/><path d="M39 43Q43 41 47 43M53 43Q57 41 61 43" class="svg-hair-s" stroke-width="1.3" stroke-linecap="round"/><circle cx="39" cy="54" r="3" class="svg-blush"/><circle cx="61" cy="54" r="3" class="svg-blush"/><path d="M44 56Q50 62 56 56Q50 59 44 56Z" class="svg-smile" stroke-width="1.2" stroke-linejoin="round"/><circle cx="34" cy="54" r="1.8" class="svg-goldb"/><circle cx="66" cy="54" r="1.8" class="svg-goldb"/></svg></div>
       <div><b>Sarah</b><small><span class="dot"></span>Virtual assistant \u00b7 replies instantly</small></div>
       <button class="x" id="lx-close" aria-label="Close chat">\u00d7</button>
     </div>
@@ -54,29 +53,29 @@
     </div>
   </section>
   <button id="lx-fab" aria-label="Talk to Sarah, virtual assistant"><svg class="ch" viewBox="0 0 100 160" aria-hidden="true">
-<ellipse cx="50" cy="154" rx="24" ry="4" fill="#000" opacity=".28"/>
-<path d="M30 40C26 64 30 74 38 76L62 76C70 74 74 64 70 40Z" fill="#2A1A15"/>
-<path d="M36 98L35 148H47L50 112L53 148H65L64 98Z" fill="#1E4B49"/>
-<ellipse cx="41" cy="150" rx="8" ry="3.5" fill="#D2B27A"/><ellipse cx="59" cy="150" rx="8" ry="3.5" fill="#D2B27A"/>
-<rect x="45" y="52" width="10" height="12" rx="4" fill="#E7B58F"/>
-<path d="M31 72C31 62 40 58 50 58S69 62 69 72L68 102H32Z" fill="#F8F6F0"/>
-<path d="M43 59L50 80L57 59Z" fill="#14302F"/><path d="M50 80V102" stroke="#D2B27A" stroke-width="1"/>
-<circle cx="50" cy="90" r="1.3" fill="#B08D4F"/><circle cx="50" cy="97" r="1.3" fill="#B08D4F"/><rect x="55" y="76" width="7" height="3.5" rx="1" fill="#D2B27A"/>
-<path d="M33 68C25 74 24 88 32 96" stroke="#F8F6F0" stroke-width="8" stroke-linecap="round" fill="none"/>
-<rect x="20" y="90" width="15" height="20" rx="2" fill="#B08D4F"/><rect x="22" y="93" width="11" height="15" rx="1" fill="#fff"/><path d="M24 97H31M24 100H31M24 103H29" stroke="#B08D4F" stroke-width=".8"/><circle cx="32" cy="98" r="4" fill="#F1C6A4"/>
-<g class="wv"><path d="M67 68C77 68 82 58 81 46" stroke="#F8F6F0" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="81" cy="41" r="5" fill="#F1C6A4"/></g>
-<ellipse cx="50" cy="38" rx="17" ry="19" fill="#F1C6A4"/>
-<path d="M32 40C28 16 44 9 55 11C71 13 72 30 68 40C66 29 58 23 46 25C38 27 34 33 32 40Z" fill="#2A1A15"/>
-<ellipse cx="43" cy="41" rx="1.9" ry="2.4" fill="#2A1A15"/><ellipse cx="57" cy="41" rx="1.9" ry="2.4" fill="#2A1A15"/>
-<path d="M38 35Q43 33 47 35M53 35Q57 33 62 35" stroke="#2A1A15" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-<circle cx="39" cy="47" r="3" fill="#E89A8A" opacity=".35"/><circle cx="61" cy="47" r="3" fill="#E89A8A" opacity=".35"/>
-<path d="M44 49Q50 55 56 49Q50 52 44 49Z" fill="#fff" stroke="#B5524B" stroke-width="1.2" stroke-linejoin="round"/>
-<path d="M33 38C32 10 68 10 67 38" stroke="#14302F" stroke-width="2.6" fill="none"/>
-<rect x="29.5" y="35" width="5" height="9" rx="2.5" fill="#14302F"/><rect x="65.5" y="35" width="5" height="9" rx="2.5" fill="#14302F"/>
-<path d="M32 44C32 56 38 58 44 56" stroke="#14302F" stroke-width="1.6" fill="none"/><circle cx="45" cy="56" r="2.3" fill="#D2B27A"/>
-<circle cx="34" cy="48" r="1.6" fill="#D2B27A"/><circle cx="66" cy="48" r="1.6" fill="#D2B27A"/>
-<path class="sp" transform="translate(12 28)" d="M0-5Q0 0 5 0Q0 0 0 5Q0 0-5 0Q0 0 0-5Z" fill="#D2B27A"/><path class="sp s2" transform="translate(90 12)" d="M0-5Q0 0 5 0Q0 0 0 5Q0 0-5 0Q0 0 0-5Z" fill="#D2B27A"/><path class="sp" transform="translate(88 100) scale(.7)" d="M0-5Q0 0 5 0Q0 0 0 5Q0 0-5 0Q0 0 0-5Z" fill="#D2B27A"/>
-</svg><span class="pill"><svg class="pi" viewBox="0 0 24 24" fill="none" stroke="#D2B27A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Talk to Sarah<b>AI</b></span></button>
+<ellipse cx="50" cy="154" rx="24" ry="4" class="svg-shadow"/>
+<path d="M30 40C26 64 30 74 38 76L62 76C70 74 74 64 70 40Z" class="svg-hair"/>
+<path d="M36 98L35 148H47L50 112L53 148H65L64 98Z" class="svg-scrub"/>
+<ellipse cx="41" cy="150" rx="8" ry="3.5" class="svg-goldb"/><ellipse cx="59" cy="150" rx="8" ry="3.5" class="svg-goldb"/>
+<rect x="45" y="52" width="10" height="12" rx="4" class="svg-skin"/>
+<path d="M31 72C31 62 40 58 50 58S69 62 69 72L68 102H32Z" class="svg-coat"/>
+<path d="M43 59L50 80L57 59Z" class="svg-uniform"/><path d="M50 80V102" class="svg-gold-s" stroke-width="1"/>
+<circle cx="50" cy="90" r="1.3" class="svg-gold"/><circle cx="50" cy="97" r="1.3" class="svg-gold"/><rect x="55" y="76" width="7" height="3.5" rx="1" class="svg-goldb"/>
+<path d="M33 68C25 74 24 88 32 96" class="svg-coat-s" stroke-width="8" stroke-linecap="round"/>
+<rect x="20" y="90" width="15" height="20" rx="2" class="svg-gold"/><rect x="22" y="93" width="11" height="15" rx="1" class="svg-paper"/><path d="M24 97H31M24 100H31M24 103H29" class="svg-gold-s" stroke-width=".8"/><circle cx="32" cy="98" r="4" class="svg-skin"/>
+<g class="wv"><path d="M67 68C77 68 82 58 81 46" class="svg-coat-s" stroke-width="8" stroke-linecap="round"/><circle cx="81" cy="41" r="5" class="svg-skin"/></g>
+<ellipse cx="50" cy="38" rx="17" ry="19" class="svg-skin"/>
+<path d="M32 40C28 16 44 9 55 11C71 13 72 30 68 40C66 29 58 23 46 25C38 27 34 33 32 40Z" class="svg-hair"/>
+<ellipse cx="43" cy="41" rx="1.9" ry="2.4" class="svg-hair"/><ellipse cx="57" cy="41" rx="1.9" ry="2.4" class="svg-hair"/>
+<path d="M38 35Q43 33 47 35M53 35Q57 33 62 35" class="svg-hair-s" stroke-width="1.3" stroke-linecap="round"/>
+<circle cx="39" cy="47" r="3" class="svg-blush"/><circle cx="61" cy="47" r="3" class="svg-blush"/>
+<path d="M44 49Q50 55 56 49Q50 52 44 49Z" class="svg-smile" stroke-width="1.2" stroke-linejoin="round"/>
+<path d="M33 38C32 10 68 10 67 38" class="svg-uniform-s" stroke-width="2.6"/>
+<rect x="29.5" y="35" width="5" height="9" rx="2.5" class="svg-uniform"/><rect x="65.5" y="35" width="5" height="9" rx="2.5" class="svg-uniform"/>
+<path d="M32 44C32 56 38 58 44 56" class="svg-uniform-s" stroke-width="1.6"/><circle cx="45" cy="56" r="2.3" class="svg-goldb"/>
+<circle cx="34" cy="48" r="1.6" class="svg-gold"/><circle cx="66" cy="48" r="1.6" class="svg-gold"/>
+<path class="sp svg-goldb" transform="translate(12 28)" d="M0-5Q0 0 5 0Q0 0 0 5Q0 0-5 0Q0 0 0-5Z"/><path class="sp s2 svg-goldb" transform="translate(90 12)" d="M0-5Q0 0 5 0Q0 0 0 5Q0 0-5 0Q0 0 0-5Z"/><path class="sp svg-goldb" transform="translate(88 100) scale(.7)" d="M0-5Q0 0 5 0Q0 0 0 5Q0 0-5 0Q0 0 0-5Z"/>
+</svg><span class="pill"><svg class="pi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Talk to Sarah<b>AI</b></span></button>
 </div>`;
 
   document.body.insertAdjacentHTML("beforeend", MARKUP);

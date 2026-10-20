@@ -653,6 +653,60 @@ header:is(:not(.sc),.mo) #th:hover { background: rgba(143,205,245,.16); border-c
 @media (min-width: 981px) {
   #th { min-width: 39px; min-height: 39px; }
 }
+/* Roomy desktops (>=1300px): the dark-mode toggle steps out of the capsule and
+   floats just beyond its right edge, so the bar reads logo | links | CTA and
+   the booking button owns the right side on its own. The button stays a child
+   of <header> and is positioned against it, so it tracks the capsule's centred
+   placement at every window width and no per-page markup changes. The 1300px
+   gate only opens once the bar's side margins leave ~72px of clear room -
+   below that (and on every phone/tablet) the in-capsule layout is kept,
+   exactly as before.
+   Shape: a true 48x48 square (width = height, so it can never read as a tall
+   rounded pill) with a modest 12px radius - about a quarter of the side, so
+   the corners stay soft but the silhouette is unmistakably square. It is
+   centred a few px inside the capsule's height, so it neither fills the bar
+   (which made a full-height tile feel heavy) nor reads as a tiny chip.
+   Position uses top, not transform, so the existing hover/active transforms
+   still work. Sitting outside the capsule it carries the capsule's exact edge
+   treatment in both states: the faint white border and soft shadow over the
+   hero, the frosted glass once the page has scrolled. */
+@media (min-width: 1300px) {
+  header #th {
+    position: absolute;
+    left: 100%;
+    right: auto;
+    top: calc(50% - 24px);
+    margin-left: 16px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--card) 88%, transparent);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid var(--line);
+    box-shadow: 0 12px 34px rgba(30, 58, 110, .16), inset 0 1px 0 rgba(255, 255, 255, .6);
+  }
+  /* At the top of the page the header is still transparent over the hero, so
+     the floating toggle drops its glass and mirrors the capsule's edge
+     treatment exactly: the same faint white 1px border and soft drop shadow
+     the capsule wears there. Before this it kept a bright blue ring, which is
+     why the two edges did not read as a matched pair over the hero. */
+  header:not(.sc) #th {
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-color: rgba(255, 255, 255, .2);
+    box-shadow: 0 2px 14px rgba(7, 20, 40, .1);
+  }
+  /* Keep the tile's glass on hover - the shared #th:hover tint would otherwise
+     melt it away. Only applies to the scrolled (frosted) state; the over-hero
+     state keeps its light-blue hover from the rule above. */
+  header.sc #th:hover {
+    background: color-mix(in srgb, var(--card) 96%, transparent);
+    box-shadow: 0 16px 38px rgba(30, 58, 110, .22), inset 0 1px 0 rgba(255, 255, 255, .7);
+  }
+}
 @keyframes thSpin { from { transform: rotate(0) scale(.6); opacity: .2 } 60% { transform: rotate(210deg) scale(1) } to { transform: rotate(360deg) scale(1); opacity: 1 } }
 #th.spin i { animation: thSpin .55s cubic-bezier(.22,1,.36,1); }
 .mn { padding: 0 6px; }

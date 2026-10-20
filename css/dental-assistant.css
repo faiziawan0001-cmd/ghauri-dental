@@ -4,40 +4,87 @@
    --------------------------------------------------------------------------
    Extracted from "dental-assistant-v5-sarah-luxury.html" and made safe to
    drop into the live site:
-     - every rule is scoped under #lx, so the widget's class names (.card,
-       .row, .av, .chip, .hd ...) can never leak into the site
-     - the palette lives on #lx (not :root), so it can't overwrite the site's
-       own --bg / --gold / --line variables
-     - colours follow the site theme (data-theme + prefers-color-scheme)
+      - every rule is scoped under #lx, so the widget's class names (.card,
+        .row, .av, .chip, .hd ...) can never leak into the site
+      - the palette lives on #lx (not :root), so it can't overwrite the site's
+        own --bg / --gold / --line variables
+      - colours follow the site theme (data-theme + prefers-color-scheme)
+   --------------------------------------------------------------------------
+   PALETTE: "Option B — Blue + Gold Signature" (see assistant-design-preview.html)
+      navy #1E3A6E base · site typeface Plus Jakarta Sans · gold promoted to
+      the signature accent (gold CTA buttons, gold hairline under the header,
+      gold-outlined chips, warm cream info card) — same treatment as the
+      site's "Most popular" tier. Matches css/styles.css tokens 1:1.
    =========================================================================== */
-
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap");
 
 /* --- palette + fixed shell ------------------------------------------------ */
 #lx{
-  --bg:#F3F5F4;--surface:#FFFFFF;--ink:#14302F;--muted:#5E7270;--line:#DCE4E2;
-  --brand:#14302F;--brand-ink:#F3F5F4;--gold:#B08D4F;--gold-soft:#F1E8D6;
-  --bubble:#EAF0EE;--shadow:0 30px 80px -20px rgba(20,48,47,.35);
+  --bg:#F2F8FD;--surface:#FFFFFF;--ink:#1E3A6E;--muted:#5B6B7F;--line:#C4D8E9;
+  --brand:#1E3A6E;--brand-ink:#FFFFFF;--hdr-bg:linear-gradient(135deg,#1E3A6E,#16305A);
+  --btn-bg:linear-gradient(135deg,#C9B076,#A98F52);--btn-ink:#1E3A6E;--btn-shadow:0 8px 20px rgba(169,143,82,.35);
+  --gold:#B9A06C;--gold-b:#D9BD7E;--gold-soft:#FBF7EE;--card-line:#E2D3AC;--card-ink:#1E3A6E;
+  --bubble:#EAF3FA;--chip-line:#B9A06C;--chip-bg:transparent;--dot:#2FBF71;
+  --focus:#3B8FC9;--focus-glow:rgba(59,143,201,.18);
+  --scrub:#1E3A6E;--uniform:#16305A;--coat:#F8F6F1;--av1:#1E3A6E;--av2:#0F2548;
+  --pill-bg:#16305A;--pill-line:rgba(185,160,108,.7);--pill-ink:#F8F6F1;
+  --badge-bg:linear-gradient(135deg,#D9BD7E,#B9975A);--badge-ink:#16305A;
+  --shadow:0 30px 80px -20px rgba(30,58,110,.30);
   position:fixed;right:max(14px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));
-  z-index:999;font-family:Manrope,system-ui,sans-serif;color:var(--ink)
+  z-index:999;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;color:var(--ink)
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]) #lx{
-    --bg:#0C1716;--surface:#142423;--ink:#EDF2F0;--muted:#8FA6A3;--line:#233836;
-    --brand:#D2B27A;--brand-ink:#14302F;--gold:#D2B27A;--gold-soft:#2A2A22;
-    --bubble:#1B302E;--shadow:0 30px 80px -20px rgba(0,0,0,.7)
+    --bg:#0F182B;--surface:#141F33;--ink:#E8EDF5;--muted:#9FB2C9;--line:rgba(255,255,255,.14);
+    --brand:#1D3A5C;--brand-ink:#FFFFFF;--hdr-bg:linear-gradient(135deg,#16283F,#1D3A5C);
+    --btn-bg:linear-gradient(135deg,#E4CB93,#B9975A);--btn-ink:#0F182B;--btn-shadow:0 8px 20px rgba(0,0,0,.35);
+    --gold:#D9BD7E;--gold-b:#E4CB93;--gold-soft:rgba(217,189,126,.10);--card-line:rgba(217,189,126,.35);--card-ink:#F3E9CF;
+    --bubble:#16283F;--chip-line:rgba(217,189,126,.5);--chip-bg:transparent;--dot:#5EE59A;
+    --focus:#9FD3FF;--focus-glow:rgba(90,169,234,.18);
+    --scrub:#1D3A5C;--uniform:#16283F;--coat:#EAF3FA;--av1:#1D3A5C;--av2:#0F2548;
+    --pill-bg:#16283F;--pill-line:rgba(217,189,126,.6);--pill-ink:#F8F6F1;
+    --badge-bg:linear-gradient(135deg,#E4CB93,#B9975A);--badge-ink:#0F182B;
+    --shadow:0 30px 80px -20px rgba(0,0,0,.7)
   }
 }
 :root[data-theme="dark"] #lx{
-  --bg:#0C1716;--surface:#142423;--ink:#EDF2F0;--muted:#8FA6A3;--line:#233836;
-  --brand:#D2B27A;--brand-ink:#14302F;--gold:#D2B27A;--gold-soft:#2A2A22;
-  --bubble:#1B302E;--shadow:0 30px 80px -20px rgba(0,0,0,.7)
+  --bg:#0F182B;--surface:#141F33;--ink:#E8EDF5;--muted:#9FB2C9;--line:rgba(255,255,255,.14);
+  --brand:#1D3A5C;--brand-ink:#FFFFFF;--hdr-bg:linear-gradient(135deg,#16283F,#1D3A5C);
+  --btn-bg:linear-gradient(135deg,#E4CB93,#B9975A);--btn-ink:#0F182B;--btn-shadow:0 8px 20px rgba(0,0,0,.35);
+  --gold:#D9BD7E;--gold-b:#E4CB93;--gold-soft:rgba(217,189,126,.10);--card-line:rgba(217,189,126,.35);--card-ink:#F3E9CF;
+  --bubble:#16283F;--chip-line:rgba(217,189,126,.5);--chip-bg:transparent;--dot:#5EE59A;
+  --focus:#9FD3FF;--focus-glow:rgba(90,169,234,.18);
+  --scrub:#1D3A5C;--uniform:#16283F;--coat:#EAF3FA;--av1:#1D3A5C;--av2:#0F2548;
+  --pill-bg:#16283F;--pill-line:rgba(217,189,126,.6);--pill-ink:#F8F6F1;
+  --badge-bg:linear-gradient(135deg,#E4CB93,#B9975A);--badge-ink:#0F182B;
+  --shadow:0 30px 80px -20px rgba(0,0,0,.7)
 }
 #lx,#lx *{box-sizing:border-box}
 
+/* --- Sarah illustration (avatar + launcher character) ---------------------
+   The markup carries svg-* classes instead of hardcoded hex values, so every
+   colour above flows straight into the drawing — including dark mode. */
+#lx .svg-hair{fill:#2A1A15}
+#lx .svg-hair-s{stroke:#2A1A15;fill:none}
+#lx .svg-skin{fill:#F1C6A4}
+#lx .svg-blush{fill:#E89A8A;opacity:.35}
+#lx .svg-smile{fill:#fff;stroke:#B5524B}
+#lx .svg-shadow{fill:#000;opacity:.28}
+#lx .svg-coat{fill:var(--coat)}
+#lx .svg-coat-s{stroke:var(--coat);fill:none}
+#lx .svg-scrub{fill:var(--scrub)}
+#lx .svg-uniform{fill:var(--uniform)}
+#lx .svg-uniform-s{stroke:var(--uniform);fill:none}
+#lx .svg-gold{fill:var(--gold)}
+#lx .svg-gold-s{stroke:var(--gold);fill:none}
+#lx .svg-goldb{fill:var(--gold-b)}
+#lx .svg-glow{fill:var(--gold-b);opacity:.16}
+#lx .svg-paper{fill:#fff}
+#lx .g1{stop-color:var(--av1)}
+#lx .g2{stop-color:var(--av2)}
+
 /* --- launcher button ------------------------------------------------------ */
 #lx-fab{width:78px;height:78px;border-radius:50%;border:2px solid var(--gold);padding:0;background:var(--surface);cursor:pointer;box-shadow:var(--shadow);position:relative;transition:transform .25s}
-#lx-fab .on{position:absolute;right:3px;bottom:3px;width:15px;height:15px;border-radius:50%;background:#5FD08F;border:2.5px solid var(--surface)}
+#lx-fab .on{position:absolute;right:3px;bottom:3px;width:15px;height:15px;border-radius:50%;background:var(--dot);border:2.5px solid var(--surface)}
 #lx-fab:hover{transform:scale(1.06)}
 #lx-fab svg{width:100%;height:100%;display:block;border-radius:50%}
 #lx-fab::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid var(--gold);opacity:0;animation:lx-ring 2.8s ease-out 2s 3}
@@ -50,13 +97,13 @@
 #lx.open #lx-tip{display:none}
 /* NB: the site has a global `header{position:fixed;top:10px;left:0;right:0;width:min(1120px,...)}`
    rule. The panel bar is now a <div> to avoid it, and the reset below keeps it safe even if a
-   <header> is ever used again. */
-#lx .hd{position:relative;top:auto;right:auto;left:auto;bottom:auto;width:auto;margin:0;z-index:auto;border:0;border-radius:0;box-shadow:none;grid-template-columns:none;flex:0 0 auto;padding:20px 20px 18px;background:var(--brand);color:var(--brand-ink);display:flex;gap:14px;align-items:center}
-#lx .av{width:46px;height:46px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--gold);flex:none;background:rgba(255,255,255,.06);overflow:hidden;padding:0}
+   <header> is ever used again. The inset shadow is the gold hairline of Option B. */
+#lx .hd{position:relative;top:auto;right:auto;left:auto;bottom:auto;width:auto;margin:0;z-index:auto;border:0;border-radius:0;box-shadow:inset 0 -2px 0 var(--gold-b);grid-template-columns:none;flex:0 0 auto;padding:20px 20px 18px;background:var(--hdr-bg);color:var(--brand-ink);display:flex;gap:14px;align-items:center}
+#lx .av{width:46px;height:46px;border-radius:50%;border:1px solid var(--gold-b);display:grid;place-items:center;font-size:24px;font-weight:800;color:var(--gold-b);flex:none;background:rgba(255,255,255,.08);overflow:hidden;padding:0}
 #lx .av svg{width:100%;height:100%;display:block}
-#lx .hd b{display:block;font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;line-height:1.1}
+#lx .hd b{display:block;font-size:1.18rem;font-weight:800;line-height:1.1;letter-spacing:-.01em}
 #lx .hd small{font-size:12px;opacity:.8;display:flex;align-items:center;gap:6px;margin-top:3px}
-#lx .dot{width:7px;height:7px;border-radius:50%;background:#5FD08F}
+#lx .dot{width:7px;height:7px;border-radius:50%;background:var(--dot)}
 #lx .x{margin-left:auto;background:transparent;border:0;color:inherit;cursor:pointer;font-size:22px;opacity:.8;padding:4px 8px;border-radius:8px}
 #lx .msgs{flex:1;overflow-y:auto;padding:20px 18px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
 #lx .m{max-width:84%;padding:12px 15px;border-radius:18px;font-size:14px;line-height:1.55;animation:lx-pop .25s ease-out}
@@ -69,31 +116,31 @@
 #lx .typing i:nth-child(3){animation-delay:.3s}
 @keyframes lx-bl{0%,60%,100%{opacity:.3}30%{opacity:1}}
 #lx .chips{display:flex;flex-wrap:wrap;gap:8px;align-self:flex-start;animation:lx-pop .25s}
-#lx .chip{border:1px solid var(--gold);background:transparent;color:var(--ink);padding:9px 14px;border-radius:99px;font:500 13px Manrope,sans-serif;cursor:pointer;transition:background .2s}
+#lx .chip{border:1px solid var(--chip-line);background:var(--chip-bg);color:var(--ink);padding:8px 13px;border-radius:99px;font:600 12.5px 'Plus Jakarta Sans',sans-serif;cursor:pointer;transition:background .2s}
 #lx .chip:hover{background:var(--gold-soft)}
 /* the site's own .card rule adds a shadow + transition; neutralise them here */
-#lx .card{border:1px solid var(--gold);background:var(--gold-soft);border-radius:18px;padding:16px;align-self:stretch;font-size:14px;line-height:1.6;box-shadow:none;transition:none}
-#lx .card h4{margin:0 0 6px;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600}
-#lx .card a,#lx .cta{display:inline-block;margin-top:10px;background:var(--brand);color:var(--brand-ink);padding:10px 16px;border-radius:12px;text-decoration:none;font-weight:600;font-size:13px;border:0;cursor:pointer;font-family:inherit}
+#lx .card{border:1px solid var(--card-line);background:var(--gold-soft);color:var(--card-ink);border-radius:18px;padding:16px;align-self:stretch;font-size:14px;line-height:1.6;box-shadow:none;transition:none}
+#lx .card h4{margin:0 0 6px;font-size:1.05rem;font-weight:800;letter-spacing:-.01em}
+#lx .card a,#lx .cta{display:inline-block;margin-top:10px;background:var(--btn-bg);color:var(--btn-ink);padding:10px 16px;border-radius:12px;text-decoration:none;font-weight:700;font-size:13px;border:0;cursor:pointer;font-family:inherit;box-shadow:var(--btn-shadow)}
 #lx .row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px solid var(--line)}
 #lx .row:last-child{border:0}
 #lx .ft{padding:12px 14px 14px;border-top:1px solid var(--line)}
 #lx .ft form{display:flex;gap:8px}
 /* the site sets `input,select{width:100%}`; keep the widget input flexible */
-#lx .ft input{flex:1;width:auto;min-width:0;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:12px 14px;font:14px Manrope,sans-serif;outline:0}
-#lx .ft input:focus{border-color:var(--gold)}
-#lx .send{width:44px;border:0;border-radius:14px;background:var(--brand);color:var(--brand-ink);cursor:pointer;font-size:18px}
+#lx .ft input{flex:1;width:auto;min-width:0;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:12px 14px;font:14px 'Plus Jakarta Sans',sans-serif;outline:0}
+#lx .ft input:focus{border-color:var(--focus);box-shadow:0 0 0 3px var(--focus-glow)}
+#lx .send{width:44px;border:0;border-radius:14px;background:var(--btn-bg);color:var(--btn-ink);cursor:pointer;font-size:16px;font-weight:700;box-shadow:var(--btn-shadow)}
 #lx .note{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
-#lx :is(button,input,a):focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#lx :is(button,input,a):focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 
 /* --- luxury launcher (character + pill) ----------------------------------- */
 #lx-fab{width:auto;height:auto;border:0;background:none;box-shadow:none;display:flex;flex-direction:row-reverse;align-items:flex-end;gap:4px;border-radius:0;padding:0;z-index:1}
 #lx-fab:hover{transform:none}
 #lx-fab::after{content:none;animation:none}
 #lx-fab svg.ch{width:86px;height:138px;border-radius:0;filter:drop-shadow(0 10px 14px rgba(0,0,0,.25));animation:lx-bob 4s ease-in-out infinite}
-#lx-fab svg.pi{width:17px;height:17px;border-radius:0}
-#lx .pill{display:flex;align-items:center;gap:9px;margin-bottom:41px;padding:12px 16px;border-radius:16px;background:#10292A;border:1px solid #B08D4F;color:#F3F5F4;font:600 14px Manrope,sans-serif;white-space:nowrap;box-shadow:0 12px 30px -8px rgba(0,0,0,.5);transition:transform .2s}
-#lx .pill b{background:#D2B27A;color:#10292A;font-size:11px;padding:3px 8px;border-radius:99px}
+#lx-fab svg.pi{width:17px;height:17px;border-radius:0;color:var(--gold-b)}
+#lx .pill{display:flex;align-items:center;gap:9px;margin-bottom:41px;padding:11px 15px;border-radius:15px;background:var(--pill-bg);border:1px solid var(--pill-line);color:var(--pill-ink);font:700 13.5px 'Plus Jakarta Sans',sans-serif;white-space:nowrap;box-shadow:0 12px 30px -8px rgba(0,0,0,.4);transition:transform .2s}
+#lx .pill b{background:var(--badge-bg);color:var(--badge-ink);font-size:11px;padding:3px 8px;border-radius:99px}
 #lx-fab:hover .pill{transform:translateX(-3px)}
 #lx.open .pill{display:none}
 #lx .wv{transform-origin:67px 66px;animation:lx-wave 2.4s ease-in-out infinite}
@@ -109,8 +156,8 @@
 #lx .mic{width:44px;border:1px solid var(--gold);border-radius:14px;background:transparent;color:var(--gold);cursor:pointer;display:grid;place-items:center}
 #lx .mic svg{width:18px;height:18px}
 #lx .mic[hidden]{display:none}
-#lx .mic.rec{background:var(--gold);color:var(--brand-ink);animation:lx-mp 1s infinite}
-@keyframes lx-mp{50%{box-shadow:0 0 0 7px rgba(176,141,79,.25)}}
+#lx .mic.rec{background:var(--btn-bg);color:var(--btn-ink);animation:lx-mp 1s infinite}
+@keyframes lx-mp{50%{box-shadow:0 0 0 7px rgba(185,160,108,.3)}}
 
 /* --- small screens -------------------------------------------------------- */
 @media (max-width:480px){

@@ -35,10 +35,10 @@ const loadSupabase = () => {
   return supabaseLoading;
 };
 const IMG = {
-  reception: "images/clinic_interior.webp",
+  reception: "images/new-lounge.jpg",
   rooms: "images/new-clinic.webp",
   steril: "images/landing-image.webp",
-  lounge: "images/dr-umar-new.webp"
+  lounge: "images/kids-corner.jpg"
 };
 const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
 const set = (s, h) => { const e = $(s); if (e) e.innerHTML = h };
