@@ -140,21 +140,19 @@ html:not(.js) .strip .swin{overflow-x:auto}
 
 @media(max-width:820px){.hs{background:linear-gradient(rgba(7,20,40,.28),rgba(7,20,40,.28)),linear-gradient(90deg,rgba(7,20,40,.62) 0%,rgba(7,20,40,.35) 35%,rgba(7,20,40,0) 62%),linear-gradient(180deg,rgba(7,20,40,.45) 0%,rgba(7,20,40,0) 18%),url('../images/landing-image-mobile.webp') center/cover no-repeat}}
 .hs h1,.hs p,.hs .trust .ti{text-shadow:0 1px 3px rgba(7,20,40,.5),0 2px 18px rgba(7,20,40,.55)}
-/* Hero eyebrow: the blue 2 reference's white frosted glass — 8% white fill,
-   10px backdrop blur, 25% white border. A subtle navy base keeps the white
-   14px label AA on the bright side of our photo. Content (sentence-case copy,
-   sparkle, 24px gap) stays as approved. */
+/* Hero eyebrow: same glass recipe as the hero "Call us now" button in the
+   blue 2 reference — 8% white fill, 35% white border, 6px backdrop blur.
+   No dark underlay, so the background colour matches the button. The
+   reference's two-layer text shadow keeps the 14px label readable. */
 .hs .eb{
   display:inline-flex;align-items:center;gap:8px;max-width:100%;
   color:#fff;font-size:.875rem;font-weight:400;
   letter-spacing:.02em;line-height:1.43;text-transform:none;
-  border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:8px 16px;
-  background:
-    linear-gradient(0deg,rgba(255,255,255,.08),rgba(255,255,255,.08)),
-    linear-gradient(0deg,rgba(7,20,40,.30),rgba(7,20,40,.30));
-  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 16px;
+  background:rgba(255,255,255,.08);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
   margin-bottom:24px;
-  text-shadow:0 1px 3px rgba(7,20,40,.5);
+  text-shadow:0 1px 3px rgba(7,20,40,.5),0 2px 18px rgba(7,20,40,.55);
 }
 .hs .eb svg{flex:none;width:16px;height:16px;color:#fff}
 .hs .eb span{white-space:normal}
