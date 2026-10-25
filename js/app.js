@@ -326,7 +326,7 @@ if (revealFx && revs.length && "IntersectionObserver" in window) {
 
 /* --- home: smile gallery card click handling for non-anchor variant --- */
 const elinkWork = document.getElementById('elink-work');
-if (elinkWork && !elinkWork.tagName || elinkWork.tagName === 'DIV') {
+if (elinkWork && elinkWork.tagName === 'DIV') {
   elinkWork.style.cursor = 'pointer';
   elinkWork.addEventListener('click', (e) => {
     if (e.target.closest('.ec-range') || e.target.closest('.ec-lbl') || e.target.closest('a') || e.target.closest('button')) return;
@@ -563,7 +563,13 @@ document.addEventListener("keydown", e => {
   e.preventDefault();
   t.click();
 });
-if (hdr) addEventListener("scroll", () => hdr.classList.toggle("sc", scrollY > 24), { passive: true });
+/* Keep the fixed header in sync on every page. Running it once on load also
+   covers pages that open already scrolled (anchors, back/forward restores). */
+if (hdr) {
+  const syncHdr = () => hdr.classList.toggle("sc", scrollY > 24);
+  addEventListener("scroll", syncHdr, { passive: true });
+  syncHdr();
+}
 const th = $("#th");
 if (th) {
   /* Determine dark from the explicit theme, not from a hard-coded token
