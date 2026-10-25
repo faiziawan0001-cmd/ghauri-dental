@@ -143,7 +143,9 @@ html:not(.js) .strip .swin{overflow-x:auto}
 /* Hero eyebrow: same glass recipe as the hero "Call us now" button in the
    blue 2 reference — 8% white fill, 35% white border, 6px backdrop blur.
    No dark underlay, so the background colour matches the button. The
-   reference's two-layer text shadow keeps the 14px label readable. */
+   reference's two-layer text shadow keeps the 14px label readable. The
+   smaller phone scale (and the section eyebrow bump to 10.6px) is set in
+   the <=768px block near the end of this file. */
 .hs .eb{
   display:inline-flex;align-items:center;gap:8px;max-width:100%;
   color:#fff;font-size:.875rem;font-weight:400;
@@ -1804,11 +1806,26 @@ html.js .fit-line { white-space: nowrap; }
   .hs .eb { white-space: normal; text-align: left; }
   .hs .eb .eb-full { display: none; }
   .hs .eb .eb-short { display: inline; }
-  .eb { font-size: .6rem; letter-spacing: .06em; }
-  .hs .eb { font-size: .8125rem; padding: 7px 14px; margin-bottom: 20px; }
-  .hs .eb svg { width: 15px; height: 15px; }
+  /* Section eyebrows stay legible on phones: .66rem ≈ 10.6px instead of the
+     former .6rem ≈ 9.6px, which sat under the uppercase legibility floor. */
+  .eb { font-size: .66rem; letter-spacing: .08em; }
+  /* Hero eyebrow: 12px on phones and a tighter 5x11 pill. The heading below
+     is the hero, so the eyebrow should read as a quiet label, not as a second
+     heading. Desktop keeps its 14px / 8x16 pill. */
+  .hs .eb {
+    font-size: .75rem;
+    line-height: 1.35;
+    gap: 7px;
+    padding: 5px 11px;
+    margin-bottom: var(--gap-eyebrow);
+  }
+  .hs .eb svg { width: 12px; height: 12px; }
   .hs .eb span { line-height: 1.4; white-space: normal; }
-  .hs h1 { font-size: clamp(2.15rem, 4.8vw, 3.5rem); }
+  /* Phones/tablets: fluid 33.6 -> 50px, landing on the same 50px the desktop
+     clamp starts with at 769px, so the heading no longer jumps at the
+     breakpoint (the old 2.15rem/4.8vw cap held it at ~35px through tablets).
+     The 2.1rem floor also keeps the first line on one line at 280px. */
+  .hs h1 { font-size: clamp(2.1rem, 10.5vw, 3.125rem); }
   .hs p, .hero p { font-size: clamp(1rem, 1.8vw, 1.1rem); max-width: 100%; line-height: 1.65; }
   .hs .hero-btns { flex-direction: column; align-items: stretch; gap: 12px; margin-top: 0; }
   .hs .hero-btns .btn { width: 100%; justify-content: center; }
@@ -1852,8 +1869,12 @@ html.js .fit-line { white-space: nowrap; }
 }
 @media (max-width: 420px) {
   .hs .eb { white-space: normal; line-height: 1.4; }
-  .hs h1 { font-size: clamp(1.9rem, 9vw, 2.3rem); }
   .hs .trust .ti { font-size: .8rem; }
+}
+/* Very narrow phones (e.g. 280px folded screens): the headline already fits,
+   but the eyebrow pill needs a smaller label to stay on one line. */
+@media (max-width: 300px) {
+  .hs .eb { font-size: .7rem; padding: 5px 9px; }
 }
 
 /* Site-wide mobile parity with the Ahmed Clinic reference (<=480px).
@@ -1863,21 +1884,25 @@ html.js .fit-line { white-space: nowrap; }
    reference's own breakpoint changes. */
 @media (max-width: 480px) {
   .btn { padding: 12px 24px; font-size: .88rem; }
+  /* The hero is the primary action: keep its label at ~15px even when the
+     global small-screen button label steps down to 14px. */
+  .hs .hero-btns .btn { font-size: .94rem; }
   .stats { grid-template-columns: repeat(2, 1fr); gap: 24px 16px; }
   .stats b { font-size: 1.8rem; }
   .footer-grid { gap: 16px 14px; }
   .footer-col ul li a { font-size: .76rem; }
   .footer-bottom { gap: 6px; }
   .hs .eb {
-    padding: 7px 14px;
+    /* Size/padding come from the <=768px hero block; this rule only pairs the
+       glass tint with the CTA's small-screen backdrop. */
     /* Match the CTA's small-screen backdrop tint so the glass tones stay paired. */
     -webkit-backdrop-filter: blur(6px) brightness(.65);
     backdrop-filter: blur(6px) brightness(.65);
   }
 }
-@media (max-width: 340px) {
-  .hs .eb { font-size: .78125rem; padding: 7px 13px; }
-}
+/* The hero eyebrow is now stepped down cleanly inside the <=768px block, with
+   a small <=300px fallback for folded/narrow phones, so the old standalone
+   <=340px shrink is gone. */
 
 /* =========================================================
    MOBILE PARITY FIXES — appended last so they take priority
