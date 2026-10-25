@@ -1831,8 +1831,25 @@ html.js .fit-line { white-space: nowrap; }
 }
 .hs .trust .ti{font-size:.82rem;color:rgba(255,255,255,.78)}
 .hs .trust .ts{width:15px;height:15px;stroke:rgba(159,211,255,.7)}
-.hs .hero-btns .btn.alt{background:transparent;border-color:rgba(255,255,255,.45)}
+/* Same 8% white / 35% border / 6px blur glass as the hero eyebrow. */
+.hs .hero-btns .btn.alt{
+  background:rgba(255,255,255,.08);
+  border-color:rgba(255,255,255,.35);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  text-shadow:0 1px 3px rgba(7,20,40,.5);
+}
+/* Keep the reveal off the button row: a transformed parent isolates the
+   button's backdrop-filter. Fill mode `backwards` restores the hover lift. */
+.hs .hero-btns .btn.in{animation-fill-mode:backwards}
 .hs .hero-btns .btn.alt:hover{background:rgba(255,255,255,.12)}
+@media (max-width: 820px) {
+  /* The small-screen photo is brighter behind the CTA; tint the blurred
+     backdrop so the white text stays readable without changing the glass. */
+  .hs .hero-btns .btn.alt {
+    -webkit-backdrop-filter: blur(6px) brightness(.65);
+    backdrop-filter: blur(6px) brightness(.65);
+  }
+}
 @media (max-width: 420px) {
   .hs .eb { white-space: normal; line-height: 1.4; }
   .hs h1 { font-size: clamp(1.9rem, 9vw, 2.3rem); }
@@ -1851,7 +1868,12 @@ html.js .fit-line { white-space: nowrap; }
   .footer-grid { gap: 16px 14px; }
   .footer-col ul li a { font-size: .76rem; }
   .footer-bottom { gap: 6px; }
-  .hs .eb { padding: 7px 14px; }
+  .hs .eb {
+    padding: 7px 14px;
+    /* Match the CTA's small-screen backdrop tint so the glass tones stay paired. */
+    -webkit-backdrop-filter: blur(6px) brightness(.65);
+    backdrop-filter: blur(6px) brightness(.65);
+  }
 }
 @media (max-width: 340px) {
   .hs .eb { font-size: .78125rem; padding: 7px 13px; }
