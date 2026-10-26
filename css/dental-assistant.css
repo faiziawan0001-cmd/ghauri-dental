@@ -163,6 +163,11 @@
 @media (max-width:480px){
   #lx-panel{position:fixed;inset:0;width:auto;max-width:none;height:auto;max-height:none;border-radius:0;transform-origin:bottom}
   #lx.open #lx-fab{display:none}
+  /* Shrink the character + pill on phones so she doesn't overlap page content */
+  #lx{right:max(10px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom))}
+  #lx-fab svg.ch{width:68px;height:110px}
+  #lx .pill{padding:8px 12px;font-size:12px;margin-bottom:32px}
+  #lx-panel{bottom:128px;max-height:calc(100vh - 148px)}
 }
 @media (prefers-reduced-motion:reduce){
   #lx,#lx *{animation:none!important;transition:none!important}
