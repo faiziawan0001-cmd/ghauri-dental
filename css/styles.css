@@ -152,23 +152,24 @@ html:not(.js) .strip .swin{overflow-x:auto}
 
 @media(max-width:820px){.hs{background:linear-gradient(rgba(7,20,40,.28),rgba(7,20,40,.28)),linear-gradient(90deg,rgba(7,20,40,.62) 0%,rgba(7,20,40,.35) 35%,rgba(7,20,40,0) 62%),linear-gradient(180deg,rgba(7,20,40,.45) 0%,rgba(7,20,40,0) 18%),url('../images/landing-image-mobile.webp') center/cover no-repeat}}
 .hs h1,.hs p,.hs .trust .ti{text-shadow:0 1px 3px rgba(7,20,40,.5),0 2px 18px rgba(7,20,40,.55)}
-/* Hero eyebrow: same glass recipe as the hero "Call us now" button in the
-   blue 2 reference — 8% white fill, 35% white border, 6px backdrop blur.
-   No dark underlay, so the background colour matches the button. The
-   reference's two-layer text shadow keeps the 14px label readable. The
-   smaller phone scale (and the section eyebrow bump to 10.6px) is set in
-   the <=768px block near the end of this file. */
+/* Hero eyebrow: hairline overline instead of the glass pill. A 30x2px
+   brand-gradient rule (paired with the award mark) leads the tracked label,
+   so the two CTAs stay the only capsules on screen. The two-layer text
+   shadow keeps the label readable on the photo. The smaller phone scale
+   (and the section eyebrow bump to 10.6px) is set in the <=768px block near
+   the end of this file. */
 .hs .eb{
-  display:inline-flex;align-items:center;gap:8px;max-width:100%;
-  color:#fff;font-size:.875rem;font-weight:400;
-  letter-spacing:.02em;line-height:1.43;text-transform:none;
-  border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 16px;
-  background:rgba(255,255,255,.08);
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
-  margin-bottom:24px;
+  display:inline-flex;align-items:center;gap:10px;max-width:100%;
+  color:#dbeaf8;font-size:.75rem;font-weight:700;
+  letter-spacing:.14em;line-height:1.3;text-transform:uppercase;
+  padding:0;border:0;border-radius:0;background:none;
+  margin-bottom:22px;
   text-shadow:0 1px 3px rgba(7,20,40,.5),0 2px 18px rgba(7,20,40,.55);
 }
-.hs .eb svg{flex:none;width:16px;height:16px;color:#fff}
+.hs .eb::before{
+  content:"";flex:none;width:30px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,var(--blue),#8fcdf5);
+}
 .hs .eb span{white-space:normal}
 /* Hero scroll cue: growing hairline + SCROLL (style ref: dental-house). */
 .hs .scb{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;cursor:pointer;color:rgba(255,255,255,.5)}
@@ -1828,17 +1829,18 @@ html.js .fit-line { white-space: nowrap; }
   /* Section eyebrows stay legible on phones: .66rem ≈ 10.6px instead of the
      former .6rem ≈ 9.6px, which sat under the uppercase legibility floor. */
   .eb { font-size: .66rem; letter-spacing: .08em; }
-  /* Hero eyebrow: 12px on phones and a tighter 5x11 pill. The heading below
-     is the hero, so the eyebrow should read as a quiet label, not as a second
-     heading. Desktop keeps its 14px / 8x16 pill. */
+  /* Hero eyebrow: 11px tracked caps on phones, still a hairline + mark, so
+     it reads as a quiet label rather than a second heading. Desktop keeps
+     the 12px rule-and-icon scale. */
   .hs .eb {
-    font-size: .75rem;
+    font-size: .7rem;
     line-height: 1.35;
-    gap: 7px;
-    padding: 5px 11px;
+    letter-spacing: .1em;
+    gap: 8px;
+    padding: 0;
     margin-bottom: var(--gap-eyebrow);
   }
-  .hs .eb svg { width: 12px; height: 12px; }
+  .hs .eb::before { width: 24px; }
   .hs .eb span { line-height: 1.4; white-space: normal; }
   /* Phones/tablets: fluid 33.6 -> 50px, landing on the same 50px the desktop
      clamp starts with at 769px, so the heading no longer jumps at the
@@ -1891,11 +1893,11 @@ html.js .fit-line { white-space: nowrap; }
   .hs .trust .ti { font-size: .8rem; }
 }
 /* Narrow phones (320-344px): the longer mobile eyebrow needs a smaller label
-   and tighter chrome to stay on one line. Below 315px the pill wraps rather
-   than shrinking further. */
+   and tighter tracking to stay on one line. Below 315px the label wraps
+   rather than shrinking further. */
 @media (max-width: 344px) {
-  .hs .eb { font-size: .6875rem; padding: 5px 9px; gap: 6px; }
-  .hs .eb svg { width: 11px; height: 11px; }
+  .hs .eb { font-size: .66rem; letter-spacing: .08em; gap: 6px; }
+  .hs .eb::before { width: 18px; }
 }
 
 /* Site-wide mobile parity with the Ahmed Clinic reference (<=480px).
@@ -1913,13 +1915,6 @@ html.js .fit-line { white-space: nowrap; }
   .footer-grid { gap: 16px 14px; }
   .footer-col ul li a { font-size: .76rem; }
   .footer-bottom { gap: 6px; }
-  .hs .eb {
-    /* Size/padding come from the <=768px hero block; this rule only pairs the
-       glass tint with the CTA's small-screen backdrop. */
-    /* Match the CTA's small-screen backdrop tint so the glass tones stay paired. */
-    -webkit-backdrop-filter: blur(6px) brightness(.65);
-    backdrop-filter: blur(6px) brightness(.65);
-  }
 }
 /* The hero eyebrow is now stepped down cleanly inside the <=768px block, with
    a small <=300px fallback for folded/narrow phones, so the old standalone
