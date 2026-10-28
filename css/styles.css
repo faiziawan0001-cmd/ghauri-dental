@@ -1422,7 +1422,7 @@ footer a { color: var(--blue-ink); }
   font-size: .88rem;
   line-height: 1.5;
 }
-.footer-contact-item .icon { color: #8fcdf5; margin-top: 2px; flex-shrink: 0; }
+.footer-contact-item .icon { color: #8fcdf5; margin-top: 2px; flex-shrink: 0; font-size: .88rem; }
 .footer-contact-item a {
   color: #a9bcd4;
   text-decoration: none;
