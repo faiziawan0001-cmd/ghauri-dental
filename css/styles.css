@@ -1401,6 +1401,7 @@ footer a { color: var(--blue-ink); }
   color: #a9bcd4;
 }
 .footer-hours-row span:last-child { text-align: right; color: #a9bcd4; }
+.footer-hours-row span:first-child { color: #ffffff; }
 
 .footer-hours-row .sun-time {
   color: inherit;
