@@ -1492,21 +1492,15 @@ footer a { color: var(--blue-ink); }
   gap: 16px;
   flex-wrap: wrap;
 }
-.footer-brand .footer-credit {
-  margin: 16px 0 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, .16);
-  border: 1px solid rgba(255, 255, 255, .2);
-  color: #fff;
-  padding: 8px 18px;
-  border-radius: 8px;
-  font-size: .82rem;
-  font-weight: 600;
-  letter-spacing: .04em;
-  white-space: nowrap;
-  width: fit-content;
+@media (min-width: 768px) {
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .footer-brand .footer-credit {
+    margin: 16px 0 0;
+  }
 }
 .footer-credit .dot {
   width: 8px; height: 8px;
