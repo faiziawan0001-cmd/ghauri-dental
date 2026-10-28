@@ -1361,9 +1361,13 @@ footer a { color: var(--blue-ink); }
   display: flex; align-items: center; justify-content: center;
   color: #a9bcd4;
   font-size: .85rem;
-  transition: background .3s cubic-bezier(.4, 0, .2, 1), color .3s cubic-bezier(.4, 0, .2, 1);
+  transition: background .3s cubic-bezier(.4, 0, .2, 1), color .3s cubic-bezier(.4, 0, .2, 1), box-shadow .3s cubic-bezier(.4, 0, .2, 1), transform .2s ease;
 }
-.footer-social a:hover { background: var(--blue); color: #fff; }
+.footer-social a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, .25); }
+.footer-social a[aria-label="Instagram"]:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); color: #fff; }
+.footer-social a[aria-label="Facebook"]:hover { background: #1877f2; color: #fff; }
+.footer-social a[aria-label="Clinic location"]:hover { background: #ea4335; color: #fff; }
+.footer-social a[aria-label="Email"]:hover { background: #3b8fc9; color: #fff; }
 
 /* --- Link columns --- */
 .footer-col h3 {
