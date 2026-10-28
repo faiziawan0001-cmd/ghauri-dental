@@ -201,42 +201,59 @@ const PER_UNIT = { "Fillings": "Teeth", "Root canal": "Teeth", "Veneers": "Teeth
 /* Set ZERO_INTEREST to false if the clinic does not offer interest-free instalments. */
 const ZERO_INTEREST = false;
 const esSel = $("#es"), eq = $("#eq"), ev = $("#ev"), eo = $("#eo"), eemi = $("#eemi"), elab = $("#elab"), ewa = $("#ewa");
-if (esSel && eq && ev && eo) {
-  esSel.innerHTML = S.map((x, i) => `<option value="${i}">${x[0]}</option>`).join("");
-  const eqField = eq.closest(".field");
-  const monthsWrap = $("#emo"), monthsBtns = monthsWrap ? [].slice.call(monthsWrap.querySelectorAll(".mo-btn")) : [];
-  let months = 6;
-  const fill = () => { const p = (eq.value - eq.min) / (eq.max - eq.min) * 100; eq.style.setProperty("--fill", p + "%") };
-  const est = () => {
-    const a = S[esSel.value]; if (!a) return;
-    const per = PER_UNIT[a[0]];/* undefined = fixed price */
-    if (eqField) eqField.hidden = !per;
-    const q = per ? +eq.value || 1 : 1;
-    const total = a[4] * q * 100, monthly = Math.round(total / months);
-    ev.textContent = q; eo.textContent = total.toLocaleString();
-    if (elab) elab.textContent = per || "";
-    if (eemi) eemi.textContent = "PKR " + monthly.toLocaleString() + "/mo over " + months + " months" + (ZERO_INTEREST ? " (0% available)" : "");
-    if (ewa) {
-      let m = "Hi! I would like to book " + a[0];
-      if (per) m += " (" + q + " " + per.toLowerCase() + ")";
-      m += ", estimated PKR " + total.toLocaleString() + " over " + months + " months.";
-      ewa.href = "https://wa.me/923211048740?text=" + encodeURIComponent(m);
-    }
-    eo.classList.remove("pulse"); void eo.offsetWidth; eo.classList.add("pulse");
-    fill()
-  };
-  const setMonths = m => { months = m; monthsBtns.forEach(b => b.setAttribute("aria-pressed", +b.dataset.m === m ? "true" : "false")); est() };
-  monthsBtns.forEach(b => b.addEventListener("click", () => setMonths(+b.dataset.m)));
-  esSel.onchange = eq.oninput = est; est();
-  /* Contextual handoff: pass the selected treatment, units (per-unit only), estimate and plan. */
-  window.bookEstimate = () => {
-    const a = S[esSel.value]; if (!a) { openBooking(null, { source: "estimator" }); return }
-    const per = PER_UNIT[a[0]], q = per ? +eq.value || 1 : 1, total = a[4] * q * 100;
-    const ctx = { estimate: total, months: months, monthly: Math.round(total / months), source: "estimator" };
-    if (per) ctx.units = q;
-    openBooking(a[0], ctx)
-  };
-}
+  if (esSel && eq && ev && eo) {
+    esSel.innerHTML = S.map((x, i) => `<option value="${i}">${x[0]}</option>`).join("");
+    const eqField = eq.closest(".field");
+    const monthsWrap = $("#emo"), monthsBtns = monthsWrap ? [].slice.call(monthsWrap.querySelectorAll(".mo-btn")) : [];
+    const payTypeWrap = $("#pt"), payTypeBtns = payTypeWrap ? [].slice.call(payTypeWrap.querySelectorAll(".pt-btn")) : [];
+    const monthsField = $("#emo") ? $("#emo").closest(".field") : null;
+    const budgetCard = $("#eo") ? $("#eo").closest(".budget") : null;
+    let months = 6, mode = "full";
+    const setMode = m => {
+      mode = m;
+      payTypeBtns.forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === m ? "true" : "false"));
+      if (budgetCard) budgetCard.setAttribute("data-mode", m);
+      if (monthsField) monthsField.hidden = (m === "full");
+      est();
+    };
+    payTypeBtns.forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode)));
+    const fill = () => { const p = (eq.value - eq.min) / (eq.max - eq.min) * 100; eq.style.setProperty("--fill", p + "%") };
+    const est = () => {
+      const a = S[esSel.value]; if (!a) return;
+      const per = PER_UNIT[a[0]];/* undefined = fixed price */
+      if (eqField) eqField.hidden = !per;
+      const q = per ? +eq.value || 1 : 1;
+      const total = a[4] * q * 100, monthly = Math.round(total / months);
+      ev.textContent = q; eo.textContent = total.toLocaleString();
+      if (elab) elab.textContent = per || "";
+      if (eemi) {
+        if (mode === "inst") eemi.textContent = "PKR " + monthly.toLocaleString() + "/mo over " + months + " months" + (ZERO_INTEREST ? " (0% available)" : "");
+        else eemi.textContent = "";
+      }
+      if (ewa) {
+        let m = "Hi! I would like to book " + a[0];
+        if (per) m += " (" + q + " " + per.toLowerCase() + ")";
+        m += ", estimated PKR " + total.toLocaleString();
+        if (mode === "inst") m += " over " + months + " months.";
+        m += ".";
+        ewa.href = "https://wa.me/923211048740?text=" + encodeURIComponent(m);
+      }
+      eo.classList.remove("pulse"); void eo.offsetWidth; eo.classList.add("pulse");
+      fill()
+    };
+    const setMonths = m => { months = m; monthsBtns.forEach(b => b.setAttribute("aria-pressed", +b.dataset.m === m ? "true" : "false")); est() };
+    monthsBtns.forEach(b => b.addEventListener("click", () => setMonths(+b.dataset.m)));
+    esSel.onchange = eq.oninput = est; est();
+    /* Contextual handoff: pass the selected treatment, units (per-unit only), estimate and plan. */
+    window.bookEstimate = () => {
+      const a = S[esSel.value]; if (!a) { openBooking(null, { source: "estimator" }); return }
+      const per = PER_UNIT[a[0]], q = per ? +eq.value || 1 : 1, total = a[4] * q * 100;
+      const ctx = { estimate: total, months: months, mode: mode, source: "estimator" };
+      if (per) ctx.units = q;
+      if (mode === "inst") ctx.monthly = Math.round(total / months);
+      openBooking(a[0], ctx)
+    };
+  }
 
 /* --- before/after sliders (home + work) --- */
 const teeth = n => `<svg viewBox="0 0 24 24"><use href="#t"/></svg>`.repeat(n);

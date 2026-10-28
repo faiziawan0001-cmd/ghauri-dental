@@ -1396,8 +1396,56 @@ footer a { color: var(--blue-ink); }
   border-bottom: 1px solid rgba(255, 255, 255, .06);
   color: #a9bcd4;
 }
-.footer-hours-row span:first-child { font-weight: 500; color: #fff; }
-.footer-hours-row span:last-child { text-align: right; }
+.footer-hours-row span:last-child { text-align: right; color: #a9bcd4; }
+
+.footer-hours-row .sun-time {
+  color: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .footer-hours-row span:last-child:has(.sun-note) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: 2px;
+  }
+  .footer-hours-row .sun-note {
+    display: block;
+    color: #a9bcd4;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    opacity: 1;
+  }
+  .footer-hours-row .sun-time {
+    color: #a9bcd4;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    opacity: 1;
+  }
+}
+@media (min-width: 769px) {
+  .footer-hours-row .sun-time {
+    color: #a9bcd4;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    opacity: 1;
+  }
+.footer-hours-row .sun-note {
+  color: #a9bcd4;
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  opacity: 1;
+}
+}
 
 .footer-map-cta {
   display: inline-flex;
@@ -1805,8 +1853,20 @@ html.js .fit-line { white-space: nowrap; }
 .budget-cta .btn { flex: 1 1 150px; text-align: center; margin: 0; }
 .budget-cta .b-wa { background: #0f7a5f; color: #fff; box-shadow: 0 8px 20px rgba(37, 211, 102, .32); }
 .budget-cta .b-wa:hover { box-shadow: 0 12px 26px rgba(37, 211, 102, .42); }
-/* Instalment months selector — three rounded buttons, styled like the filters. */
-.months-field { margin-bottom: 16px; }
+/* --- Payment type toggle (Pay in Full vs Installments) --- */
+.pay-type-field { margin-bottom: 16px; }
+.pay-type { display: flex; gap: 8px; }
+.pay-type .pt-btn { flex: 1 1 0; border: 1px solid var(--line); background: var(--card); color: var(--navy); border-radius: 12px; padding: 12px 8px; font: 600 .88rem "Plus Jakarta Sans", sans-serif; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+.pay-type .pt-btn[aria-pressed="true"] { background: linear-gradient(135deg, #55aae6, #2c78b4); color: #fff; border-color: transparent; box-shadow: 0 8px 18px rgba(59, 143, 201, .28); }
+.pay-type .pt-btn:not([aria-pressed="true"]):hover { background: color-mix(in srgb, var(--tint) 70%, transparent); }
+.pay-type .pt-btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+@media (hover: none) { .pay-type .pt-btn:not([aria-pressed="true"]):hover { background: var(--card); } }
+/* When "Pay in Full" is active, hide the installment row + emi line. */
+.budget[data-mode="full"] .months-field,
+.budget[data-mode="full"] .b-emi { display: none; }
+/* When "Pay in Installments" is active, show them. */
+.budget[data-mode="inst"] .months-field,
+.budget[data-mode="inst"] .b-emi { display: block; }
 .months { display: flex; gap: 8px; }
 .months .mo-btn { flex: 1 1 0; border: 1px solid var(--line); background: var(--card); color: var(--navy); border-radius: 12px; padding: 10px 8px; font: 600 .88rem "Plus Jakarta Sans", sans-serif; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
 .months .mo-btn[aria-pressed="true"] { background: linear-gradient(135deg, #55aae6, #2c78b4); color: #fff; border-color: transparent; box-shadow: 0 8px 18px rgba(59, 143, 201, .28); }
