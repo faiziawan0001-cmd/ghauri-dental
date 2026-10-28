@@ -1498,9 +1498,6 @@ footer a { color: var(--blue-ink); }
     flex-direction: column;
     align-items: flex-start;
   }
-  .footer-brand .footer-credit {
-    margin: 16px 0 0;
-  }
 }
 .footer-credit .dot {
   width: 8px; height: 8px;
