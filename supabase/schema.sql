@@ -1,5 +1,5 @@
 -- ============================================================================
--- Bright Smiles Dental Clinic — Supabase schema
+-- Ghauri Dental Center — Supabase schema
 -- Project ref: xbgkskfayfbrevguoowl
 --
 -- Derived from how the code actually uses the table:

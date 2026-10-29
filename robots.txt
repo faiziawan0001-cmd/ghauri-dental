@@ -1,4 +1,4 @@
-# Bright Smiles Dental Clinic - https://bright-dental.vercel.app
+# Ghauri Dental Center - https://ghauri-dental.vercel.app
 User-agent: *
 Allow: /
 Disallow: /admin.html
@@ -14,4 +14,4 @@ Allow: /js/
 Allow: /images/
 Allow: /fonts/
 
-Sitemap: https://bright-dental.vercel.app/sitemap.xml
+Sitemap: https://ghauri-dental.vercel.app/sitemap.xml

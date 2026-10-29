@@ -1,8 +1,8 @@
 /* ===========================================================================
-   Bright Smiles Dental Clinic - Premium Edition
+   Ghauri Dental Center - Premium Edition
    Designed & built by : Nexus Labs
    Date                : 2026-10-05
-   Site                : Bright Smiles Dental Clinic, Lahore
+   Site                : Ghauri Dental Center, Lahore
    --------------------------------------------------------------------------
    (c) 2026-10-05 Nexus Labs. All rights reserved.
    --------------------------------------------------------------------------
@@ -12,7 +12,7 @@
    --------------------------------------------------------------------------
    Enquiries : faiziawan.0001@gmail.com
    =========================================================================== */
-/* Bright Smiles Dental Clinic — shared behaviour for every page.
+/* Ghauri Dental Center — shared behaviour for every page.
    Paste photo URLs or data: URIs into IMG below to replace the illustrated tiles. */
 /* Supabase — one config object, anon key only. The public "bookings" table grants
    INSERT only, so bookings are written here and never read back. */
@@ -84,7 +84,7 @@ const S = [["Cleaning", "General", "Scale and polish to protect your gums.", "30
 ["Child check-ups", "Pediatric", "Friendly first visits, sealants and fluoride.", "30 min", 12, "user", ["Meet and play", "Gentle exam", "Tips for parents"], ["First visit age?", "Around the first birthday."]],
 ["Fillings", "General", "Tooth-coloured, natural-looking repairs.", "45 min", 25, "tag", ["Numb", "Remove decay", "Shape and polish"], ["Are they safe?", "Yes, mercury-free composite is used."]]];
 
-const R = [["Hira A.", "I was terrified of dentists. Dr. Umar Liaqat made it painless and kind."], ["Bilal R.", "My aligners finished two months early and the results are perfect."], ["Mariam S.", "My kids actually ask to go back. That says everything."], ["Usman T.", "Clear pricing, no surprises, and a great implant result."], ["Noor F.", "Whitening in one hour. Friends keep asking what I changed."], ["Zain K.", "An emergency toothache fixed the same afternoon. Thank you."]];
+const R = [["Hira A.", "I was terrified of dentists. Dr. Harron Ghauri made it painless and kind."], ["Bilal R.", "My aligners finished two months early and the results are perfect."], ["Mariam S.", "My kids actually ask to go back. That says everything."], ["Usman T.", "Clear pricing, no surprises, and a great implant result."], ["Noor F.", "Whitening in one hour. Friends keep asking what I changed."], ["Zain K.", "An emergency toothache fixed the same afternoon. Thank you."]];
 
 /* Self-hosted, optimized 16:9 cover art for each treatment (images/services/).
    Each slug has a 640w and 1280w WebP so the grid stays crisp on retina and
@@ -103,7 +103,7 @@ const card = (a, i) => {
   const slug = SERV_IMG[a[0]] || "";
   const price = (a[4] * 100).toLocaleString();
   let media = slug
-    ? '<div class="svc-media"><picture><source type="image/avif" srcset="images/services/' + slug + '-640.avif 640w, images/services/' + slug + '-1280.avif 1280w" sizes="' + SRV_SIZES + '"><img src="images/services/' + slug + '-1280.webp" srcset="images/services/' + slug + '-640.webp 640w, images/services/' + slug + '-1280.webp 1280w" sizes="' + SRV_SIZES + '" alt="' + a[0] + ' treatment at Bright Smiles Dental Clinic" loading="lazy" decoding="async" width="1280" height="720"></picture><span class="svc-tag">' + a[1] + '</span></div>'
+    ? '<div class="svc-media"><picture><source type="image/avif" srcset="images/services/' + slug + '-640.avif 640w, images/services/' + slug + '-1280.avif 1280w" sizes="' + SRV_SIZES + '"><img src="images/services/' + slug + '-1280.webp" srcset="images/services/' + slug + '-640.webp 640w, images/services/' + slug + '-1280.webp 1280w" sizes="' + SRV_SIZES + '" alt="' + a[0] + ' treatment at Ghauri Dental Center" loading="lazy" decoding="async" width="1280" height="720"></picture><span class="svc-tag">' + a[1] + '</span></div>'
     : '<div class="svc-media"><div class="svc-fallback">' + ic(a[5]) + '</div><span class="svc-tag">' + a[1] + '</span></div>';
   return '<div class="card svc h" style="cursor:pointer" tabindex="0" role="button" aria-haspopup="dialog" data-i="' + i + '">' + media + '<div class="svc-body"><h3>' + a[0] + '</h3><p>' + a[2] + '</p><div class="svc-meta"><span class="svc-price">From Rs ' + price + '</span><span class="svc-link">View details <i class="fa-solid fa-arrow-right"></i></span></div></div></div>';
 };
@@ -170,7 +170,7 @@ window.closeDialog = closeDialog;
 /* Details modal -> booking form, with that service pre-selected. */
 window.bookService = () => { closeDialog(document.getElementById("sd")); openBooking(sdSvc, { source: "service_card" }) };
 
-const open = e => { const c = e.target.closest("[data-i]"); if (!c) return; const a = S[c.dataset.i]; if (!a) return; set("#sb", `<h2>${a[0]}</h2><p>${a[2]}</p><p><b>Duration:</b> ${a[3]}</p><h3>Steps</h3><div class="tl">${a[6].map(x => `<p>${x}</p>`).join("")}</div><details open><summary>${a[7][0]}</summary><p>${a[7][1]}</p></details>`); sdSvc = a[0]; const wa = $("#sd-wa"); if (wa) wa.href = "https://wa.me/923211048740?text=" + encodeURIComponent("Hi! I would like to book an appointment for " + a[0]); openDialog(document.getElementById("sd")) };
+const open = e => { const c = e.target.closest("[data-i]"); if (!c) return; const a = S[c.dataset.i]; if (!a) return; set("#sb", `<h2>${a[0]}</h2><p>${a[2]}</p><p><b>Duration:</b> ${a[3]}</p><h3>Steps</h3><div class="tl">${a[6].map(x => `<p>${x}</p>`).join("")}</div><details open><summary>${a[7][0]}</summary><p>${a[7][1]}</p></details>`); sdSvc = a[0]; const wa = $("#sd-wa"); if (wa) wa.href = "https://wa.me/923333711434?text=" + encodeURIComponent("Hi! I would like to book an appointment for " + a[0]); openDialog(document.getElementById("sd")) };
 
 /* --- home: featured services, why-us, before/after, reviews --- */
 set("#svp", S.slice(0, 6).map(card).join(""));
@@ -236,7 +236,7 @@ const esSel = $("#es"), eq = $("#eq"), ev = $("#ev"), eo = $("#eo"), eemi = $("#
         m += ", estimated PKR " + total.toLocaleString();
         if (mode === "inst") m += " over " + months + " months.";
         m += ".";
-        ewa.href = "https://wa.me/923211048740?text=" + encodeURIComponent(m);
+        ewa.href = "https://wa.me/923333711434?text=" + encodeURIComponent(m);
       }
       eo.classList.remove("pulse"); void eo.offsetWidth; eo.classList.add("pulse");
       fill()
@@ -272,8 +272,8 @@ const WORK_DATA = [
 const storyCard = (s) => `
 <div class="story-card" data-cat="${s.cat}">
   <div class="story-ba">
-    <picture>${avifSrcset(s.img) ? `<source type="image/avif" srcset="${avifSrcset(s.img)}" sizes="${WK_SIZES}">` : ""}<img src="${baseImg(s.img)}" srcset="${srcset(s.img)}" sizes="${WK_SIZES}" class="b-img" alt="Before - ${s.name} at Bright Smiles Dental Clinic" loading="lazy" decoding="async" width="1280" height="960"></picture>
-    <picture>${avifSrcset(s.img) ? `<source type="image/avif" srcset="${avifSrcset(s.img)}" sizes="${WK_SIZES}">` : ""}<img src="${baseImg(s.img)}" srcset="${srcset(s.img)}" sizes="${WK_SIZES}" class="a-img" alt="After - ${s.name} at Bright Smiles Dental Clinic" loading="lazy" decoding="async" width="1280" height="960"></picture>
+    <picture>${avifSrcset(s.img) ? `<source type="image/avif" srcset="${avifSrcset(s.img)}" sizes="${WK_SIZES}">` : ""}<img src="${baseImg(s.img)}" srcset="${srcset(s.img)}" sizes="${WK_SIZES}" class="b-img" alt="Before - ${s.name} at Ghauri Dental Center" loading="lazy" decoding="async" width="1280" height="960"></picture>
+    <picture>${avifSrcset(s.img) ? `<source type="image/avif" srcset="${avifSrcset(s.img)}" sizes="${WK_SIZES}">` : ""}<img src="${baseImg(s.img)}" srcset="${srcset(s.img)}" sizes="${WK_SIZES}" class="a-img" alt="After - ${s.name} at Ghauri Dental Center" loading="lazy" decoding="async" width="1280" height="960"></picture>
     <em style="left:16px">Before</em>
     <em style="right:16px">After</em>
     <i></i>
@@ -315,7 +315,7 @@ if (wkHome) {
   wkHome.innerHTML = teaser.map(s => {
     const line = (s.desc.split(".")[0] || s.desc).trim() + ".";
     return `<a href="work.html" class="smile-card js-rev">
-      <img src="${baseImg(s.img)}" srcset="${srcset(s.img)}" sizes="${WK_SIZES}" alt="${s.name} — ${s.cat} result at Bright Smiles Dental Clinic" loading="lazy" decoding="async" width="1200" height="900">
+      <img src="${baseImg(s.img)}" srcset="${srcset(s.img)}" sizes="${WK_SIZES}" alt="${s.name} — ${s.cat} result at Ghauri Dental Center" loading="lazy" decoding="async" width="1200" height="900">
       <div class="smile-ov">
         <h3>${s.name}</h3>
         <p>${line}</p>
@@ -435,7 +435,7 @@ document.addEventListener("click", e => {
   if (!b) return;
   const box = b.closest(".map-wrap"), src = box && box.dataset.map;
   if (!src) return;
-  box.innerHTML = `<iframe src="${src}" title="Google Map — Bright Smiles Dental Clinic, DHA Phase 6, Lahore" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>`;
+  box.innerHTML = `<iframe src="${src}" title="Google Map — Ghauri Dental Center, DHA Phase 2, Lahore" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>`;
 }, { passive: true });
 
 /* Live "Open now / Closed" pill, evaluated in the clinic's own timezone so it
@@ -447,9 +447,9 @@ if (vst && typeof Intl !== "undefined" && Intl.DateTimeFormat) {
     const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], d = WD.indexOf(p.weekday);
     const mins = (Number(p.hour) % 24) * 60 + Number(p.minute);
     const fmt = m => { const h = Math.floor(m / 60), ap = h >= 12 ? "PM" : "AM"; return `${h % 12 || 12}:${String(m % 60).padStart(2, "0")} ${ap}` };
-    const open = d === 0 ? [660, 1020] : [540, 1200]; /* Sun 11:00–17:00 · Mon–Sat 9:00–20:00 */
+    const open = d === 0 ? [960, 1320] : [540, 1380]; /* Sun 16:00-22:00 / Mon-Sat 9:00-23:00 */
     const on = d > -1 && mins >= open[0] && mins < open[1];
-    const nextOpen = n => fmt(n === 0 ? 660 : 540);
+    const nextOpen = n => fmt(n === 0 ? 960 : 540);
     const txt = on ? `Open now · closes ${fmt(open[1])}`
       : (d < 0 || mins < open[0]) ? `Closed · opens ${nextOpen(d)}`
         : `Closed · opens ${WD[(d + 1) % 7]} ${nextOpen((d + 1) % 7)}`;
@@ -609,14 +609,14 @@ if (th) {
    Works with the existing dialog markup (#bk, #bf, #go, #n, #p, #s, #d, #e1-#e3, #ok)
    on every page, so no HTML changes are needed. The new time-slot picker and the
    success screen are built here, and their styles are injected from this file. */
-const CLINIC_WA = "923211048740", CLINIC_NAME = "Bright Smiles";
+const CLINIC_WA = "923333711434", CLINIC_NAME = "Ghauri Dental Center";
 const bkDlg = $("#bk"), bf = $("#bf"), goBtn = $("#go");
 const bkOldOk = $("#ok");
 if (goBtn && bf && bkOldOk) {
   const nIn = $("#n"), pIn = $("#p"), dIn = $("#d"), sSel = $("#s"), e1 = $("#e1"), e2 = $("#e2"), e3 = $("#e3");
   let slot = "";
   const REF_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ23456789";
-  const makeRef = () => { let s = ""; for (let i = 0; i < 5; i++)s += REF_CHARS[Math.floor(Math.random() * REF_CHARS.length)]; return "BS-" + s };
+  const makeRef = () => { let s = ""; for (let i = 0; i < 5; i++)s += REF_CHARS[Math.floor(Math.random() * REF_CHARS.length)]; return "GDC-" + s };
   const vEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
   const st = document.createElement("style");

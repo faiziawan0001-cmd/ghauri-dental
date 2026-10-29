@@ -1,6 +1,6 @@
 /* ===========================================================================
    Sarah — virtual dental assistant widget
-   Bright Smiles Dental Clinic
+   Ghauri Dental Center
    --------------------------------------------------------------------------
    Extracted from "dental-assistant-v5-sarah-luxury.html" and adapted to drop
    into the live site:
@@ -19,10 +19,10 @@
 
   /* ---- Clinic settings: edit these for each client ---------------------- */
   const CLINIC = {
-    name: "Bright Smiles Dental Clinic",
-    phone: "+92 321 1048740",
-    wa: "923211048740",
-    hours: "Mon\u2013Sat 9am\u20138pm, Sunday 11am\u20135pm",
+    name: "Ghauri Dental Center",
+    phone: "+92 333 3711434",
+    wa: "923333711434",
+    hours: "Mon\u2013Sat 9am\u201311pm, Sunday 4pm\u201310pm (emergencies only)",
     aiEndpoint: "", /* paste your Worker URL here to enable free-form AI answers */
     treatments: [
       ["Cleaning & check-up", "From Rs 1,500"],
